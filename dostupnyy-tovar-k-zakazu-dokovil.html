@@ -231,6 +231,25 @@
             margin-bottom: 5px;
         }
 
+        .available-stock {
+            font-size: 0.9em;
+            margin-top: 5px;
+            padding: 5px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .available-stock.positive {
+            color: #28a745;
+            background-color: #d4edda;
+        }
+
+        .available-stock.negative {
+            color: #dc3545;
+            background-color: #f8d7da;
+            font-weight: bold;
+        }
+
         .add-to-cart-btn {
             background: #2dbe64;
             color: white;
@@ -507,8 +526,29 @@
         // Корзина
         let cart = JSON.parse(localStorage.getItem('cart') || '[]');
         
+        // Получить товар по ID из productsData
+        function getProductById(productId) {
+            for (const category in productsData) {
+                const product = productsData[category].find(p => p.id === productId);
+                if (product) return product;
+            }
+            return null;
+        }
+        
+        // Обновить остатки в корзине из актуальных данных товаров
+        function updateCartStock() {
+            cart.forEach(item => {
+                const productInfo = getProductById(item.id);
+                if (productInfo && productInfo.stock !== undefined && productInfo.stock !== null) {
+                    item.stock = productInfo.stock;
+                }
+            });
+            saveCart();
+        }
+        
         // Инициализация
         document.addEventListener('DOMContentLoaded', function() {
+            updateCartStock(); // Обновляем остатки при загрузке
             renderCategories();
             updateCartBadge();
             updateProductButtons();
@@ -606,6 +646,15 @@
             }
         }
         
+        // Получить товар по ID из productsData
+        function getProductById(productId) {
+            for (const category in productsData) {
+                const product = productsData[category].find(p => p.id === productId);
+                if (product) return product;
+            }
+            return null;
+        }
+        
         // Добавить в корзину
         function addToCart(product) {
             // Парсим квант из строки (может быть "6", "6 шт", "Квант: 6" и т.д.)
@@ -619,23 +668,41 @@
                 }
             }
             
+            // Получаем актуальную информацию о товаре для проверки остатка
+            const productInfo = getProductById(product.id);
+            const stock = productInfo && productInfo.stock !== undefined && productInfo.stock !== null ? productInfo.stock : null;
+            
             const existingItem = cart.find(item => item.id === product.id);
             if (existingItem) {
-                // Если товар уже есть, добавляем еще один квант
-                existingItem.quantity += quantValue;
+                // Если товар уже есть, проверяем остаток перед добавлением
+                const newQuantity = existingItem.quantity + quantValue;
+                if (stock !== null && newQuantity > stock) {
+                    alert(`Недостаточно товара на складе. Доступно: ${stock} шт.`);
+                    return;
+                }
+                existingItem.quantity = newQuantity;
             } else {
+                // Если товара нет, проверяем остаток перед добавлением
+                if (stock !== null && quantValue > stock) {
+                    alert(`Недостаточно товара на складе. Доступно: ${stock} шт.`);
+                    return;
+                }
                 // Если товара нет, добавляем с количеством равным кванту
                 cart.push({
                     id: product.id,
                     name: product.name,
                     price: product.price || 0,
                     quantity: quantValue,
-                    quant: product.quant || ''
+                    quant: product.quant || '',
+                    stock: stock
                 });
             }
             
             saveCart();
             updateProductButtons();
+            if (document.getElementById('cart-view').classList.contains('active')) {
+                renderCart();
+            }
         }
         
         // Удалить из корзины
@@ -653,6 +720,10 @@
         function updateQuantity(productId, change) {
             const item = cart.find(item => item.id === productId);
             if (item) {
+                // Получаем актуальную информацию о товаре для проверки остатка
+                const productInfo = getProductById(productId);
+                const stock = productInfo && productInfo.stock !== undefined && productInfo.stock !== null ? productInfo.stock : (item.stock !== undefined && item.stock !== null ? item.stock : null);
+                
                 // Парсим квант из строки (может быть "6", "6 шт", "Квант: 6" и т.д.)
                 let quantValue = 1;
                 if (item.quant && item.quant.toString().trim() !== '') {
@@ -666,11 +737,21 @@
                 
                 // Изменяем количество на квант (а не на 1)
                 if (change > 0) {
-                    // При нажатии "+" добавляем один квант
-                    item.quantity += quantValue;
+                    // При нажатии "+" проверяем остаток перед добавлением
+                    const newQuantity = item.quantity + quantValue;
+                    if (stock !== null && newQuantity > stock) {
+                        alert(`Недостаточно товара на складе. Доступно: ${stock} шт.`);
+                        return;
+                    }
+                    item.quantity = newQuantity;
                 } else {
                     // При нажатии "-" убираем один квант
                     item.quantity -= quantValue;
+                }
+                
+                // Обновляем stock в элементе корзины
+                if (stock !== null) {
+                    item.stock = stock;
                 }
                 
                 if (item.quantity <= 0) {
@@ -765,6 +846,18 @@
                 const itemTotal = item.price * item.quantity;
                 total += itemTotal;
                 
+                // Получаем актуальную информацию о товаре для расчета доступного остатка
+                const productInfo = getProductById(item.id);
+                const stock = productInfo && productInfo.stock !== undefined && productInfo.stock !== null ? productInfo.stock : (item.stock !== undefined && item.stock !== null ? item.stock : null);
+                
+                // Вычисляем доступный товар
+                let availableStock = null;
+                let availableStockClass = '';
+                if (stock !== null) {
+                    availableStock = stock - item.quantity;
+                    availableStockClass = availableStock < 0 ? 'negative' : 'positive';
+                }
+                
                 const detailsParts = [];
                 if (item.price > 0) {
                     detailsParts.push('Цена: ' + formatPrice(item.price) + ' шт');
@@ -780,6 +873,7 @@
                         <div class="cart-item-info">
                             <div class="cart-item-name">${itemName}</div>
                             <div class="cart-item-details">${detailsParts.join(' • ')}</div>
+                            ${availableStock !== null ? `<div class="available-stock ${availableStockClass}">Доступный товар: ${availableStock} шт</div>` : ''}
                         </div>
                         <div class="cart-item-controls">
                             <button onclick="updateQuantity('${item.id}', -1)">-</button>
