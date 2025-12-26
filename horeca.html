@@ -409,6 +409,67 @@
             transform: none;
         }
         
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .export-btn {
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            flex: 1;
+            min-width: 140px;
+            transition: all 0.3s;
+        }
+        
+        .export-btn:hover {
+            background: #357abd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+        }
+        
+        .export-btn.csv {
+            background: #50c878;
+        }
+        
+        .export-btn.csv:hover {
+            background: #45b369;
+        }
+        
+        .export-btn.excel {
+            background: #217346;
+        }
+        
+        .export-btn.excel:hover {
+            background: #1d5f3a;
+        }
+        
+        .export-btn.clipboard {
+            background: #9b59b6;
+        }
+        
+        .export-btn.clipboard:hover {
+            background: #8e44ad;
+        }
+        
+        @media (max-width: 768px) {
+            .export-buttons {
+                flex-direction: column;
+            }
+            
+            .export-btn {
+                width: 100%;
+            }
+        }
+        
         .empty-cart {
             text-align: center;
             padding: 40px;
@@ -539,6 +600,9 @@
             </div>
         </div>
     </div>
+    
+    <!-- Библиотека SheetJS для экспорта в Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     
     <script>
         const categoriesData = {
@@ -5356,9 +5420,203 @@
                     <span>${total > 0 ? formatPrice(total) : '—'}</span>
                 </div>
                 <button class="submit-order-btn" onclick="submitOrder()">Отправить заказ</button>
+                <div class="export-buttons">
+                    <button class="export-btn csv" onclick="exportToCSV()">📥 Скачать CSV</button>
+                    <button class="export-btn excel" onclick="exportToExcel()">📊 Скачать Excel</button>
+                    <button class="export-btn clipboard" onclick="copyToClipboard(event)">📋 Копировать для Google Sheets</button>
+                </div>
             `;
             
             cartContent.innerHTML = html;
+        }
+        
+        // Функция экспорта в CSV
+        function exportToCSV() {
+            if (cart.length === 0) {
+                alert('Корзина пуста');
+                return;
+            }
+            
+            // Формируем заголовки
+            const headers = ['ID', 'Наименование', 'Цена за шт', 'Количество', 'Квант', 'Итого'];
+            const rows = [headers];
+            
+            // Добавляем данные
+            cart.forEach(item => {
+                rows.push([
+                    item.id || '',
+                    item.name || '',
+                    item.price > 0 ? item.price.toString() : 'по запросу',
+                    item.quantity.toString(),
+                    item.quant || '',
+                    item.price > 0 ? (item.price * item.quantity).toString() : '—'
+                ]);
+            });
+            
+            // Добавляем итоговую строку
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            rows.push(['', '', '', '', 'Итого:', total > 0 ? total.toString() : '—']);
+            
+            // Преобразуем в CSV
+            const csvContent = rows.map(row => 
+                row.map(cell => {
+                    // Экранируем кавычки и оборачиваем в кавычки если содержит запятую или кавычку
+                    const cellStr = String(cell);
+                    if (cellStr.includes(',') || cellStr.includes('"') || cellStr.includes('\n')) {
+                        return '"' + cellStr.replace(/"/g, '""') + '"';
+                    }
+                    return cellStr;
+                }).join(',')
+            ).join('\n');
+            
+            // Добавляем BOM для правильного отображения кириллицы в Excel
+            const BOM = '\uFEFF';
+            const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `Заказ_HoReCa_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        // Функция экспорта в Excel
+        function exportToExcel() {
+            if (cart.length === 0) {
+                alert('Корзина пуста');
+                return;
+            }
+            
+            // Проверяем наличие библиотеки SheetJS
+            if (typeof XLSX === 'undefined') {
+                alert('Библиотека для работы с Excel не загружена. Попробуйте скачать CSV.');
+                return;
+            }
+            
+            // Формируем данные для таблицы
+            const data = [];
+            
+            // Заголовки
+            data.push(['ID', 'Наименование', 'Цена за шт', 'Количество', 'Квант', 'Итого']);
+            
+            // Данные товаров
+            cart.forEach(item => {
+                data.push([
+                    item.id || '',
+                    item.name || '',
+                    item.price > 0 ? item.price : 'по запросу',
+                    item.quantity,
+                    item.quant || '',
+                    item.price > 0 ? item.price * item.quantity : '—'
+                ]);
+            });
+            
+            // Итоговая строка
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            data.push(['', '', '', '', 'Итого:', total > 0 ? total : '—']);
+            
+            // Создаем рабочую книгу
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            
+            // Устанавливаем ширину колонок
+            ws['!cols'] = [
+                { wch: 10 }, // ID
+                { wch: 40 }, // Наименование
+                { wch: 12 }, // Цена за шт
+                { wch: 12 }, // Количество
+                { wch: 10 }, // Квант
+                { wch: 12 }  // Итого
+            ];
+            
+            // Добавляем лист в книгу
+            XLSX.utils.book_append_sheet(wb, ws, 'Заказ');
+            
+            // Сохраняем файл
+            const fileName = `Заказ_HoReCa_${new Date().toISOString().split('T')[0]}.xlsx`;
+            XLSX.writeFile(wb, fileName);
+        }
+        
+        // Функция копирования в буфер обмена для вставки в Google Sheets
+        async function copyToClipboard(event) {
+            if (cart.length === 0) {
+                alert('Корзина пуста');
+                return;
+            }
+            
+            // Формируем данные в формате TSV (табуляция) для Google Sheets
+            const rows = [];
+            
+            // Заголовки
+            rows.push(['ID', 'Наименование', 'Цена за шт', 'Количество', 'Квант', 'Итого']);
+            
+            // Данные товаров
+            cart.forEach(item => {
+                rows.push([
+                    item.id || '',
+                    item.name || '',
+                    item.price > 0 ? item.price.toString() : 'по запросу',
+                    item.quantity.toString(),
+                    item.quant || '',
+                    item.price > 0 ? (item.price * item.quantity).toString() : '—'
+                ]);
+            });
+            
+            // Итоговая строка
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            rows.push(['', '', '', '', 'Итого:', total > 0 ? total.toString() : '—']);
+            
+            // Преобразуем в TSV (табуляция между колонками, перенос строки между строками)
+            const tsvContent = rows.map(row => row.join('\t')).join('\n');
+            
+            // Получаем кнопку для изменения текста
+            const btn = event ? event.target : document.querySelector('.export-btn.clipboard');
+            
+            try {
+                // Копируем в буфер обмена
+                await navigator.clipboard.writeText(tsvContent);
+                
+                // Показываем сообщение об успехе
+                if (btn) {
+                    const originalText = btn.textContent;
+                    btn.textContent = '✓ Скопировано!';
+                    btn.style.background = '#2dbe64';
+                    
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.style.background = '';
+                    }, 2000);
+                }
+                
+                alert('Данные скопированы в буфер обмена!\n\nОткройте Google Sheets и нажмите Ctrl+V (или Cmd+V на Mac) для вставки.');
+            } catch (err) {
+                console.error('Ошибка копирования в буфер обмена:', err);
+                // Fallback: показываем данные в текстовом поле для ручного копирования
+                const textarea = document.createElement('textarea');
+                textarea.value = tsvContent;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    if (btn) {
+                        const originalText = btn.textContent;
+                        btn.textContent = '✓ Скопировано!';
+                        btn.style.background = '#2dbe64';
+                        setTimeout(() => {
+                            btn.textContent = originalText;
+                            btn.style.background = '';
+                        }, 2000);
+                    }
+                    alert('Данные скопированы в буфер обмена!\n\nОткройте Google Sheets и нажмите Ctrl+V (или Cmd+V на Mac) для вставки.');
+                } catch (fallbackErr) {
+                    alert('Не удалось скопировать автоматически. Пожалуйста, используйте экспорт в CSV или Excel.');
+                }
+                document.body.removeChild(textarea);
+            }
         }
         
         async function submitOrder() {
@@ -5388,8 +5646,14 @@
                 totalItems: cart.reduce((sum, item) => sum + item.quantity, 0)
             };
             
-            // URL Google Apps Script Web App (замените на ваш URL после настройки)
-            const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbygnvbOt2AvHNTIcFAGtjMSJ_-KqPxFEVGw-h1oVNdsmRDDPE5IE_m_h7qANGiltNpE7Q/exec'; // TODO: Добавьте URL после настройки Google Apps Script
+            // URL n8n Webhook (приоритетный способ отправки)
+            // Для локального тестирования: http://localhost:5678/webhook/landing-order
+            // Для GitHub Pages: нужен публичный URL (ngrok или production сервер)
+            // ВАЖНО: 0.0.0.0 не работает из браузера! Используйте localhost для локального тестирования
+            const N8N_WEBHOOK_URL = 'http://localhost:5678/webhook/landing-order';
+            
+            // URL Google Apps Script Web App (fallback, если n8n недоступен)
+            const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbygnvbOt2AvHNTIcFAGtjMSJ_-KqPxFEVGw-h1oVNdsmRDDPE5IE_m_h7qANGiltNpE7Q/exec';
             
             try {
                 // Сохраняем заказ в localStorage как резервную копию
@@ -5397,12 +5661,47 @@
                 orders.push(orderData);
                 localStorage.setItem('orders', JSON.stringify(orders));
                 
-                // Отправляем заказ в Google Таблицу через Google Apps Script
+                // Отправляем заказ в Google Таблицу через n8n webhook или Google Apps Script
                 let orderSent = false;
                 let orderResult = null;
                 let errorMessage = '';
                 
-                if (GOOGLE_APPS_SCRIPT_URL && GOOGLE_APPS_SCRIPT_URL.trim() !== '') {
+                // Сначала пытаемся отправить через n8n webhook
+                if (N8N_WEBHOOK_URL && N8N_WEBHOOK_URL.trim() !== '') {
+                    try {
+                        console.log('Отправка заказа через n8n webhook...', orderData);
+                        
+                        const response = await fetch(N8N_WEBHOOK_URL, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(orderData)
+                        });
+                        
+                        if (response.ok) {
+                            orderResult = await response.json();
+                            console.log('Ответ от n8n:', orderResult);
+                            
+                            if (orderResult.success !== false) {
+                                orderSent = true;
+                            } else {
+                                errorMessage = orderResult.error || 'Ошибка от n8n';
+                                console.error('Ошибка от n8n:', errorMessage);
+                            }
+                        } else {
+                            errorMessage = 'HTTP ' + response.status + ': ' + response.statusText;
+                            console.error('HTTP ошибка от n8n:', errorMessage);
+                        }
+                    } catch (fetchError) {
+                        console.error('Ошибка отправки через n8n:', fetchError);
+                        errorMessage = 'Ошибка сети при отправке через n8n: ' + fetchError.toString();
+                        // Продолжаем попытку через Google Apps Script
+                    }
+                }
+                
+                // Если n8n не сработал, пытаемся через Google Apps Script
+                if (!orderSent && GOOGLE_APPS_SCRIPT_URL && GOOGLE_APPS_SCRIPT_URL.trim() !== '') {
                     try {
                         console.log('Отправка заказа в Google Таблицу...', orderData);
                         
@@ -5464,11 +5763,11 @@
                                 `Детали заказа:\n${orderSummary}`;
                             
                             if (orderSent) {
-                                userMessage += '\n\n✅ Заказ успешно отправлен в Google Таблицу!';
+                                userMessage += '\n\n✅ Заказ успешно отправлен в Google Таблицу через n8n!';
                                 if (orderResult && orderResult.spreadsheet_url) {
                                     userMessage += '\n\nПросмотреть заказ: ' + orderResult.spreadsheet_url;
                                 }
-                            } else if (GOOGLE_APPS_SCRIPT_URL && GOOGLE_APPS_SCRIPT_URL.trim() !== '') {
+                            } else if (N8N_WEBHOOK_URL && N8N_WEBHOOK_URL.trim() !== '' || GOOGLE_APPS_SCRIPT_URL && GOOGLE_APPS_SCRIPT_URL.trim() !== '') {
                                 userMessage += '\n\n⚠️ Заказ сохранен локально. Не удалось отправить в Google Таблицу.';
                                 if (errorMessage) {
                                     userMessage += '\n\nОшибка: ' + errorMessage;
@@ -5520,11 +5819,11 @@
                     `Детали заказа:\n${orderSummary}`;
                 
                 if (orderSent) {
-                    userMessage += '\n\n✅ Заказ успешно отправлен в Google Таблицу!';
+                    userMessage += '\n\n✅ Заказ успешно отправлен в Google Таблицу через n8n!';
                     if (orderResult && orderResult.spreadsheet_url) {
                         userMessage += '\n\nПросмотреть заказ: ' + orderResult.spreadsheet_url;
                     }
-                } else if (GOOGLE_APPS_SCRIPT_URL && GOOGLE_APPS_SCRIPT_URL.trim() !== '') {
+                } else if (N8N_WEBHOOK_URL && N8N_WEBHOOK_URL.trim() !== '' || GOOGLE_APPS_SCRIPT_URL && GOOGLE_APPS_SCRIPT_URL.trim() !== '') {
                     userMessage += '\n\n⚠️ Заказ сохранен локально. Не удалось отправить в Google Таблицу.';
                     if (errorMessage) {
                         userMessage += '\n\nОшибка: ' + errorMessage;
