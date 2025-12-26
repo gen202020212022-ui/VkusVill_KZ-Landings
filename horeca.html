@@ -5154,15 +5154,28 @@
         }
         
         function addToCart(product) {
+            // Парсим квант из строки (может быть "6", "6 шт", "Квант: 6" и т.д.)
+            let quantValue = 1;
+            if (product.quant && product.quant.toString().trim() !== '') {
+                const quantStr = product.quant.toString().trim();
+                // Извлекаем число из строки
+                const quantMatch = quantStr.match(/\d+/);
+                if (quantMatch) {
+                    quantValue = parseInt(quantMatch[0]);
+                }
+            }
+            
             const existingItem = cart.find(item => item.id === product.id);
             if (existingItem) {
-                existingItem.quantity += 1;
+                // Если товар уже есть, добавляем еще один квант
+                existingItem.quantity += quantValue;
             } else {
+                // Если товара нет, добавляем с количеством равным кванту
                 cart.push({
                     id: product.id,
                     name: product.name,
                     price: product.price,
-                    quantity: 1,
+                    quantity: quantValue,
                     category: product.category || '',
                     quant: product.quant || ''
                 });
@@ -5184,7 +5197,26 @@
         function updateQuantity(productId, change) {
             const item = cart.find(item => item.id === productId);
             if (item) {
-                item.quantity += change;
+                // Парсим квант из строки (может быть "6", "6 шт", "Квант: 6" и т.д.)
+                let quantValue = 1;
+                if (item.quant && item.quant.toString().trim() !== '') {
+                    const quantStr = item.quant.toString().trim();
+                    // Извлекаем число из строки
+                    const quantMatch = quantStr.match(/\d+/);
+                    if (quantMatch) {
+                        quantValue = parseInt(quantMatch[0]);
+                    }
+                }
+                
+                // Изменяем количество на квант (а не на 1)
+                if (change > 0) {
+                    // При нажатии "+" добавляем один квант
+                    item.quantity += quantValue;
+                } else {
+                    // При нажатии "-" убираем один квант
+                    item.quantity -= quantValue;
+                }
+                
                 if (item.quantity <= 0) {
                     removeFromCart(productId);
                 } else {
