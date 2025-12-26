@@ -5239,13 +5239,13 @@
                 // Формируем строку с деталями товара
                 let detailsParts = [];
                 detailsParts.push('ID: ' + item.id);
-                if (item.price > 0) {
-                    detailsParts.push(formatPrice(item.price));
-                } else {
-                    detailsParts.push('Цена по запросу');
-                }
                 if (item.quant && item.quant.toString().trim() !== '') {
                     detailsParts.push('Квант: ' + item.quant);
+                }
+                if (item.price > 0) {
+                    detailsParts.push('Цена: ' + formatPrice(item.price) + ' шт');
+                } else {
+                    detailsParts.push('Цена: по запросу');
                 }
                 
                 html += `
