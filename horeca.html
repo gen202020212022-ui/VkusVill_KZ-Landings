@@ -248,8 +248,9 @@
         
         .product-details {
             font-size: 0.85em;
-            color: #999;
-            margin-top: 5px;
+            color: #666;
+            margin-top: 8px;
+            line-height: 1.6;
         }
         
         .no-image {
@@ -5374,9 +5375,7 @@
                     const quantValue = parseInt(product.quant);
                     // Если это число и больше 0, показываем как "Остаток"
                     if (!isNaN(quantValue) && quantValue >= 0) {
-                        details.push('Остаток: ' + product.quant + ' шт');
-                    } else if (product.quant.toString().includes('Квант')) {
-                        details.push('Квант: ' + product.quant);
+                        details.push('Квант: ' + product.quant + ' шт');
                     } else {
                         details.push('Квант: ' + product.quant);
                     }
@@ -5413,7 +5412,8 @@
                 }
                 
                 if (details.length > 0) {
-                    detailsHtml = `<div class="product-details">${details.join(' • ')}</div>`;
+                    // Отображаем каждую деталь на отдельной строке
+                    detailsHtml = `<div class="product-details">${details.join('<br>')}</div>`;
                 }
                 
                 let priceHtml = '';
