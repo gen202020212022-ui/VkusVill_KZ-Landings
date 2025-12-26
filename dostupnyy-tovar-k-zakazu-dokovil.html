@@ -608,16 +608,28 @@
         
         // Добавить в корзину
         function addToCart(product) {
-            const existingItem = cart.find(item => item.id === product.id);
+            // Парсим квант из строки (может быть "6", "6 шт", "Квант: 6" и т.д.)
+            let quantValue = 1;
+            if (product.quant && product.quant.toString().trim() !== '') {
+                const quantStr = product.quant.toString().trim();
+                // Извлекаем число из строки
+                const quantMatch = quantStr.match(/\d+/);
+                if (quantMatch) {
+                    quantValue = parseInt(quantMatch[0]);
+                }
+            }
             
+            const existingItem = cart.find(item => item.id === product.id);
             if (existingItem) {
-                existingItem.quantity += 1;
+                // Если товар уже есть, добавляем еще один квант
+                existingItem.quantity += quantValue;
             } else {
+                // Если товара нет, добавляем с количеством равным кванту
                 cart.push({
                     id: product.id,
                     name: product.name,
                     price: product.price || 0,
-                    quantity: 1,
+                    quantity: quantValue,
                     quant: product.quant || ''
                 });
             }
@@ -637,14 +649,33 @@
             updateProductButtons();
         }
         
-        // Изменить количество
-        function updateQuantity(productId, newQuantity) {
+        // Изменить количество (change: 1 для увеличения, -1 для уменьшения)
+        function updateQuantity(productId, change) {
             const item = cart.find(item => item.id === productId);
             if (item) {
-                if (newQuantity <= 0) {
+                // Парсим квант из строки (может быть "6", "6 шт", "Квант: 6" и т.д.)
+                let quantValue = 1;
+                if (item.quant && item.quant.toString().trim() !== '') {
+                    const quantStr = item.quant.toString().trim();
+                    // Извлекаем число из строки
+                    const quantMatch = quantStr.match(/\d+/);
+                    if (quantMatch) {
+                        quantValue = parseInt(quantMatch[0]);
+                    }
+                }
+                
+                // Изменяем количество на квант (а не на 1)
+                if (change > 0) {
+                    // При нажатии "+" добавляем один квант
+                    item.quantity += quantValue;
+                } else {
+                    // При нажатии "-" убираем один квант
+                    item.quantity -= quantValue;
+                }
+                
+                if (item.quantity <= 0) {
                     removeFromCart(productId);
                 } else {
-                    item.quantity = newQuantity;
                     saveCart();
                     renderCart();
                 }
@@ -751,9 +782,9 @@
                             <div class="cart-item-details">${detailsParts.join(' • ')}</div>
                         </div>
                         <div class="cart-item-controls">
-                            <button onclick="updateQuantity('${item.id}', ${item.quantity - 1})">-</button>
+                            <button onclick="updateQuantity('${item.id}', -1)">-</button>
                             <span>${item.quantity}</span>
-                            <button onclick="updateQuantity('${item.id}', ${item.quantity + 1})">+</button>
+                            <button onclick="updateQuantity('${item.id}', 1)">+</button>
                             <button class="remove-item-btn" onclick="removeFromCart('${item.id}')">Удалить</button>
                         </div>
                     </div>
