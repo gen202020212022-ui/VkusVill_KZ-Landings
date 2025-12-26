@@ -31,6 +31,7 @@
             margin-bottom: 30px;
             padding: 40px 20px;
             border-radius: 0 0 20px 20px;
+            position: relative;
         }
         
         .header h1 {
@@ -42,6 +43,47 @@
         .header p {
             font-size: 1.1em;
             opacity: 0.95;
+        }
+        
+        .cart-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.5em;
+        }
+        
+        .cart-icon:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #d7144b;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7em;
+            font-weight: bold;
+        }
+        
+        .cart-badge.hidden {
+            display: none;
         }
         
         .view-mode {
@@ -135,14 +177,46 @@
             overflow: hidden;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             transition: all 0.3s ease;
-            cursor: pointer;
             border: 1px solid #f0f0f0;
+            display: flex;
+            flex-direction: column;
         }
         
         .product-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 4px 12px rgba(45, 190, 100, 0.15);
             border-color: #2dbe64;
+        }
+        
+        .add-to-cart-btn {
+            background: #2dbe64;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 500;
+            margin-top: 10px;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        .add-to-cart-btn:hover {
+            background: #25a855;
+            transform: scale(1.02);
+        }
+        
+        .add-to-cart-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .add-to-cart-btn.added {
+            background: #d7144b;
+        }
+        
+        .add-to-cart-btn.added:hover {
+            background: #c01342;
         }
         
         .product-image {
@@ -189,6 +263,134 @@
             font-size: 0.9em;
         }
         
+        /* Корзина */
+        .cart-view {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        
+        .cart-item-info {
+            flex: 1;
+        }
+        
+        .cart-item-name {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .cart-item-details {
+            font-size: 0.85em;
+            color: #666;
+        }
+        
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .quantity-btn {
+            background: #2dbe64;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .quantity-btn:hover {
+            background: #25a855;
+        }
+        
+        .quantity-value {
+            font-weight: 600;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .remove-item-btn {
+            background: #d7144b;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+        }
+        
+        .remove-item-btn:hover {
+            background: #c01342;
+        }
+        
+        .cart-total {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #2dbe64;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+        
+        .submit-order-btn {
+            background: #2dbe64;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-top: 20px;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        
+        .submit-order-btn:hover {
+            background: #25a855;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(45, 190, 100, 0.3);
+        }
+        
+        .submit-order-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .empty-cart {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
         @media (max-width: 768px) {
             .categories-grid {
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -203,6 +405,24 @@
             .header h1 {
                 font-size: 2em;
             }
+            
+            .cart-icon {
+                width: 45px;
+                height: 45px;
+                top: 15px;
+                right: 15px;
+            }
+            
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .cart-item-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
         }
     </style>
 </head>
@@ -211,6 +431,10 @@
         <div class="header">
             <h1>HoReCa</h1>
             <p>Выберите категорию для просмотра товаров</p>
+            <div class="cart-icon" onclick="showCart()">
+                🛒
+                <span class="cart-badge hidden" id="cart-badge">0</span>
+            </div>
         </div>
         
         <!-- Вид категорий -->
@@ -265,6 +489,20 @@
                 <!-- Товары будут добавлены через JavaScript -->
             </div>
         </div>
+        
+        <!-- Вид корзины -->
+        <div id="cart-view" class="view-mode">
+            <div class="products-header">
+                <button class="back-button" onclick="showCategories()">← Назад к категориям</button>
+                <h2>Корзина</h2>
+            </div>
+            <div class="cart-view" id="cart-content">
+                <div class="empty-cart">
+                    <p>Корзина пуста</p>
+                    <p style="margin-top: 10px; font-size: 0.9em;">Добавьте товары из каталога</p>
+                </div>
+            </div>
+        </div>
     </div>
     
     <script>
@@ -276,7 +514,8 @@
       "price": 1269.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/7f007974-abb9-4caa-bff3-184823060d7d.webp?1735248324.6258",
       "quant": "6",
-      "weight": "260"
+      "weight": "260",
+      "expiry_days": "730"
     },
     {
       "id": "93268",
@@ -284,7 +523,8 @@
       "price": 1211.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/0cb05bd8-b083-45f4-8df6-ddce6495652f.webp?1735248563.7385",
       "quant": "6",
-      "weight": "260"
+      "weight": "260",
+      "expiry_days": "730"
     },
     {
       "id": "95963",
@@ -292,7 +532,8 @@
       "price": 665.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/9a549464-d27f-40e5-9b31-2050da3b7085.webp?1732916054.8524",
       "quant": "6",
-      "weight": "220"
+      "weight": "220",
+      "expiry_days": "720"
     },
     {
       "id": "101778",
@@ -300,7 +541,8 @@
       "price": 979.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/7537fc49-d167-4ce0-8b0e-758eb4464e0b.webp?1731778594.6293",
       "quant": "6",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "365"
     },
     {
       "id": "102753",
@@ -308,7 +550,8 @@
       "price": 820.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/ad3109cd-c6e0-4c55-b175-d393a536bcb3.webp?1734731937.0449",
       "quant": "6",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "720"
     },
     {
       "id": "19821",
@@ -316,7 +559,8 @@
       "price": 680.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/2fd9d064-cbe2-4c3b-bb1c-c2f4d9b10264.jpg?1720383959.7716",
       "quant": "10",
-      "weight": "310"
+      "weight": "310",
+      "expiry_days": "720"
     },
     {
       "id": "84815",
@@ -324,7 +568,8 @@
       "price": 794.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/c6a16d8c-5bf1-4143-96e1-ff5e0ff2dd25.jpg?1709930775.6275",
       "quant": "6",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "720"
     },
     {
       "id": "15759",
@@ -332,7 +577,8 @@
       "price": 872.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/6434a667-b88a-4c82-82c7-0bf826b49990.jpg?1714655947.0158",
       "quant": "12",
-      "weight": "310"
+      "weight": "310",
+      "expiry_days": "720"
     },
     {
       "id": "33861",
@@ -340,7 +586,8 @@
       "price": 717.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/1a6950db-4408-466d-9890-bcd132a4a36c.jpg?1714656358.6764",
       "quant": "8",
-      "weight": "250"
+      "weight": "250",
+      "expiry_days": "90"
     },
     {
       "id": "16773",
@@ -348,7 +595,8 @@
       "price": 784.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/59478e0d-3b33-4745-8835-4db3aaa9b079.jpg?1715583055.8654",
       "quant": "12",
-      "weight": "366"
+      "weight": "366",
+      "expiry_days": "720"
     },
     {
       "id": "19927",
@@ -356,7 +604,8 @@
       "price": 667.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/ee8bbeee-61b5-4522-b1a4-622950d35aae.jpg?1714655786.6574",
       "quant": "12",
-      "weight": "310"
+      "weight": "310",
+      "expiry_days": "720"
     },
     {
       "id": "83639",
@@ -364,7 +613,8 @@
       "price": 619.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/07b6603e-e664-4da4-ace0-b8607ecbfebc.jpg?1714941519.6851",
       "quant": "6",
-      "weight": "195"
+      "weight": "195",
+      "expiry_days": "720"
     },
     {
       "id": "83088",
@@ -372,7 +622,8 @@
       "price": 750.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/93d68051-b178-4c62-8e4a-f7b7c26c2116.jpg?1708639091.8312",
       "quant": "6",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "720"
     },
     {
       "id": "21164",
@@ -380,7 +631,8 @@
       "price": 1089.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/10f4120b-3545-4839-9cc5-189fa969e78d.jpg?1714655442.4101",
       "quant": "12",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "730"
     },
     {
       "id": "67136",
@@ -388,7 +640,8 @@
       "price": 515.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/bb681f36-70ac-4fb0-8eb8-a62a591cd970.jpg?1714656193.8975",
       "quant": "6",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "720"
     },
     {
       "id": "92917",
@@ -396,7 +649,8 @@
       "price": 648.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/1c5cc697-1e48-43e0-a9ed-7b541fe2e7e2.jpg?1722455952.0231",
       "quant": "6",
-      "weight": "195"
+      "weight": "195",
+      "expiry_days": "720"
     },
     {
       "id": "73588",
@@ -404,7 +658,8 @@
       "price": 652.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/0086fe62-850b-42ca-92f8-87e4d240cb67.jpg?1714656247.1209",
       "quant": "6",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "720"
     },
     {
       "id": "21789",
@@ -412,7 +667,8 @@
       "price": 1027.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/4090e611-292e-44b4-bfb3-70b8c6f66b64.jpg?1714655396.3382",
       "quant": "6",
-      "weight": "330"
+      "weight": "330",
+      "expiry_days": "730"
     },
     {
       "id": "34132",
@@ -420,7 +676,8 @@
       "price": 830.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/c06d005f-43f3-4ea7-a962-8a04ae5a3b7c.jpg?1714655350.0526",
       "quant": "12",
-      "weight": "360"
+      "weight": "360",
+      "expiry_days": "720"
     },
     {
       "id": "19028",
@@ -428,7 +685,8 @@
       "price": 530.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/e6d5bc34-798f-4016-b2be-d1f5cc494bbb.jpg?1714656312.2792",
       "quant": "8",
-      "weight": "250"
+      "weight": "250",
+      "expiry_days": "90"
     },
     {
       "id": "73587",
@@ -436,7 +694,8 @@
       "price": 666.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/d0981489-03ed-46bb-8526-4e4ede9ebb83.jpg?1712785872.3783",
       "quant": "6",
-      "weight": "195"
+      "weight": "195",
+      "expiry_days": "720"
     },
     {
       "id": "19926",
@@ -444,7 +703,8 @@
       "price": 744.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/cc77abec-d9df-40c9-9712-eda4ffdbe1e7.jpg?1714656011.4009",
       "quant": "10",
-      "weight": "310"
+      "weight": "310",
+      "expiry_days": "720"
     },
     {
       "id": "21708",
@@ -452,7 +712,8 @@
       "price": 629.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/6aa4b4c1-5e5c-4c89-a63f-e3f39ca41ac4.jpg?1714658120.6378",
       "quant": "12",
-      "weight": "280"
+      "weight": "280",
+      "expiry_days": "720"
     },
     {
       "id": "15760",
@@ -460,7 +721,8 @@
       "price": 740.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/ab3a5c46-72ed-402b-a9e4-ce17e2753e6d.jpg?1714655531.9406",
       "quant": "12",
-      "weight": "310"
+      "weight": "310",
+      "expiry_days": "720"
     },
     {
       "id": "15758",
@@ -468,7 +730,8 @@
       "price": 815.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/27813a90-3db3-4ab3-978f-efe0700e1f44.jpg?1715583008.0854",
       "quant": "12",
-      "weight": "310"
+      "weight": "310",
+      "expiry_days": "720"
     },
     {
       "id": "83957",
@@ -476,7 +739,8 @@
       "price": 513.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/c302510e-5a6e-452f-aae9-84fb8362b278.webp?1727735539.7223",
       "quant": "15",
-      "weight": "280"
+      "weight": "280",
+      "expiry_days": "360"
     },
     {
       "id": "89387",
@@ -484,7 +748,8 @@
       "price": 1070.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/08249c16-bccb-4680-b2ba-6736a3a52313.jpg?1727039388.7244",
       "quant": "8",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "720"
     },
     {
       "id": "91305",
@@ -492,7 +757,8 @@
       "price": 1161.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/94bc4e3d-1012-4a3f-a5b2-efe5fe907359.webp?1731777895.4605",
       "quant": "6",
-      "weight": "330"
+      "weight": "330",
+      "expiry_days": "730"
     },
     {
       "id": "101755",
@@ -500,7 +766,8 @@
       "price": 879.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/6795e427-3aa7-4af8-ac71-5d34e8283291.webp?1732265017.5472",
       "quant": "6",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "365"
     },
     {
       "id": "101760",
@@ -508,7 +775,8 @@
       "price": 879.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/1affb753-3663-4eb7-af3d-7394a87cc934.webp?1732264938.1727",
       "quant": "6",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "365"
     },
     {
       "id": "30381",
@@ -516,7 +784,8 @@
       "price": 583.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/47253ade-27d1-4b63-b454-666f6620f41a.jpg?1715583609.3569",
       "quant": "8",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "90"
     },
     {
       "id": "19725",
@@ -524,7 +793,8 @@
       "price": 596.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/8825f8fa-3150-48a8-b198-d8ad97ea2384.jpg?1714656930.0801",
       "quant": "8",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "90"
     },
     {
       "id": "86672",
@@ -532,7 +802,8 @@
       "price": 1131.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/8b33d377-6d6f-499a-9e1b-94a78d3c9c3c.jpg?1707523338.3619",
       "quant": "4",
-      "weight": "250"
+      "weight": "250",
+      "expiry_days": "90"
     },
     {
       "id": "104792",
@@ -540,7 +811,8 @@
       "price": 1197.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/e06e8e99-8e9b-4fa6-b377-338ad34893d3.webp?1735152418.051",
       "quant": "4",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "90"
     },
     {
       "id": "30028",
@@ -548,7 +820,8 @@
       "price": 945.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/48b5c4fb-26ef-4b1e-a0cf-cf1f0bf83f93.jpg?1713794773.8126",
       "quant": "8",
-      "weight": "470"
+      "weight": "470",
+      "expiry_days": "730"
     },
     {
       "id": "104793",
@@ -556,7 +829,8 @@
       "price": 1971.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/d3231423-4dbe-4527-bbfc-5b678f23f2d4.webp?1735152077.1555",
       "quant": "4",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "90"
     },
     {
       "id": "16379",
@@ -564,7 +838,8 @@
       "price": 449.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/4aafecbb-1834-4369-834b-a9db4960245a.jpg?1713795219.4784",
       "quant": "12",
-      "weight": "340"
+      "weight": "340",
+      "expiry_days": "1460"
     },
     {
       "id": "55217",
@@ -572,7 +847,8 @@
       "price": 464.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/7ad51357-ebfb-4e3a-b662-056373c4bd09.jpg?1715332165.0405",
       "quant": "12",
-      "weight": "425"
+      "weight": "425",
+      "expiry_days": "1460"
     },
     {
       "id": "43031",
@@ -580,7 +856,8 @@
       "price": 538.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/8c695076-a293-458b-bae8-26f57b22af2b.jpg?1713795188.4491",
       "quant": "12",
-      "weight": "340"
+      "weight": "340",
+      "expiry_days": "1460"
     },
     {
       "id": "16378",
@@ -588,7 +865,8 @@
       "price": 427.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/a6ae19ef-31ef-4b02-aa52-57ec380858a9.jpg?1715332118.8392",
       "quant": "12",
-      "weight": "420"
+      "weight": "420",
+      "expiry_days": "1460"
     },
     {
       "id": "93800",
@@ -596,7 +874,8 @@
       "price": 469.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/6b65dcc5-d60f-43fb-ad80-5d9f40ca47c1.webp?1727708407.5253",
       "quant": "6",
-      "weight": "90"
+      "weight": "90",
+      "expiry_days": "365"
     },
     {
       "id": "15157",
@@ -604,7 +883,8 @@
       "price": 1076.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/39a54f06-d2a1-49e8-8906-3e448f11048c.jpg?1711740014.3336",
       "quant": "10",
-      "weight": "240"
+      "weight": "240",
+      "expiry_days": "360"
     },
     {
       "id": "94351",
@@ -612,7 +892,8 @@
       "price": 601.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/c454f894-7dfe-4b5d-a327-510420f41485.jpg?1722282678.7335",
       "quant": "6",
-      "weight": "90"
+      "weight": "90",
+      "expiry_days": "360"
     },
     {
       "id": "38367",
@@ -620,7 +901,8 @@
       "price": 988.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/6a930484-df84-468c-8695-1ab16acf98bd.jpg?1713536294.1689",
       "quant": "10",
-      "weight": "140"
+      "weight": "140",
+      "expiry_days": "730"
     },
     {
       "id": "20770",
@@ -628,7 +910,8 @@
       "price": 1656.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/364a8b7c-c261-4fcc-8c4c-25c0569b4f38.jpg?1711660630.4449",
       "quant": "12",
-      "weight": "250"
+      "weight": "250",
+      "expiry_days": "730"
     },
     {
       "id": "29009",
@@ -636,7 +919,8 @@
       "price": 428.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/a23b5194-688b-4d5d-8969-d08a25cb3ef0.jpg?1712350999.7206",
       "quant": "6",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "120"
     },
     {
       "id": "89750",
@@ -644,7 +928,8 @@
       "price": 639.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/ae15895d-860f-47db-9ea6-e1df38872569.webp?1731638593.361",
       "quant": "6",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "1095"
     },
     {
       "id": "65007",
@@ -652,7 +937,8 @@
       "price": 479.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/280aab6e-2ad8-4f95-b7ee-50140da6df49.jpg?1713795611.4462",
       "quant": "12",
-      "weight": "250"
+      "weight": "250",
+      "expiry_days": "730"
     },
     {
       "id": "76689",
@@ -660,7 +946,8 @@
       "price": 500.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/19d9f92d-dade-44f5-b27f-6a21f6707306.jpg?1727294136.9715",
       "quant": "9",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "365"
     },
     {
       "id": "15312",
@@ -668,7 +955,8 @@
       "price": 751.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/cd6fdf35-7f47-4b49-a69b-443acbbaf399.jpg?1713795977.9377",
       "quant": "24",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "1140"
     },
     {
       "id": "28949",
@@ -676,7 +964,8 @@
       "price": 863.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/11bd44c9-bbda-4ed1-9116-01e9575abb74.jpg?1713796221.8429",
       "quant": "8",
-      "weight": "720"
+      "weight": "720",
+      "expiry_days": "730"
     },
     {
       "id": "18209",
@@ -684,7 +973,8 @@
       "price": 1092.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/9143ea6c-52ec-4bc4-8733-770d15370bca.jpg?1722201508.5691",
       "quant": "12",
-      "weight": "750"
+      "weight": "750",
+      "expiry_days": "730"
     },
     {
       "id": "28621",
@@ -692,7 +982,8 @@
       "price": 645.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/1c23ab6d-40ff-4200-b251-96ef480221de.jpg?1714658028.7611",
       "quant": "12",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "780"
     },
     {
       "id": "80956",
@@ -700,7 +991,8 @@
       "price": 119.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/91cf555f-b6aa-4482-926d-38c9d1f76330.webp?1732564574.9039",
       "quant": "24",
-      "weight": "70"
+      "weight": "70",
+      "expiry_days": "360"
     },
     {
       "id": "55242",
@@ -708,7 +1000,8 @@
       "price": 490.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/6f6c0f13-2085-4cc8-9505-a2392f31c80f.jpg?1713796031.0631",
       "quant": "8",
-      "weight": "680"
+      "weight": "680",
+      "expiry_days": "730"
     },
     {
       "id": "51429",
@@ -716,7 +1009,8 @@
       "price": 629.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/254c7483-ce0b-47c6-a42f-424bbac21c60.jpg?1715583441.1721",
       "quant": "8",
-      "weight": "370"
+      "weight": "370",
+      "expiry_days": "730"
     },
     {
       "id": "83636",
@@ -724,7 +1018,8 @@
       "price": 482.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/bc901f72-3c8e-4bb3-8d20-309c0371b0cc.jpg?1707943729.245",
       "quant": "12",
-      "weight": "250"
+      "weight": "250",
+      "expiry_days": "1095"
     },
     {
       "id": "21054",
@@ -732,7 +1027,8 @@
       "price": 581.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/62301093-e3b5-487d-8483-e99dc6c07a3b.jpg?1725053861.5607",
       "quant": "8",
-      "weight": "670"
+      "weight": "670",
+      "expiry_days": "730"
     },
     {
       "id": "37160",
@@ -740,7 +1036,8 @@
       "price": 580.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/72a7888c-77a4-4cca-a583-fbba0d48aa3c.jpg?1722718379.6562",
       "quant": "8",
-      "weight": "680"
+      "weight": "680",
+      "expiry_days": "730"
     },
     {
       "id": "70381",
@@ -748,7 +1045,8 @@
       "price": 630.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/61bea9dc-5b68-46bb-911f-8ea8fb43e84e.jpg?1713249368.4064",
       "quant": "8",
-      "weight": "680"
+      "weight": "680",
+      "expiry_days": "730"
     },
     {
       "id": "77807",
@@ -756,7 +1054,8 @@
       "price": 580.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/79284ff6-573a-461c-bfd1-750655f261d3.jpg?1715584641.4056",
       "quant": "6",
-      "weight": "680"
+      "weight": "680",
+      "expiry_days": "730"
     },
     {
       "id": "68603",
@@ -764,7 +1063,8 @@
       "price": 798.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/669be54d-463c-4e7a-a632-1ecb18a530a9.jpg?1715174048.3161",
       "quant": "8",
-      "weight": "700"
+      "weight": "700",
+      "expiry_days": "730"
     },
     {
       "id": "71235",
@@ -772,7 +1072,8 @@
       "price": 435.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/b0dc03f3-2fdc-4121-b1e0-f00aa88e2d01.jpg?1713795067.2938",
       "quant": "12",
-      "weight": "450"
+      "weight": "450",
+      "expiry_days": "1095"
     },
     {
       "id": "90740",
@@ -780,7 +1081,8 @@
       "price": 921.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/46a032ba-2c42-4770-a83d-5b79df23431a.jpg?1720903948.5625",
       "quant": "6",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "730"
     },
     {
       "id": "32050",
@@ -788,7 +1090,8 @@
       "price": 830.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/46634a58-d25a-4825-8445-fb25c63ecc1e.jpg?1713795011.884",
       "quant": "6",
-      "weight": "350"
+      "weight": "350",
+      "expiry_days": "1095"
     },
     {
       "id": "23036",
@@ -796,7 +1099,8 @@
       "price": 1000.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/15765c2a-c9fb-498c-8e55-f202499edeb6.jpg?1714509836.7186",
       "quant": "12",
-      "weight": "380"
+      "weight": "380",
+      "expiry_days": "720"
     },
     {
       "id": "79075",
@@ -804,7 +1108,8 @@
       "price": 472.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/3626a5fc-9da9-4bdb-bc77-c8718350a9ec.jpg?1719076315.0464",
       "quant": "6",
-      "weight": "480"
+      "weight": "480",
+      "expiry_days": "1095"
     },
     {
       "id": "24047",
@@ -812,7 +1117,8 @@
       "price": 906.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/18681734-38ff-477d-b260-cb7c5fd59b55.jpg?1715765616.1954",
       "quant": "8",
-      "weight": "470"
+      "weight": "470",
+      "expiry_days": "730"
     },
     {
       "id": "70723",
@@ -820,7 +1126,8 @@
       "price": 921.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/f6e24c12-e0d8-4251-8a7c-602bc10f293e.jpg?1714656696.4424",
       "quant": "0",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "730"
     },
     {
       "id": "81394",
@@ -828,7 +1135,8 @@
       "price": 199.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/4d985d5e-4743-4b81-8075-14c63ede2be3.jpg?1702673297.1629",
       "quant": "16",
-      "weight": "50"
+      "weight": "50",
+      "expiry_days": "60"
     },
     {
       "id": "77640",
@@ -836,7 +1144,8 @@
       "price": 1523.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/78ff5dd2-b3af-4296-a0ad-991d5373142b.jpg?1713250709.1746",
       "quant": "4",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "120"
     },
     {
       "id": "81434",
@@ -844,7 +1153,8 @@
       "price": 199.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/a82dfb00-d250-44e2-bc11-b871b176fc1b.jpg?1702673265.8571",
       "quant": "16",
-      "weight": "50"
+      "weight": "50",
+      "expiry_days": "60"
     },
     {
       "id": "89751",
@@ -852,7 +1162,8 @@
       "price": 1803.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/302e5473-c7c0-420d-bf7e-12f6b6f43c13.jpg?1712354234.1714",
       "quant": "6",
-      "weight": "250"
+      "weight": "250",
+      "expiry_days": "90"
     },
     {
       "id": "94663",
@@ -860,7 +1171,8 @@
       "price": 833.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/faaaf19b-9414-414e-8223-0288c5c9bb44.webp?1727992563.143",
       "quant": "2",
-      "weight": "800"
+      "weight": "800",
+      "expiry_days": "90"
     },
     {
       "id": "100881",
@@ -868,7 +1180,8 @@
       "price": 1008.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/c0f1f0d1-116e-4115-877f-a5af481b112f.webp?1732266854.5939",
       "quant": "6",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "730"
     },
     {
       "id": "104794",
@@ -876,7 +1189,8 @@
       "price": 1596.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/27413d70-c40c-4516-8fa1-49faa6c5c868.webp?1735151959.625",
       "quant": "4",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "90"
     },
     {
       "id": "96675",
@@ -884,7 +1198,8 @@
       "price": 1027.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/d2e99331-d603-4002-9818-a0bc1fcb79a9.webp?1731788394.9052",
       "quant": "6",
-      "weight": "380"
+      "weight": "380",
+      "expiry_days": "730"
     },
     {
       "id": "21813",
@@ -892,7 +1207,8 @@
       "price": 620.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/8c9e2be5-15f2-49ee-b27c-fa6b2afda50a.jpg?1713795730.2459",
       "quant": "8",
-      "weight": "700"
+      "weight": "700",
+      "expiry_days": "1095"
     },
     {
       "id": "16373",
@@ -900,7 +1216,8 @@
       "price": 1009.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/bf21787d-ed8b-431a-9f7a-b37cb9f06cac.jpg?1724245096.3104",
       "quant": "6",
-      "weight": "350"
+      "weight": "350",
+      "expiry_days": "730"
     },
     {
       "id": "83631",
@@ -908,7 +1225,8 @@
       "price": 699.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/96216147-7db8-43ff-a64e-0976e2076a7e.jpg?1709927921.5634",
       "quant": "8",
-      "weight": "460"
+      "weight": "460",
+      "expiry_days": "1095"
     },
     {
       "id": "23039",
@@ -916,7 +1234,8 @@
       "price": 1036.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/23f7e9f9-21c3-4956-ab55-1c2af8568030.jpg?1713794909.8681",
       "quant": "12",
-      "weight": "370"
+      "weight": "370",
+      "expiry_days": "720"
     },
     {
       "id": "16777",
@@ -924,7 +1243,8 @@
       "price": 584.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/3633d411-2c96-4155-89dd-237c80c0f01e.jpg?1713794864.5124",
       "quant": "6",
-      "weight": "510"
+      "weight": "510",
+      "expiry_days": "1095"
     },
     {
       "id": "82902",
@@ -932,7 +1252,8 @@
       "price": 936.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/bce36963-52d9-4f53-b31e-c5a37b34a9e1.jpg?1709927811.804",
       "quant": "6",
-      "weight": "270"
+      "weight": "270",
+      "expiry_days": "730"
     },
     {
       "id": "96678",
@@ -940,7 +1261,8 @@
       "price": 958.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/b3b2ca3b-43e5-436f-ace6-f5f142acac29.webp?1731634963.2916",
       "quant": "6",
-      "weight": "380"
+      "weight": "380",
+      "expiry_days": "730"
     },
     {
       "id": "99076",
@@ -948,7 +1270,8 @@
       "price": 958.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/e5aa8d45-b3b8-4e37-bdce-d536f228575c.webp?1731634891.5799",
       "quant": "6",
-      "weight": "370"
+      "weight": "370",
+      "expiry_days": "730"
     },
     {
       "id": "84446",
@@ -956,7 +1279,8 @@
       "price": 566.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/ceaf4782-0e5f-4cb1-bcbe-3b07df2d50f5.jpg?1711047108.1845",
       "quant": "6",
-      "weight": "520"
+      "weight": "520",
+      "expiry_days": "1095"
     },
     {
       "id": "98309",
@@ -964,7 +1288,8 @@
       "price": 943.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/f949fcd8-f789-4f0c-bbb7-57b6ff65407d.webp?1732266323.9879",
       "quant": "6",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "730"
     },
     {
       "id": "28667",
@@ -972,7 +1297,8 @@
       "price": 573.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/06050c5a-19e1-493c-a4ad-a14b0f159750.jpg?1713249668.684",
       "quant": "12",
-      "weight": "130"
+      "weight": "130",
+      "expiry_days": "360"
     },
     {
       "id": "24812",
@@ -980,7 +1306,8 @@
       "price": 758.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/82210d1d-90b0-421a-a3cc-1e46d84f5652.jpg?1713250514.4661",
       "quant": "12",
-      "weight": "110"
+      "weight": "110",
+      "expiry_days": "360"
     },
     {
       "id": "24850",
@@ -988,7 +1315,8 @@
       "price": 694.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/2330f10d-fcb3-4ec6-bac4-255dc8f56842.jpg?1713250270.8382",
       "quant": "12",
-      "weight": "120"
+      "weight": "120",
+      "expiry_days": "360"
     },
     {
       "id": "82985",
@@ -996,7 +1324,8 @@
       "price": 1066.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/82cf1d26-22c4-4211-8783-97140304a61c.jpg?1703965459.0166",
       "quant": "12",
-      "weight": "280"
+      "weight": "280",
+      "expiry_days": "720"
     },
     {
       "id": "82378",
@@ -1004,7 +1333,8 @@
       "price": 839.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/18319e24-e35c-418b-adba-90f1797e63b1.jpg?1715271755.8743",
       "quant": "12",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "1095"
     },
     {
       "id": "77583",
@@ -1012,7 +1342,8 @@
       "price": 1523.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/bf222442-49ac-474d-a3c7-6513cc50c9e3.jpg?1713250448.4451",
       "quant": "4",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "120"
     },
     {
       "id": "21432",
@@ -1020,7 +1351,8 @@
       "price": 628.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/406b56f8-592d-4708-b0e6-8f7cd3edfc7b.jpg?1713249503.6615",
       "quant": "12",
-      "weight": "130"
+      "weight": "130",
+      "expiry_days": "360"
     },
     {
       "id": "85413",
@@ -1028,7 +1360,8 @@
       "price": 1130.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/c5b3ea18-f1d6-4aae-a10f-e56c7d5ca4d5.jpg?1725410334.7994",
       "quant": "12",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "420"
     },
     {
       "id": "77248",
@@ -1036,7 +1369,8 @@
       "price": 1557.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/541800fe-a26e-4f40-8086-214219ed1abb.webp?1735152545.6497",
       "quant": "12",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "1095"
     },
     {
       "id": "88540",
@@ -1044,7 +1378,8 @@
       "price": 844.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/ba0eaadf-5c6d-4406-b6d0-3302b5460c4e.jpg?1722024750.6172",
       "quant": "12",
-      "weight": "280"
+      "weight": "280",
+      "expiry_days": "1095"
     },
     {
       "id": "100428",
@@ -1052,7 +1387,8 @@
       "price": 798.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/30672856-f5f3-4334-a759-3f814d8601e4.webp?1735658635.9064",
       "quant": "12",
-      "weight": "120"
+      "weight": "120",
+      "expiry_days": "180"
     },
     {
       "id": "83500",
@@ -1060,7 +1396,8 @@
       "price": 408.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/5d5cd8f9-9cc5-4ddd-9bed-40e217f16000.webp?1731185089.2291",
       "quant": "12",
-      "weight": "115"
+      "weight": "115",
+      "expiry_days": "360"
     },
     {
       "id": "79853",
@@ -1068,7 +1405,8 @@
       "price": 1362.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/a5a6836d-0364-4467-9691-ddcf658851d3.jpg?1703273472.4961",
       "quant": "24",
-      "weight": "565"
+      "weight": "565",
+      "expiry_days": "730"
     },
     {
       "id": "18175",
@@ -1076,7 +1414,8 @@
       "price": 1207.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/dcc9160b-33d4-4593-8c40-8786cdf57513.jpg?1725227297.399",
       "quant": "24",
-      "weight": "565"
+      "weight": "565",
+      "expiry_days": "730"
     },
     {
       "id": "79057",
@@ -1084,7 +1423,8 @@
       "price": 402.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/0ba4c528-2c59-45f8-9bc8-e35a603cd12a.jpg?1690493826.8065",
       "quant": "15",
-      "weight": "140"
+      "weight": "140",
+      "expiry_days": "365"
     },
     {
       "id": "18176",
@@ -1092,7 +1432,8 @@
       "price": 972.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/8be65d9e-9265-451f-8c61-2cc06596a9f7.jpg?1660323308.0457",
       "quant": "24",
-      "weight": "425"
+      "weight": "425",
+      "expiry_days": "1095"
     },
     {
       "id": "54359",
@@ -1100,7 +1441,8 @@
       "price": 1167.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/6b231484-0a20-41a7-bb67-c5fc46bf1983.jpg?1652976790.495",
       "quant": "12",
-      "weight": "565"
+      "weight": "565",
+      "expiry_days": "720"
     },
     {
       "id": "79056",
@@ -1108,7 +1450,8 @@
       "price": 476.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/6d8d3278-83a6-42a5-b404-d9c25b621998.jpg?1690494669.672",
       "quant": "15",
-      "weight": "120"
+      "weight": "120",
+      "expiry_days": "360"
     },
     {
       "id": "83501",
@@ -1116,7 +1459,8 @@
       "price": 437.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/f989149a-d7f9-4194-be82-f500148968d2.jpg?1726171798.0288",
       "quant": "12",
-      "weight": "115"
+      "weight": "115",
+      "expiry_days": "360"
     },
     {
       "id": "85525",
@@ -1124,7 +1468,8 @@
       "price": 461.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/089e020e-fe9c-4e04-9c0f-385437e6a0ed.webp?1732575004.3095",
       "quant": "15",
-      "weight": "120"
+      "weight": "120",
+      "expiry_days": "360"
     },
     {
       "id": "95581",
@@ -1132,7 +1477,8 @@
       "price": 1084.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/1965fc17-0aad-40df-8fa3-64827a59aaf6.webp?1731013836.0557",
       "quant": "12",
-      "weight": "565"
+      "weight": "565",
+      "expiry_days": "1080"
     },
     {
       "id": "101635",
@@ -1140,7 +1486,8 @@
       "price": 881.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/103f814a-0333-43ea-a788-a2411891a8d2.webp?1734387984.1491",
       "quant": "6",
-      "weight": "435"
+      "weight": "435",
+      "expiry_days": "1095"
     }
   ],
   "Бакалея": [
@@ -1150,7 +1497,8 @@
       "price": 466.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/baecdbfe-fd41-41b5-836a-22b2ea173420.webp?1735658557.0596",
       "quant": "8",
-      "weight": "180"
+      "weight": "180",
+      "expiry_days": "180"
     },
     {
       "id": "62717",
@@ -1158,7 +1506,8 @@
       "price": 463.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/4e46023a-0b7c-479b-8791-72e0bcad9542.jpg?1710058489.6087",
       "quant": "8",
-      "weight": "180"
+      "weight": "180",
+      "expiry_days": "180"
     },
     {
       "id": "21827",
@@ -1166,7 +1515,8 @@
       "price": 681.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/6b1a734d-cfcf-40aa-9db2-a15775c30623.jpg?1710331182.572",
       "quant": "4",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "60"
     },
     {
       "id": "80306",
@@ -1174,7 +1524,8 @@
       "price": 454.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/6b18b43b-fd06-4886-94cb-bd8b4d8e3542.jpg?1703795745.4776",
       "quant": "8",
-      "weight": "180"
+      "weight": "180",
+      "expiry_days": "180"
     },
     {
       "id": "17138",
@@ -1182,7 +1533,8 @@
       "price": 328.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/ace87a44-208c-434e-8775-bbf35a1c28f7.jpg?1710058933.8369",
       "quant": "12",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "60"
     },
     {
       "id": "81064",
@@ -1190,7 +1542,8 @@
       "price": 494.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/b2c7f884-2d1a-4701-85ec-3c21089ad258.jpg?1717447279.947",
       "quant": "6",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "360"
     },
     {
       "id": "81067",
@@ -1198,7 +1551,8 @@
       "price": 487.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/2e181fdb-2fdc-415e-a0b8-3a3268bca63a.jpg?1721506160.9542",
       "quant": "6",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "360"
     },
     {
       "id": "74027",
@@ -1206,7 +1560,8 @@
       "price": 254.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/81b822f1-b899-40cc-ba13-b6eb2e354a83.jpg?1704579489.2058",
       "quant": "9",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "450"
     },
     {
       "id": "18778",
@@ -1214,7 +1569,8 @@
       "price": 219.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/ed64f595-1e59-4023-ab4f-d2aa9e8aac50.jpg?1708070095.7588",
       "quant": "15",
-      "weight": "100"
+      "weight": "100",
+      "expiry_days": "365"
     },
     {
       "id": "28802",
@@ -1222,7 +1578,8 @@
       "price": 394.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/d7bc259d-59b5-4abb-89e7-9911058aa0de.jpg?1724019543.9135",
       "quant": "10",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "540"
     },
     {
       "id": "21020",
@@ -1230,7 +1587,8 @@
       "price": 189.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/cd7526c7-e690-432e-a1c4-67f9b7513f0d.jpg?1707838932.8282",
       "quant": "12",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "540"
     },
     {
       "id": "24753",
@@ -1238,7 +1596,8 @@
       "price": 217.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/4cdfbb2c-4ba3-414b-9d87-2a81c859bd12.jpg?1708071011.8639",
       "quant": "12",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "270"
     },
     {
       "id": "59756",
@@ -1246,7 +1605,8 @@
       "price": 623.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/f4685631-9b13-42ed-8d1e-a3d5c367dc41.jpg?1713567344.9199",
       "quant": "10",
-      "weight": "900"
+      "weight": "900",
+      "expiry_days": "540"
     },
     {
       "id": "29377",
@@ -1254,7 +1614,8 @@
       "price": 279.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/59a133c2-3638-4684-adc5-4de4471cc32e.jpg?1707838270.1696",
       "quant": "10",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "300"
     },
     {
       "id": "17681",
@@ -1262,7 +1623,8 @@
       "price": 503.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/95a91e97-2c07-4e02-9901-0be8e84bf36f.jpg?1707751272.9979",
       "quant": "10",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "600"
     },
     {
       "id": "36142",
@@ -1270,7 +1632,8 @@
       "price": 627.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/a6bec620-88eb-48b5-8b12-d1addab0671f.jpg?1704580031.6025",
       "quant": "6",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "600"
     },
     {
       "id": "21279",
@@ -1278,7 +1641,8 @@
       "price": 438.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/c796eedd-f6bb-4209-9ce1-9a7d63d7f6b9.jpg?1707749832.4499",
       "quant": "10",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "600"
     },
     {
       "id": "20233",
@@ -1286,7 +1650,8 @@
       "price": 388.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/f3d6ed70-137d-4808-a678-c1bfeff5d8a7.jpg?1707838869.7455",
       "quant": "12",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "360"
     },
     {
       "id": "17678",
@@ -1294,7 +1659,8 @@
       "price": 205.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/a5f788e3-bf59-469f-9195-25c9640f8034.jpg?1707838329.2675",
       "quant": "12",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "300"
     },
     {
       "id": "19759",
@@ -1302,7 +1668,8 @@
       "price": 369.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/d2ad576e-56ad-4a26-aaeb-8a5fc1fc77e0.jpg?1707730572.7609",
       "quant": "11",
-      "weight": "350"
+      "weight": "350",
+      "expiry_days": "360"
     },
     {
       "id": "78937",
@@ -1310,7 +1677,8 @@
       "price": 613.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/72cbe7ac-b926-4445-aa01-442d2690ed52.jpg?1700263365.8309",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "540"
     },
     {
       "id": "28616",
@@ -1318,7 +1686,8 @@
       "price": 559.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/74990635-9c86-4dd2-bcd8-9708d4ea82f4.jpg?1704583212.4921",
       "quant": "12",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "540"
     },
     {
       "id": "51897",
@@ -1326,7 +1695,8 @@
       "price": 383.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/29f10293-330a-4cf4-ad71-5357348709cf.jpg?1707838519.8194",
       "quant": "12",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "180"
     },
     {
       "id": "66488",
@@ -1334,7 +1704,8 @@
       "price": 479.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/da1009d9-2b09-4eb3-ae51-576621a03265.jpg?1707731530.7202",
       "quant": "6",
-      "weight": "350"
+      "weight": "350",
+      "expiry_days": "420"
     },
     {
       "id": "85404",
@@ -1342,7 +1713,8 @@
       "price": 474.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/d00e80f1-1c86-405b-b078-aa178e7c4e62.jpg?1714333413.0918",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "42818",
@@ -1350,7 +1722,8 @@
       "price": 892.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/ff25aa65-736c-41c6-95ed-1d57990ac42b.jpg?1704576971.0783",
       "quant": "16",
-      "weight": "350"
+      "weight": "350",
+      "expiry_days": "600"
     },
     {
       "id": "31046",
@@ -1358,7 +1731,8 @@
       "price": 507.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/ee6ebc72-a067-4afe-a641-7643aa096296.jpg?1708070002.5673",
       "quant": "8",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "720"
     },
     {
       "id": "19748",
@@ -1366,7 +1740,8 @@
       "price": 621.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/c256aba7-15d1-4980-913f-cb13e63e4ad7.jpg?1708071517.7133",
       "quant": "8",
-      "weight": "350"
+      "weight": "350",
+      "expiry_days": "360"
     },
     {
       "id": "29041",
@@ -1374,7 +1749,8 @@
       "price": 668.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/4aff4d37-a2cc-46a2-be9b-4a9023451a87.jpg?1704583390.4131",
       "quant": "8",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "360"
     },
     {
       "id": "36616",
@@ -1382,7 +1758,8 @@
       "price": 472.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/b19b979b-d8bb-4cd5-9123-e906b4e2f243.jpg?1708072910.6304",
       "quant": "10",
-      "weight": "450"
+      "weight": "450",
+      "expiry_days": "600"
     },
     {
       "id": "19761",
@@ -1390,7 +1767,8 @@
       "price": 913.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/f1d31cd6-6ae8-4afd-81f2-08c88fb58229.jpg?1707750493.1331",
       "quant": "11",
-      "weight": "350"
+      "weight": "350",
+      "expiry_days": "360"
     },
     {
       "id": "14513",
@@ -1398,7 +1776,8 @@
       "price": 320.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/bcd9cb4d-fd35-4dc8-83ff-162248f35571.jpg?1707749951.5861",
       "quant": "8",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "600"
     },
     {
       "id": "78936",
@@ -1406,7 +1785,8 @@
       "price": 818.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/0ccf9d6d-e57a-471e-980e-361bad24e478.jpg?1707677826.7004",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "540"
     },
     {
       "id": "19749",
@@ -1414,7 +1794,8 @@
       "price": 524.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/fd269e78-b1b3-41cc-9e0e-45eb57aa2111.jpg?1707839113.0243",
       "quant": "11",
-      "weight": "350"
+      "weight": "350",
+      "expiry_days": "360"
     },
     {
       "id": "29383",
@@ -1422,7 +1803,8 @@
       "price": 830.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/5dee7058-6371-48ef-be03-9ce8369ca915.jpg?1708071797.4271",
       "quant": "12",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "28617",
@@ -1430,7 +1812,8 @@
       "price": 280.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/eeb76182-aeab-4e91-a256-b0784704f700.jpg?1707751571.4014",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "600"
     },
     {
       "id": "74034",
@@ -1438,7 +1821,8 @@
       "price": 262.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/b44caf63-9317-4220-8229-57d8a060b057.jpg?1704579188.5233",
       "quant": "9",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "540"
     },
     {
       "id": "28795",
@@ -1446,7 +1830,8 @@
       "price": 579.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/32794e4e-eca1-4f75-949e-c32a45b690b3.jpg?1708071312.2577",
       "quant": "10",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "360"
     },
     {
       "id": "17699",
@@ -1454,7 +1839,8 @@
       "price": 344.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/2abec3bb-c8b1-4a9d-a506-a611b3857dc2.jpg?1707751816.3421",
       "quant": "12",
-      "weight": "900"
+      "weight": "900",
+      "expiry_days": "600"
     },
     {
       "id": "20627",
@@ -1462,7 +1848,8 @@
       "price": 639.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/92ca1822-6ebc-4984-bdf9-20c16732e5b3.jpg?1708073170.5597",
       "quant": "8",
-      "weight": "450"
+      "weight": "450",
+      "expiry_days": "720"
     },
     {
       "id": "66866",
@@ -1470,7 +1857,8 @@
       "price": 234.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/9d0750e1-378a-4c75-ba28-3264e2fddc68.jpg?1707838451.1668",
       "quant": "12",
-      "weight": "350"
+      "weight": "350",
+      "expiry_days": "300"
     },
     {
       "id": "91724",
@@ -1478,7 +1866,8 @@
       "price": 496.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/e31636e5-8ba9-4101-b7fc-4ccc46d1d751.webp?1731107970.8634",
       "quant": "8",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "360"
     },
     {
       "id": "70975",
@@ -1486,7 +1875,8 @@
       "price": 406.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/e318397e-8169-4e50-982e-386209450eff.jpg?1703801591.5107",
       "quant": "18",
-      "weight": "220"
+      "weight": "220",
+      "expiry_days": "90"
     },
     {
       "id": "91632",
@@ -1494,7 +1884,8 @@
       "price": 323.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/cca2a74a-c149-428f-bb75-3f02d47930ca.webp?1728074532.3992",
       "quant": "20",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "120"
     },
     {
       "id": "72888",
@@ -1502,7 +1893,8 @@
       "price": 745.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/677c28ad-9e9c-4e2d-9051-08003878abcd.jpg?1710322375.5041",
       "quant": "6",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "90"
     },
     {
       "id": "70974",
@@ -1510,7 +1902,8 @@
       "price": 407.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/e6b9b302-bd2a-4aad-bcbe-19b0e85fd87e.jpg?1703801446.8734",
       "quant": "18",
-      "weight": "220"
+      "weight": "220",
+      "expiry_days": "90"
     },
     {
       "id": "43157",
@@ -1518,7 +1911,8 @@
       "price": 519.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/165b4fa9-cd36-48df-a557-e0cb539a022b.jpg?1710059582.8615",
       "quant": "24",
-      "weight": "375"
+      "weight": "375",
+      "expiry_days": "90"
     },
     {
       "id": "78033",
@@ -1526,7 +1920,8 @@
       "price": 405.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/d44fede4-1e56-4bfa-bf60-54e59e32db2d.jpg?1719337699.6494",
       "quant": "18",
-      "weight": "220"
+      "weight": "220",
+      "expiry_days": "90"
     },
     {
       "id": "24574",
@@ -1534,7 +1929,8 @@
       "price": 238.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/c628c518-79b1-43af-9b49-8efc3445c3e1.jpg?1710533087.2828",
       "quant": "12",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "360"
     },
     {
       "id": "25705",
@@ -1542,7 +1938,8 @@
       "price": 325.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/0bf6d588-2d0b-4271-8cbb-c0c1a145f0a2.jpg?1704581199.8645",
       "quant": "12",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "180"
     },
     {
       "id": "25704",
@@ -1550,7 +1947,8 @@
       "price": 478.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/045d549d-e869-411a-8227-c693f592c4ed.jpg?1704581352.213",
       "quant": "8",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "360"
     },
     {
       "id": "75418",
@@ -1558,7 +1956,8 @@
       "price": 1942.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/2a5dd2af-b746-4a95-9271-180cae205291.jpg?1708068091.9156",
       "quant": "5",
-      "weight": "250"
+      "weight": "250",
+      "expiry_days": "365"
     },
     {
       "id": "43204",
@@ -1566,7 +1965,8 @@
       "price": 325.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/34390b48-78ab-4253-a41b-9297e2ad3bb8.jpg?1710154515.7642",
       "quant": "10",
-      "weight": "1000"
+      "weight": "1000",
+      "expiry_days": "540"
     },
     {
       "id": "84194",
@@ -1574,7 +1974,8 @@
       "price": 451.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/2f92cf8b-9ce4-4e70-a2ba-4e00652abcab.jpg?1701548471.3669",
       "quant": "6",
-      "weight": "1000"
+      "weight": "1000",
+      "expiry_days": "270"
     },
     {
       "id": "71556",
@@ -1582,7 +1983,8 @@
       "price": 573.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/bf57f63f-5cb9-4552-8152-dd2ff361f53d.jpg?1710154653.9223",
       "quant": "6",
-      "weight": "2000"
+      "weight": "2000",
+      "expiry_days": "360"
     },
     {
       "id": "92629",
@@ -1590,7 +1992,8 @@
       "price": 1189.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/58ad3379-ab52-4ff3-be5c-3d7113e5cae3.jpg?1725223597.2929",
       "quant": "8",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "360"
     },
     {
       "id": "34776",
@@ -1598,7 +2001,8 @@
       "price": 567.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/35163df4-1946-4986-a15a-dadf2a6675a5.jpg?1704581294.2302",
       "quant": "8",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "360"
     },
     {
       "id": "83790",
@@ -1606,7 +2010,8 @@
       "price": 362.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/d3eb122d-dcfc-4a30-80fe-0449b6bdbdcb.jpg?1716845296.783",
       "quant": "12",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "360"
     },
     {
       "id": "34820",
@@ -1614,7 +2019,8 @@
       "price": 363.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/8cd51a1d-72c8-4704-9eb2-b796e18da9d8.jpg?1715602635.9743",
       "quant": "10",
-      "weight": "1000"
+      "weight": "1000",
+      "expiry_days": "360"
     },
     {
       "id": "28614",
@@ -1622,7 +2028,8 @@
       "price": 369.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/f2b99bc5-c387-4a13-9ea3-f3ae003134d2.jpg?1710154277.7616",
       "quant": "6",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "180"
     },
     {
       "id": "24573",
@@ -1630,7 +2037,8 @@
       "price": 240.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/9ef0d7fd-5912-4cd9-bc08-cec0533fd9a3.jpg?1725737351.9145",
       "quant": "12",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "360"
     },
     {
       "id": "85454",
@@ -1638,7 +2046,8 @@
       "price": 462.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/545979ab-6c38-40f4-9f31-f287045d4bd2.webp?1733428406.0512",
       "quant": "6",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "480"
     },
     {
       "id": "91725",
@@ -1646,7 +2055,8 @@
       "price": 556.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/d83e5019-46a6-4db6-a04f-406d55caa517.webp?1732916495.2448",
       "quant": "8",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "360"
     },
     {
       "id": "37589",
@@ -1654,7 +2064,8 @@
       "price": 1118.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/6baa4726-deb3-4dcb-896e-672529304d28.jpg?1711437031.1449",
       "quant": "12",
-      "weight": "280"
+      "weight": "280",
+      "expiry_days": "360"
     },
     {
       "id": "37405",
@@ -1662,7 +2073,8 @@
       "price": 1070.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/7694838a-e512-47cd-93cf-cd386fea17b4.jpg?1711437209.3824",
       "quant": "12",
-      "weight": "280"
+      "weight": "280",
+      "expiry_days": "360"
     },
     {
       "id": "92983",
@@ -1670,7 +2082,8 @@
       "price": 1187.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/cb9c896e-a2de-44f9-8f9a-05f2a8257089.jpg?1726779658.9241",
       "quant": "6",
-      "weight": "160"
+      "weight": "160",
+      "expiry_days": "300"
     },
     {
       "id": "61899",
@@ -1678,7 +2091,8 @@
       "price": 1031.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/fad0d3d2-e09b-409c-b9c6-2cd3590879c8.jpg?1711438154.4683",
       "quant": "10",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "270"
     },
     {
       "id": "31501",
@@ -1686,7 +2100,8 @@
       "price": 955.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/1bda7ba3-0164-4bf9-b237-a96f392b2f6f.jpg?1711436836.4457",
       "quant": "12",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "180"
     },
     {
       "id": "86673",
@@ -1694,7 +2109,8 @@
       "price": 1052.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/8d0e095f-0133-4d18-907f-ebe0892b2fa8.jpg?1713562271.3808",
       "quant": "8",
-      "weight": "150"
+      "weight": "150",
+      "expiry_days": "360"
     },
     {
       "id": "78294",
@@ -1702,7 +2118,8 @@
       "price": 1697.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/5c905f36-4db2-4355-b52e-c1a7fe262cbe.jpg?1708068737.5718",
       "quant": "12",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "44269",
@@ -1710,7 +2127,8 @@
       "price": 997.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/faf59902-b984-4f88-abc5-f87d5f73a19f.jpg?1705325868.8104",
       "quant": "6",
-      "weight": "260"
+      "weight": "260",
+      "expiry_days": "180"
     },
     {
       "id": "21162",
@@ -1718,7 +2136,8 @@
       "price": 876.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/1a5c6822-b306-455f-bf07-dae7cc23fe55.jpg?1716064663.9133",
       "quant": "10",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "90"
     },
     {
       "id": "67180",
@@ -1726,7 +2145,8 @@
       "price": 894.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/e5dfc589-5571-4107-b310-2dd3d16d872c.jpg?1711436747.8525",
       "quant": "12",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "180"
     },
     {
       "id": "15616",
@@ -1734,7 +2154,8 @@
       "price": 889.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/12ca77cb-aa40-41fa-861c-882f739080c0.jpg?1711437996.634",
       "quant": "10",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "270"
     },
     {
       "id": "16418",
@@ -1742,7 +2163,8 @@
       "price": 1039.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/93293d19-8b6b-4df4-a63e-50bd1f555dbe.jpg?1711436929.5877",
       "quant": "10",
-      "weight": "280"
+      "weight": "280",
+      "expiry_days": "90"
     },
     {
       "id": "93403",
@@ -1750,7 +2172,8 @@
       "price": 1504.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/1b52106c-baef-418f-b35a-09824672d4ac.webp?1729799156.0073",
       "quant": "6",
-      "weight": "160"
+      "weight": "160",
+      "expiry_days": "300"
     },
     {
       "id": "102228",
@@ -1758,7 +2181,8 @@
       "price": 1894.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/7bac6e15-bc6e-4220-ba31-fe962694da85.webp?1731098290.7204",
       "quant": "12",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "365"
     },
     {
       "id": "78350",
@@ -1766,7 +2190,8 @@
       "price": 762.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/a4a03061-4e3a-43a4-a476-5b1ca668a725.jpg?1705325711.8952",
       "quant": "9",
-      "weight": "100"
+      "weight": "100",
+      "expiry_days": "360"
     },
     {
       "id": "78355",
@@ -1774,7 +2199,8 @@
       "price": 1681.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/680df3b1-8fb5-41f8-8fa8-a43ead937068.jpg?1708068557.1605",
       "quant": "12",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "78299",
@@ -1782,7 +2208,8 @@
       "price": 1625.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/812f1e58-74c2-4e71-8e0f-df529ed08e7a.jpg?1708069877.8605",
       "quant": "12",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "67366",
@@ -1790,7 +2217,8 @@
       "price": 4404.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/372e89b3-eec4-4ec3-ae49-938e312674b4.jpg?1711914459.9922",
       "quant": "12",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "900"
     },
     {
       "id": "89747",
@@ -1798,7 +2226,8 @@
       "price": 5153.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/17a65d01-ccc5-44b4-aa2f-6f17536ff365.jpg?1720213233.2072",
       "quant": "12",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "720"
     },
     {
       "id": "1213",
@@ -1806,7 +2235,8 @@
       "price": 6811.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/b99d19f4-8b85-4276-82fa-a466bd14823a.jpg?1710060134.1931",
       "quant": "12",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "540"
     },
     {
       "id": "31401",
@@ -1814,7 +2244,8 @@
       "price": 1772.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/d5abf496-24f3-4d58-bcf9-1377780fdf45.jpg?1714334240.8847",
       "quant": "12",
-      "weight": "100"
+      "weight": "100",
+      "expiry_days": "720"
     },
     {
       "id": "57424",
@@ -1822,7 +2253,8 @@
       "price": 2975.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/5f415db5-fa10-4c67-90e8-ac9d97d30539.jpg?1710060256.4078",
       "quant": "6",
-      "weight": "250"
+      "weight": "250",
+      "expiry_days": "540"
     },
     {
       "id": "81388",
@@ -1830,7 +2262,8 @@
       "price": 4620.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/afcb7803-b524-477b-8dc2-0116bdc82e9c.jpg?1703800243.3279",
       "quant": "12",
-      "weight": "1000"
+      "weight": "1000",
+      "expiry_days": "900"
     },
     {
       "id": "36966",
@@ -1838,7 +2271,8 @@
       "price": 1164.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/ce61bc75-b8ab-47a0-af13-c7648d79843c.jpg?1702765718.9666",
       "quant": "8",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "360"
     },
     {
       "id": "15427",
@@ -1846,7 +2280,8 @@
       "price": 1427.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/c972b37c-1daa-4540-8611-74c7765450f9.jpg?1710059717.6339",
       "quant": "12",
-      "weight": "230"
+      "weight": "230",
+      "expiry_days": "365"
     },
     {
       "id": "14631",
@@ -1854,7 +2289,8 @@
       "price": 624.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/fe129e21-f727-4e9e-b259-e8ba545608b0.jpg?1710060014.7714",
       "quant": "20",
-      "weight": "250"
+      "weight": "250",
+      "expiry_days": "240"
     },
     {
       "id": "827",
@@ -1862,7 +2298,8 @@
       "price": 982.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/afd6ddcc-72b3-4b23-80e2-ce034696bd08.jpg?1710060557.6109",
       "quant": "15",
-      "weight": "1000"
+      "weight": "1000",
+      "expiry_days": "120"
     },
     {
       "id": "17583",
@@ -1870,7 +2307,8 @@
       "price": 1674.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/8f392e59-8638-458a-8a89-35ac975be5c4.jpg?1710059890.9986",
       "quant": "6",
-      "weight": "250"
+      "weight": "250",
+      "expiry_days": "360"
     },
     {
       "id": "73293",
@@ -1878,7 +2316,8 @@
       "price": 778.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/8b31c765-7a15-484b-9710-a2e2707ebed8.jpg?1710060794.9052",
       "quant": "15",
-      "weight": "800"
+      "weight": "800",
+      "expiry_days": "360"
     },
     {
       "id": "37147",
@@ -1886,7 +2325,8 @@
       "price": 949.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/765c4f86-431f-42d7-a8c0-0aa357f74499.jpg?1710060638.7455",
       "quant": "15",
-      "weight": "1000"
+      "weight": "1000",
+      "expiry_days": "180"
     },
     {
       "id": "20382",
@@ -1894,7 +2334,8 @@
       "price": 1360.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/11aae443-eba6-44ee-93b8-fcc1bebfb210.jpg?1656444522.4091",
       "quant": "12",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "180"
     },
     {
       "id": "99465",
@@ -1902,7 +2343,8 @@
       "price": 4588.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/ade741d3-e2bf-4d67-8b04-311cc3280aba.webp?1733781319.1153",
       "quant": "6",
-      "weight": "250"
+      "weight": "250",
+      "expiry_days": "730"
     },
     {
       "id": "67632",
@@ -1910,7 +2352,8 @@
       "price": 586.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/4450f1df-d7be-40af-a36b-05c116e8cc80.jpg?1710229781.3319",
       "quant": "10",
-      "weight": "1000"
+      "weight": "1000",
+      "expiry_days": "1460"
     },
     {
       "id": "79585",
@@ -1918,7 +2361,8 @@
       "price": 376.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/dcc4edda-1d50-473c-a692-3643979ebacd.jpg?1713905432.8744",
       "quant": "20",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "1825"
     },
     {
       "id": "18396",
@@ -1926,7 +2370,8 @@
       "price": 1472.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/fe7f0da6-dce7-496f-ad01-a80331765562.jpg?1710229648.2196",
       "quant": "10",
-      "weight": "1000"
+      "weight": "1000",
+      "expiry_days": "1095"
     },
     {
       "id": "81695",
@@ -1934,7 +2379,8 @@
       "price": 906.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/591a5a55-672b-4a79-afef-df4a4012320f.jpg?1707005599.042",
       "quant": "12",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "1095"
     },
     {
       "id": "48554",
@@ -1942,7 +2388,8 @@
       "price": 276.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/308df186-2c8f-4e75-9e1f-1c5397155334.jpg?1710155182.0935",
       "quant": "24",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "540"
     },
     {
       "id": "36203",
@@ -1950,7 +2397,8 @@
       "price": 506.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/c82e67b4-33a0-4972-a5d8-d3d10dc80459.jpg?1710410572.361",
       "quant": "8",
-      "weight": "280"
+      "weight": "280",
+      "expiry_days": "720"
     },
     {
       "id": "15428",
@@ -1958,7 +2406,8 @@
       "price": 1131.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/14a8bd3f-ad81-4af5-9c60-16f08b5499fa.jpg?1710497292.5429",
       "quant": "10",
-      "weight": "250"
+      "weight": "250",
+      "expiry_days": "360"
     },
     {
       "id": "22882",
@@ -1966,7 +2415,8 @@
       "price": 882.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/83bd01b1-0014-4a4d-9f28-3023bfd69cc6.jpg?1702765390.0684",
       "quant": "10",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "360"
     },
     {
       "id": "31619",
@@ -1974,7 +2424,8 @@
       "price": 274.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/a0adb505-2089-422e-9317-c873d135088b.jpg?1710230293.3122",
       "quant": "18",
-      "weight": "180"
+      "weight": "180",
+      "expiry_days": "730"
     },
     {
       "id": "53404",
@@ -1982,7 +2433,8 @@
       "price": 416.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/4c0691cf-5248-4da1-a47d-2686534c95cc.jpg?1704584110.0355",
       "quant": "6",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "600"
     },
     {
       "id": "66801",
@@ -1990,7 +2442,8 @@
       "price": 340.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/2676fd05-f292-45aa-b190-ab57c3065bda.jpg?1710230253.9751",
       "quant": "10",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "540"
     },
     {
       "id": "36241",
@@ -1998,7 +2451,8 @@
       "price": 476.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/45483b8b-9857-4f99-b352-b70be492e98f.jpg?1710497703.5759",
       "quant": "8",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "1095"
     },
     {
       "id": "80458",
@@ -2006,7 +2460,8 @@
       "price": 684.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/e20acb8f-f0e6-4c7b-b69d-b1f45d3ae1c7.jpg?1708543127.671",
       "quant": "10",
-      "weight": "100"
+      "weight": "100",
+      "expiry_days": "720"
     },
     {
       "id": "80457",
@@ -2014,7 +2469,8 @@
       "price": 692.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/3ba88ff9-95f1-41df-bd91-c5aa84efb085.jpg?1714165172.4839",
       "quant": "10",
-      "weight": "100"
+      "weight": "100",
+      "expiry_days": "720"
     },
     {
       "id": "88582",
@@ -2022,7 +2478,8 @@
       "price": 611.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/b82ba404-24b6-4a6b-bc79-2d9916d0f81f.jpg?1724185228.9182",
       "quant": "8",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "1095"
     },
     {
       "id": "65750",
@@ -2030,7 +2487,8 @@
       "price": 206.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/f4bffbef-0554-4512-b7f5-c2baa96c2f40.jpg?1710230018.1004",
       "quant": "18",
-      "weight": "1000"
+      "weight": "1000",
+      "expiry_days": "540"
     },
     {
       "id": "65749",
@@ -2038,7 +2496,8 @@
       "price": 442.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/83ef1e3e-f81f-4592-ac51-2170e6ca0fba.jpg?1710229849.6026",
       "quant": "10",
-      "weight": "450"
+      "weight": "450",
+      "expiry_days": "730"
     },
     {
       "id": "16642",
@@ -2046,7 +2505,8 @@
       "price": 413.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/20609490-d2ac-49c4-8629-2c0e0c0d3ded.jpg?1715584584.1577",
       "quant": "18",
-      "weight": "280"
+      "weight": "280",
+      "expiry_days": "720"
     },
     {
       "id": "18727",
@@ -2054,7 +2514,8 @@
       "price": 1382.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/97834711-7a75-491d-bd6d-b58476ba179c.jpg?1710322779.8612",
       "quant": "6",
-      "weight": "180"
+      "weight": "180",
+      "expiry_days": "360"
     },
     {
       "id": "17676",
@@ -2062,7 +2523,8 @@
       "price": 653.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/3be51c8c-665c-4301-aadb-1c5da52f5862.jpg?1710322062.2674",
       "quant": "6",
-      "weight": "360"
+      "weight": "360",
+      "expiry_days": "720"
     },
     {
       "id": "20723",
@@ -2070,7 +2532,8 @@
       "price": 430.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/91e3c6de-6e2a-42ae-a3ec-a2969c389bc6.jpg?1710330254.9486",
       "quant": "9",
-      "weight": "330"
+      "weight": "330",
+      "expiry_days": "360"
     },
     {
       "id": "20722",
@@ -2078,7 +2541,8 @@
       "price": 449.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/9dd7c041-79f4-4329-ba74-9ab26f1acfc7.jpg?1710324569.9861",
       "quant": "9",
-      "weight": "330"
+      "weight": "330",
+      "expiry_days": "360"
     },
     {
       "id": "65085",
@@ -2086,7 +2550,8 @@
       "price": 475.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/aab2a634-15ca-461d-9e1a-66890987e67d.jpg?1710322137.4772",
       "quant": "6",
-      "weight": "260"
+      "weight": "260",
+      "expiry_days": "720"
     },
     {
       "id": "62854",
@@ -2094,7 +2559,8 @@
       "price": 476.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/7a346451-e276-4c09-bfc6-fb48656249aa.jpg?1710324716.7345",
       "quant": "9",
-      "weight": "330"
+      "weight": "330",
+      "expiry_days": "720"
     },
     {
       "id": "93408",
@@ -2102,7 +2568,8 @@
       "price": 1139.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/26acad1d-4280-45c1-80c6-39e9e37d65c7.jpg?1720735340.2147",
       "quant": "6",
-      "weight": "230"
+      "weight": "230",
+      "expiry_days": "90"
     },
     {
       "id": "28938",
@@ -2110,7 +2577,8 @@
       "price": 696.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/fc1ea866-8756-4d31-bad8-d87d0d2afd47.jpg?1710324439.2068",
       "quant": "8",
-      "weight": "320"
+      "weight": "320",
+      "expiry_days": "730"
     },
     {
       "id": "82337",
@@ -2118,7 +2586,8 @@
       "price": 608.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/f39e5b82-ed54-4074-a758-f96984677959.jpg?1713561470.5013",
       "quant": "9",
-      "weight": "150"
+      "weight": "150",
+      "expiry_days": "360"
     },
     {
       "id": "16642",
@@ -2126,7 +2595,8 @@
       "price": 413.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/20609490-d2ac-49c4-8629-2c0e0c0d3ded.jpg?1715584584.1577",
       "quant": "18",
-      "weight": "280"
+      "weight": "280",
+      "expiry_days": "720"
     },
     {
       "id": "18727",
@@ -2134,7 +2604,8 @@
       "price": 1382.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/97834711-7a75-491d-bd6d-b58476ba179c.jpg?1710322779.8612",
       "quant": "6",
-      "weight": "180"
+      "weight": "180",
+      "expiry_days": "360"
     },
     {
       "id": "17676",
@@ -2142,7 +2613,8 @@
       "price": 653.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/3be51c8c-665c-4301-aadb-1c5da52f5862.jpg?1710322062.2674",
       "quant": "6",
-      "weight": "360"
+      "weight": "360",
+      "expiry_days": "720"
     },
     {
       "id": "20723",
@@ -2150,7 +2622,8 @@
       "price": 430.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/91e3c6de-6e2a-42ae-a3ec-a2969c389bc6.jpg?1710330254.9486",
       "quant": "9",
-      "weight": "330"
+      "weight": "330",
+      "expiry_days": "360"
     },
     {
       "id": "20722",
@@ -2158,7 +2631,8 @@
       "price": 449.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/9dd7c041-79f4-4329-ba74-9ab26f1acfc7.jpg?1710324569.9861",
       "quant": "9",
-      "weight": "330"
+      "weight": "330",
+      "expiry_days": "360"
     },
     {
       "id": "65085",
@@ -2166,7 +2640,8 @@
       "price": 475.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/aab2a634-15ca-461d-9e1a-66890987e67d.jpg?1710322137.4772",
       "quant": "6",
-      "weight": "260"
+      "weight": "260",
+      "expiry_days": "720"
     },
     {
       "id": "62854",
@@ -2174,7 +2649,8 @@
       "price": 476.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/7a346451-e276-4c09-bfc6-fb48656249aa.jpg?1710324716.7345",
       "quant": "9",
-      "weight": "330"
+      "weight": "330",
+      "expiry_days": "720"
     },
     {
       "id": "93408",
@@ -2182,7 +2658,8 @@
       "price": 1139.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/26acad1d-4280-45c1-80c6-39e9e37d65c7.jpg?1720735340.2147",
       "quant": "6",
-      "weight": "230"
+      "weight": "230",
+      "expiry_days": "90"
     },
     {
       "id": "77796",
@@ -2190,7 +2667,8 @@
       "price": 393.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/8dfb6be3-c1e0-4190-8b20-1befa6b00fec.jpg?1710230477.8558",
       "quant": "7",
-      "weight": "120"
+      "weight": "120",
+      "expiry_days": "180"
     },
     {
       "id": "77065",
@@ -2198,7 +2676,8 @@
       "price": 423.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/2f87ac72-6898-43a5-85ab-8d80bc7f728a.jpg?1720733237.3234",
       "quant": "12",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "180"
     },
     {
       "id": "53817",
@@ -2206,7 +2685,8 @@
       "price": 651.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/44e1ab69-da14-4d36-9731-a3afd4a10482.jpg?1710059066.8121",
       "quant": "16",
-      "weight": "350"
+      "weight": "350",
+      "expiry_days": "540"
     },
     {
       "id": "92221",
@@ -2214,7 +2694,8 @@
       "price": 491.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/68185ccd-3820-49e3-b128-0a884e34077f.jpg?1725569122.671",
       "quant": "15",
-      "weight": "350"
+      "weight": "350",
+      "expiry_days": "90"
     },
     {
       "id": "27665",
@@ -2222,7 +2703,8 @@
       "price": 636.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/e7252e0d-6b94-4c40-be1a-7243148fa663.jpg?1710231017.9799",
       "quant": "7",
-      "weight": "120"
+      "weight": "120",
+      "expiry_days": "180"
     },
     {
       "id": "91902",
@@ -2230,7 +2712,8 @@
       "price": 424.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/2e8787dd-c76d-4934-a10a-3bcdf83a9c4f.jpg?1722281599.9574",
       "quant": "10",
-      "weight": "280"
+      "weight": "280",
+      "expiry_days": "365"
     },
     {
       "id": "91893",
@@ -2238,7 +2721,8 @@
       "price": 409.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/2facf53e-3a21-44f7-8e7f-7f6730b9af96.jpg?1723023064.7916",
       "quant": "10",
-      "weight": "280"
+      "weight": "280",
+      "expiry_days": "365"
     },
     {
       "id": "20162",
@@ -2246,7 +2730,8 @@
       "price": 418.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/3a39a110-b41c-4c4c-8c6e-3ffb5a307a03.jpg?1710322231.5058",
       "quant": "8",
-      "weight": "330"
+      "weight": "330",
+      "expiry_days": "90"
     },
     {
       "id": "58088",
@@ -2254,7 +2739,8 @@
       "price": 421.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/6f07c434-ed9e-4f0a-bc22-8c3cfb0193a5.jpg?1710323478.6267",
       "quant": "6",
-      "weight": "250"
+      "weight": "250",
+      "expiry_days": "540"
     },
     {
       "id": "73578",
@@ -2262,7 +2748,8 @@
       "price": 664.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/2e46f0da-f344-40dc-83ce-86ff64e2bde0.jpg?1710324293.1373",
       "quant": "6",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "540"
     },
     {
       "id": "91730",
@@ -2270,7 +2757,8 @@
       "price": 418.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/9182f16c-e98e-46dd-b031-68b1e3f72c72.jpg?1725307758.9714",
       "quant": "6",
-      "weight": "278"
+      "weight": "278",
+      "expiry_days": "540"
     },
     {
       "id": "82893",
@@ -2278,7 +2766,8 @@
       "price": 585.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/91f2a84c-dddf-4de6-a71a-4351c5f64c14.jpg?1706656689.5465",
       "quant": "6",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "540"
     },
     {
       "id": "78058",
@@ -2286,7 +2775,8 @@
       "price": 389.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/c2a0130f-08d6-4ed4-819a-93423b358f77.jpg?1703360000.1187",
       "quant": "6",
-      "weight": "220"
+      "weight": "220",
+      "expiry_days": "720"
     },
     {
       "id": "43440",
@@ -2294,7 +2784,8 @@
       "price": 1496.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/b86b24ab-7d6b-4dfd-bf03-cbf444a3e8bc.jpg?1710326534.4433",
       "quant": "12",
-      "weight": "230"
+      "weight": "230",
+      "expiry_days": "540"
     },
     {
       "id": "79136",
@@ -2302,7 +2793,8 @@
       "price": 1329.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/ee1c7a40-9ce7-4e04-8eff-fa6d03dc00f4.jpg?1710058216.3741",
       "quant": "6",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "720"
     },
     {
       "id": "86217",
@@ -2310,7 +2802,8 @@
       "price": 999.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/0ce86772-1f26-4eef-8756-ddbc97ac7eca.jpg?1708635873.3417",
       "quant": "6",
-      "weight": "250"
+      "weight": "250",
+      "expiry_days": "540"
     },
     {
       "id": "51186",
@@ -2318,7 +2811,8 @@
       "price": 775.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/5275581b-9f93-4149-a578-2622e1020fa9.jpg?1652214145.1127",
       "quant": "6",
-      "weight": "320"
+      "weight": "320",
+      "expiry_days": "540"
     },
     {
       "id": "79651",
@@ -2326,7 +2820,8 @@
       "price": 906.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/8589196f-8e71-44ff-8eb2-e03109389953.jpg?1703881335.4078",
       "quant": "6",
-      "weight": "230"
+      "weight": "230",
+      "expiry_days": "90"
     },
     {
       "id": "92721",
@@ -2334,7 +2829,8 @@
       "price": 701.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/3c311469-f1b2-49eb-b503-83cda53666e4.jpg?1721248145.9378",
       "quant": "4",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "360"
     },
     {
       "id": "92787",
@@ -2342,7 +2838,8 @@
       "price": 490.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/6f83ac72-6d2c-4158-9b20-fc72c98d3f47.webp?1730408805.1494",
       "quant": "6",
-      "weight": "220"
+      "weight": "220",
+      "expiry_days": "720"
     },
     {
       "id": "93448",
@@ -2350,7 +2847,8 @@
       "price": 925.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/07ab1c84-2b2b-467b-b8cb-0fab1a2470c5.jpg?1726865278.8877",
       "quant": "6",
-      "weight": "230"
+      "weight": "230",
+      "expiry_days": "90"
     },
     {
       "id": "20163",
@@ -2358,7 +2856,8 @@
       "price": 555.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/af434dc6-29b3-4bbc-ab9a-78a5b6ad0ede.jpg?1710322513.2143",
       "quant": "8",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "90"
     },
     {
       "id": "72121",
@@ -2366,7 +2865,8 @@
       "price": 642.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/60a83063-4edd-4453-a4e3-99b02274b181.jpg?1710321914.2189",
       "quant": "4",
-      "weight": "210"
+      "weight": "210",
+      "expiry_days": "60"
     },
     {
       "id": "92351",
@@ -2374,7 +2874,8 @@
       "price": 836.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/62a65c44-2187-40c6-ac50-e189a941d4f7.jpg?1717362237.8612",
       "quant": "6",
-      "weight": "260"
+      "weight": "260",
+      "expiry_days": "180"
     },
     {
       "id": "68587",
@@ -2382,7 +2883,8 @@
       "price": 717.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/b3f8885e-d31e-44f9-85a1-d0ec0c977404.jpg?1710330531.018",
       "quant": "4",
-      "weight": "280"
+      "weight": "280",
+      "expiry_days": "60"
     },
     {
       "id": "23258",
@@ -2390,7 +2892,8 @@
       "price": 562.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/85c41b8e-b7ef-4339-921f-39f57445f636.jpg?1710322669.0091",
       "quant": "9",
-      "weight": "275"
+      "weight": "275",
+      "expiry_days": "90"
     },
     {
       "id": "90192",
@@ -2398,7 +2901,8 @@
       "price": 627.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/c333e503-7641-48c8-afb8-44974153b296.jpg?1719519126.5405",
       "quant": "4",
-      "weight": "100"
+      "weight": "100",
+      "expiry_days": "90"
     },
     {
       "id": "90193",
@@ -2406,7 +2910,8 @@
       "price": 636.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/13bbfb43-1778-4235-8a20-6abcbc30fe5e.jpg?1719519255.6152",
       "quant": "4",
-      "weight": "100"
+      "weight": "100",
+      "expiry_days": "90"
     },
     {
       "id": "100886",
@@ -2414,7 +2919,8 @@
       "price": 1082.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/22ee85d5-fca3-44d9-9d6e-01d96f51ed1b.webp?1734042629.1043",
       "quant": "6",
-      "weight": "220"
+      "weight": "220",
+      "expiry_days": "90"
     },
     {
       "id": "16842",
@@ -2422,7 +2928,8 @@
       "price": 66.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/54069501-a174-418f-bbd8-300bc45bf576.jpg?1726668981.2358",
       "quant": "40",
-      "weight": "10"
+      "weight": "10",
+      "expiry_days": "720"
     },
     {
       "id": "16361",
@@ -2430,7 +2937,8 @@
       "price": 88.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/e1693e4f-31d0-4df7-9a3f-c4e797ad31a5.jpg?1726668799.8776",
       "quant": "25",
-      "weight": "7"
+      "weight": "7",
+      "expiry_days": "720"
     },
     {
       "id": "16362",
@@ -2438,7 +2946,8 @@
       "price": 63.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/56787441-6113-4427-8136-a834060b99ab.jpg?1726668877.7671",
       "quant": "35",
-      "weight": "7"
+      "weight": "7",
+      "expiry_days": "360"
     },
     {
       "id": "16844",
@@ -2446,7 +2955,8 @@
       "price": 79.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/925993c1-4d4b-4cfa-9df6-1f3c79bd3cf4.jpg?1726669401.1849",
       "quant": "40",
-      "weight": "10"
+      "weight": "10",
+      "expiry_days": "720"
     },
     {
       "id": "16363",
@@ -2454,7 +2964,8 @@
       "price": 68.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/2bf9914b-bf26-4f18-b3e4-1e976900ef30.jpg?1710495128.3808",
       "quant": "25",
-      "weight": "7"
+      "weight": "7",
+      "expiry_days": "360"
     },
     {
       "id": "74545",
@@ -2462,7 +2973,8 @@
       "price": 371.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/86805dde-05e8-4dcc-b59f-8a5461595ed4.jpg?1714160172.4675",
       "quant": "20",
-      "weight": "15"
+      "weight": "15",
+      "expiry_days": "720"
     },
     {
       "id": "50704",
@@ -2470,7 +2982,8 @@
       "price": 1605.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/5293dd7a-9181-4a27-846b-de89ff85a307.jpg?1715583146.2792",
       "quant": "8",
-      "weight": "100"
+      "weight": "100",
+      "expiry_days": "730"
     },
     {
       "id": "37606",
@@ -2478,7 +2991,8 @@
       "price": 489.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/7e860320-ea10-4b3b-82e5-35b64bb43ad8.jpg?1710494846.761",
       "quant": "8",
-      "weight": "100"
+      "weight": "100",
+      "expiry_days": "720"
     },
     {
       "id": "38448",
@@ -2486,7 +3000,8 @@
       "price": 171.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/5ad05bea-bd82-48f7-86dc-6ac277f54919.jpg?1704574692.6306",
       "quant": "25",
-      "weight": "7"
+      "weight": "7",
+      "expiry_days": "720"
     },
     {
       "id": "58146",
@@ -2494,7 +3009,8 @@
       "price": 108.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/1ad7775b-e466-4f2c-8389-8a5552c5df9f.jpg?1704575713.2278",
       "quant": "40",
-      "weight": "12"
+      "weight": "12",
+      "expiry_days": "540"
     },
     {
       "id": "20682",
@@ -2502,7 +3018,8 @@
       "price": 210.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/ef4f711a-ef45-4549-84cf-34790b36f937.jpg?1726673139.9666",
       "quant": "16",
-      "weight": "30"
+      "weight": "30",
+      "expiry_days": "720"
     },
     {
       "id": "58155",
@@ -2510,7 +3027,8 @@
       "price": 107.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/91d10dd3-0182-4ae0-baca-107ee2205bf2.jpg?1704575652.2133",
       "quant": "40",
-      "weight": "12"
+      "weight": "12",
+      "expiry_days": "540"
     },
     {
       "id": "38450",
@@ -2518,7 +3036,8 @@
       "price": 214.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/c9d4adad-3f63-4bc2-b6c2-951b30dc2148.jpg?1726734201.0247",
       "quant": "8",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "720"
     },
     {
       "id": "49821",
@@ -2526,7 +3045,8 @@
       "price": 331.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/dc23bf61-d5c2-4dbe-a078-25908930dfdf.jpg?1726668739.5944",
       "quant": "25",
-      "weight": "15"
+      "weight": "15",
+      "expiry_days": "720"
     },
     {
       "id": "14551",
@@ -2534,7 +3054,8 @@
       "price": 120.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/38705a50-d116-408c-9552-2d785d25e1b2.jpg?1710496234.192",
       "quant": "30",
-      "weight": "10"
+      "weight": "10",
+      "expiry_days": "720"
     },
     {
       "id": "85864",
@@ -2542,7 +3063,8 @@
       "price": 134.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/3baec9d3-2b6c-4efc-a0e2-e86a28842dba.jpg?1726672978.4936",
       "quant": "22",
-      "weight": "25"
+      "weight": "25",
+      "expiry_days": "720"
     },
     {
       "id": "51887",
@@ -2550,7 +3072,8 @@
       "price": 189.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/a839176e-77b2-451d-ab70-307472805151.jpg?1710495830.7044",
       "quant": "12",
-      "weight": "15"
+      "weight": "15",
+      "expiry_days": "720"
     },
     {
       "id": "86225",
@@ -2558,7 +3081,8 @@
       "price": 642.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/6c2a6f88-d5b1-40d6-ad5a-ce550f2e1727.jpg?1710531552.0074",
       "quant": "10",
-      "weight": "100"
+      "weight": "100",
+      "expiry_days": "360"
     },
     {
       "id": "37812",
@@ -2566,7 +3090,8 @@
       "price": 95.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/af233e4f-81f0-419d-aaee-caf681e0b0f7.jpg?1710033490.2619",
       "quant": "25",
-      "weight": "50"
+      "weight": "50",
+      "expiry_days": "360"
     },
     {
       "id": "36385",
@@ -2574,7 +3099,8 @@
       "price": 330.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/11dcdc89-0a3a-45fc-bb0d-1393057d50d5.jpg?1726668680.8544",
       "quant": "35",
-      "weight": "50"
+      "weight": "50",
+      "expiry_days": "360"
     },
     {
       "id": "16843",
@@ -2582,7 +3108,8 @@
       "price": 71.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/6e11dc44-8cd3-4a7a-afd8-7bc24cdf9a9c.jpg?1704582549.709",
       "quant": "25",
-      "weight": "7"
+      "weight": "7",
+      "expiry_days": "360"
     },
     {
       "id": "81072",
@@ -2590,7 +3117,8 @@
       "price": 286.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/67ec0ddb-70c5-4163-973c-4339ef528246.jpg?1708984252.4362",
       "quant": "12",
-      "weight": "28"
+      "weight": "28",
+      "expiry_days": "360"
     },
     {
       "id": "71903",
@@ -2598,7 +3126,8 @@
       "price": 176.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/3ac0f77c-b6cc-4f7f-a153-c96e03d01e64.jpg?1715378533.5568",
       "quant": "15",
-      "weight": "20"
+      "weight": "20",
+      "expiry_days": "600"
     },
     {
       "id": "73356",
@@ -2606,7 +3135,8 @@
       "price": 333.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/9ddf6dea-c823-46d7-acdc-5c3443476bda.jpg?1726743499.0439",
       "quant": "8",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "360"
     },
     {
       "id": "38004",
@@ -2614,7 +3144,8 @@
       "price": 148.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/678e9ab5-90fd-42dc-93d4-36235bef94ea.jpg?1710498033.4082",
       "quant": "14",
-      "weight": "150"
+      "weight": "150",
+      "expiry_days": "270"
     },
     {
       "id": "38449",
@@ -2622,7 +3153,8 @@
       "price": 76.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/7b18a503-1610-4b59-9b64-f78820a9b847.jpg?1710495736.9018",
       "quant": "25",
-      "weight": "10"
+      "weight": "10",
+      "expiry_days": "360"
     },
     {
       "id": "56586",
@@ -2630,7 +3162,8 @@
       "price": 137.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/6d813aa8-91a4-4743-a721-2a2a638e55eb.jpg?1704582874.2378",
       "quant": "25",
-      "weight": "35"
+      "weight": "35",
+      "expiry_days": "720"
     },
     {
       "id": "37246",
@@ -2638,7 +3171,8 @@
       "price": 126.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/a2235fca-777d-4dbc-b32f-7781f367308f.jpg?1710497009.218",
       "quant": "20",
-      "weight": "25"
+      "weight": "25",
+      "expiry_days": "720"
     },
     {
       "id": "20683",
@@ -2646,7 +3180,8 @@
       "price": 126.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/9933e61e-f761-4c02-9244-59a159ec50f0.jpg?1715584011.8691",
       "quant": "20",
-      "weight": "15"
+      "weight": "15",
+      "expiry_days": "720"
     },
     {
       "id": "20780",
@@ -2654,7 +3189,8 @@
       "price": 500.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/c9857115-59a7-4964-8a6c-eb142582d9ed.jpg?1716067011.2891",
       "quant": "10",
-      "weight": "120"
+      "weight": "120",
+      "expiry_days": "360"
     },
     {
       "id": "16360",
@@ -2662,7 +3198,8 @@
       "price": 69.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/81a0df61-7c92-4da9-9d87-a1339365512b.jpg?1710496504.5928",
       "quant": "40",
-      "weight": "10"
+      "weight": "10",
+      "expiry_days": "720"
     },
     {
       "id": "33865",
@@ -2670,7 +3207,8 @@
       "price": 101.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/47c60e5e-88e6-43fb-9a5b-cc731ac44cb8.jpg?1710495460.3344",
       "quant": "30",
-      "weight": "10"
+      "weight": "10",
+      "expiry_days": "720"
     },
     {
       "id": "20685",
@@ -2678,7 +3216,8 @@
       "price": 81.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/34bda785-f45b-4085-9d72-d44b70c7cbd8.jpg?1710497188.7027",
       "quant": "20",
-      "weight": "15"
+      "weight": "15",
+      "expiry_days": "720"
     },
     {
       "id": "28699",
@@ -2686,7 +3225,8 @@
       "price": 108.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/e34e352f-bcad-48cf-81eb-f04d286cc1a5.jpg?1710496935.106",
       "quant": "20",
-      "weight": "25"
+      "weight": "25",
+      "expiry_days": "480"
     },
     {
       "id": "38455",
@@ -2694,7 +3234,8 @@
       "price": 145.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/16584198-43bb-46ff-9d65-4d4e67a04cf8.jpg?1710495312.6316",
       "quant": "25",
-      "weight": "15"
+      "weight": "15",
+      "expiry_days": "360"
     },
     {
       "id": "20340",
@@ -2702,7 +3243,8 @@
       "price": 208.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/7e5a0537-bc4f-4c7c-8da3-13af03a11916.jpg?1710495592.4274",
       "quant": "25",
-      "weight": "10"
+      "weight": "10",
+      "expiry_days": "360"
     },
     {
       "id": "16094",
@@ -2710,7 +3252,8 @@
       "price": 80.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/0c5b2dba-e5d5-4929-bf27-1663149e7a6c.jpg?1710497115.0248",
       "quant": "15",
-      "weight": "15"
+      "weight": "15",
+      "expiry_days": "720"
     },
     {
       "id": "33862",
@@ -2718,7 +3261,8 @@
       "price": 98.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/a24b1063-4acb-4255-ae94-b10af409770a.jpg?1710495217.5459",
       "quant": "30",
-      "weight": "10"
+      "weight": "10",
+      "expiry_days": "600"
     },
     {
       "id": "20339",
@@ -2726,7 +3270,8 @@
       "price": 87.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/eeb172c3-9ab4-432f-bfc7-d6d5e71f1d7c.jpg?1726673026.9715",
       "quant": "45",
-      "weight": "15"
+      "weight": "15",
+      "expiry_days": "720"
     },
     {
       "id": "56580",
@@ -2734,7 +3279,8 @@
       "price": 118.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/d77d1112-d0ec-4df8-8bdc-e140ea661b73.jpg?1704582972.0886",
       "quant": "30",
-      "weight": "30"
+      "weight": "30",
+      "expiry_days": "720"
     },
     {
       "id": "75421",
@@ -2742,7 +3288,8 @@
       "price": 138.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/314b3e8d-47fa-4ca1-a796-56e441a80d35.jpg?1726669266.8885",
       "quant": "20",
-      "weight": "15"
+      "weight": "15",
+      "expiry_days": "720"
     },
     {
       "id": "20341",
@@ -2750,7 +3297,8 @@
       "price": 174.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/5a2b1e27-526d-485a-adaa-490914af459b.jpg?1726669128.1794",
       "quant": "25",
-      "weight": "10"
+      "weight": "10",
+      "expiry_days": "720"
     },
     {
       "id": "16365",
@@ -2758,7 +3306,8 @@
       "price": 78.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/8ba6517a-c37f-450d-b246-7bc078f2c072.jpg?1723155034.5798",
       "quant": "55",
-      "weight": "10"
+      "weight": "10",
+      "expiry_days": "360"
     },
     {
       "id": "20338",
@@ -2766,7 +3315,8 @@
       "price": 86.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/2f386788-c92d-4449-8c3a-3bd8961a9541.jpg?1705093272.6875",
       "quant": "45",
-      "weight": "15"
+      "weight": "15",
+      "expiry_days": "720"
     },
     {
       "id": "79054",
@@ -2774,7 +3324,8 @@
       "price": 72.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/65981814-5cdb-4a81-abb9-0d763261d64b.jpg?1706475142.3133",
       "quant": "15",
-      "weight": "30"
+      "weight": "30",
+      "expiry_days": "540"
     },
     {
       "id": "91901",
@@ -2782,7 +3333,8 @@
       "price": 1437.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/ee11d85a-13b6-4650-99fb-eaf0940c6cb8.jpg?1723754139.3874",
       "quant": "4",
-      "weight": "75"
+      "weight": "75",
+      "expiry_days": "365"
     },
     {
       "id": "85383",
@@ -2790,7 +3342,8 @@
       "price": 168.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/0b022f7d-8acc-4011-b529-c255101a196c.jpg?1701431950.7362",
       "quant": "0",
-      "weight": "10"
+      "weight": "10",
+      "expiry_days": "720"
     },
     {
       "id": "85776",
@@ -2798,7 +3351,8 @@
       "price": 312.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/f33b9343-7cbf-4b01-8971-50fed1ddf784.webp?1735152718.7913",
       "quant": "25",
-      "weight": "30"
+      "weight": "30",
+      "expiry_days": "720"
     },
     {
       "id": "56754",
@@ -2806,7 +3360,8 @@
       "price": 512.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/d9840794-db4e-4c5f-862d-37ca572171b1.jpg?1704585253.7239",
       "quant": "6",
-      "weight": "40"
+      "weight": "40",
+      "expiry_days": "1095"
     },
     {
       "id": "24330",
@@ -2814,7 +3369,8 @@
       "price": 1230.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/09ab0807-cc07-4f46-b79c-2e57ebe3326d.jpg?1699572314.2774",
       "quant": "10",
-      "weight": "50"
+      "weight": "50",
+      "expiry_days": "720"
     },
     {
       "id": "54430",
@@ -2822,7 +3378,8 @@
       "price": 1442.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/9b7d858d-90ca-4aac-9418-2d125d92f1a2.jpg?1706284279.577",
       "quant": "6",
-      "weight": "50"
+      "weight": "50",
+      "expiry_days": "1095"
     },
     {
       "id": "26611",
@@ -2830,7 +3387,8 @@
       "price": 1220.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/66481ea3-3616-4da0-acfc-1f80c037ee87.jpg?1711346005.9614",
       "quant": "12",
-      "weight": "50"
+      "weight": "50",
+      "expiry_days": "1095"
     },
     {
       "id": "29007",
@@ -2838,7 +3396,8 @@
       "price": 766.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/e26ff4a8-cf6e-432d-a454-6afaef8ef6d0.jpg?1711268697.0564",
       "quant": "10",
-      "weight": "100"
+      "weight": "100",
+      "expiry_days": "360"
     },
     {
       "id": "26610",
@@ -2846,7 +3405,8 @@
       "price": 1139.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/800dceee-ab05-4b3a-bc7f-fd128e12d475.jpg?1718311879.3355",
       "quant": "12",
-      "weight": "50"
+      "weight": "50",
+      "expiry_days": "1095"
     },
     {
       "id": "75408",
@@ -2854,7 +3414,8 @@
       "price": 1062.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/52c72e7b-cd74-4399-859e-143a5169cb59.jpg?1711346280.9278",
       "quant": "8",
-      "weight": "40"
+      "weight": "40",
+      "expiry_days": "720"
     },
     {
       "id": "15146",
@@ -2862,7 +3423,8 @@
       "price": 350.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/bb4ea740-7ba2-40bc-bc86-0b09b05332bf.jpg?1711345637.3401",
       "quant": "24",
-      "weight": "37"
+      "weight": "37",
+      "expiry_days": "720"
     },
     {
       "id": "85994",
@@ -2870,7 +3432,8 @@
       "price": 755.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/4f59f6fc-a3c0-448e-a772-cd6613fa35ee.jpg?1711047431.4671",
       "quant": "6",
-      "weight": "50"
+      "weight": "50",
+      "expiry_days": "730"
     },
     {
       "id": "81081",
@@ -2878,7 +3441,8 @@
       "price": 872.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/5babf84c-0f80-47d4-9710-e8f2a23ec8ae.jpg?1701460781.8201",
       "quant": "6",
-      "weight": "50"
+      "weight": "50",
+      "expiry_days": "720"
     },
     {
       "id": "82705",
@@ -2886,7 +3450,8 @@
       "price": 1044.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/68c2f239-46b1-4751-8056-e0a72f4259b7.webp?1727640688.0242",
       "quant": "10",
-      "weight": "40"
+      "weight": "40",
+      "expiry_days": "720"
     },
     {
       "id": "43236",
@@ -2894,7 +3459,8 @@
       "price": 244.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/fa3d7a4a-4307-473a-bd25-9908e5697baa.jpg?1711269551.1644",
       "quant": "15",
-      "weight": "22"
+      "weight": "22",
+      "expiry_days": "720"
     },
     {
       "id": "37224",
@@ -2902,7 +3468,8 @@
       "price": 733.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/162ec78b-9907-422a-b779-005a802f4c46.jpg?1711346465.4831",
       "quant": "12",
-      "weight": "36"
+      "weight": "36",
+      "expiry_days": "1095"
     },
     {
       "id": "19906",
@@ -2910,7 +3477,8 @@
       "price": 600.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/2b76de24-b055-4bfd-8871-acc5c5b789f8.jpg?1703020423.9004",
       "quant": "15",
-      "weight": "40"
+      "weight": "40",
+      "expiry_days": "720"
     },
     {
       "id": "16381",
@@ -2918,7 +3486,8 @@
       "price": 760.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/f6fc2432-2022-4ee3-81f4-ea46d22ce851.jpg?1711266511.4179",
       "quant": "20",
-      "weight": "75"
+      "weight": "75",
+      "expiry_days": "730"
     },
     {
       "id": "82561",
@@ -2926,7 +3495,8 @@
       "price": 752.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/33ac17b4-b607-4040-85c6-027eadac9c82.jpg?1712780172.3047",
       "quant": "12",
-      "weight": "36"
+      "weight": "36",
+      "expiry_days": "1095"
     },
     {
       "id": "37470",
@@ -2934,7 +3504,8 @@
       "price": 1088.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/16f0b870-717b-4aa4-8cf3-6cc554105dd0.jpg?1711353618.7491",
       "quant": "10",
-      "weight": "43"
+      "weight": "43",
+      "expiry_days": "720"
     },
     {
       "id": "74712",
@@ -2942,7 +3513,8 @@
       "price": 611.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/9ca1dbd0-e424-45b9-9cee-6a7e7100e24e.jpg?1711267213.156",
       "quant": "16",
-      "weight": "40"
+      "weight": "40",
+      "expiry_days": "1080"
     },
     {
       "id": "79608",
@@ -2950,7 +3522,8 @@
       "price": 847.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/b4b5c781-7e07-4a64-9249-38f3d4d24bda.jpg?1725049886.9536",
       "quant": "10",
-      "weight": "45"
+      "weight": "45",
+      "expiry_days": "730"
     },
     {
       "id": "79607",
@@ -2958,7 +3531,8 @@
       "price": 847.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/88fb2df8-312b-4752-b544-9e17fd00615e.jpg?1725050003.2846",
       "quant": "10",
-      "weight": "45"
+      "weight": "45",
+      "expiry_days": "730"
     },
     {
       "id": "27156",
@@ -2966,7 +3540,8 @@
       "price": 259.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/479e35fe-21a7-4076-b83c-f9c0fed29404.jpg?1711270917.543",
       "quant": "20",
-      "weight": "20"
+      "weight": "20",
+      "expiry_days": "720"
     },
     {
       "id": "19680",
@@ -2974,7 +3549,8 @@
       "price": 861.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/ce1f90c6-ed0b-4d23-9748-3c03c12e5dd4.jpg?1711266756.5089",
       "quant": "10",
-      "weight": "75"
+      "weight": "75",
+      "expiry_days": "730"
     },
     {
       "id": "39536",
@@ -2982,7 +3558,8 @@
       "price": 992.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/5072735f-c326-403a-bb5a-42df994dc5bf.jpg?1711267031.4492",
       "quant": "10",
-      "weight": "75"
+      "weight": "75",
+      "expiry_days": "720"
     },
     {
       "id": "72855",
@@ -2990,7 +3567,8 @@
       "price": 698.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/8db1e612-ecf6-4a26-8a1f-b1469ca07483.jpg?1711353931.7895",
       "quant": "12",
-      "weight": "36"
+      "weight": "36",
+      "expiry_days": "1080"
     },
     {
       "id": "27157",
@@ -2998,7 +3576,8 @@
       "price": 686.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/065daa99-b28e-4728-ac7b-7341f1ce7cee.jpg?1711269007.9465",
       "quant": "10",
-      "weight": "37"
+      "weight": "37",
+      "expiry_days": "720"
     },
     {
       "id": "38177",
@@ -3006,7 +3585,8 @@
       "price": 1203.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/69396e91-7307-45d0-a290-1146742534cb.jpg?1710331365.6432",
       "quant": "15",
-      "weight": "220"
+      "weight": "220",
+      "expiry_days": "540"
     },
     {
       "id": "40830",
@@ -3014,7 +3594,8 @@
       "price": 638.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/a6fd7ed6-4a49-4dc3-b5e5-8cf5aac04268.jpg?1711270304.4284",
       "quant": "16",
-      "weight": "40"
+      "weight": "40",
+      "expiry_days": "1080"
     },
     {
       "id": "25557",
@@ -3022,7 +3603,8 @@
       "price": 620.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/858372dd-3881-4981-9425-2dada316a81a.jpg?1711270091.7685",
       "quant": "16",
-      "weight": "40"
+      "weight": "40",
+      "expiry_days": "720"
     },
     {
       "id": "36533",
@@ -3030,7 +3612,8 @@
       "price": 684.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/b6e290b0-2e3b-4774-94ef-4e5a529f0cc7.jpg?1711269156.9383",
       "quant": "10",
-      "weight": "75"
+      "weight": "75",
+      "expiry_days": "720"
     },
     {
       "id": "19907",
@@ -3038,7 +3621,8 @@
       "price": 615.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/48ca67da-c1c0-469a-9f55-a298143e36ed.jpg?1711268547.8742",
       "quant": "15",
-      "weight": "40"
+      "weight": "40",
+      "expiry_days": "720"
     },
     {
       "id": "101570",
@@ -3046,7 +3630,8 @@
       "price": 1052.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/375ff000-ef4f-4bdd-bf5d-30d79a566e8b.webp?1731271044.4291",
       "quant": "10",
-      "weight": "43"
+      "weight": "43",
+      "expiry_days": "720"
     },
     {
       "id": "79603",
@@ -3054,7 +3639,8 @@
       "price": 847.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/688b7de3-d2d3-4e13-a45e-fc19df34f82a.webp?1733079741.3703",
       "quant": "10",
-      "weight": "45"
+      "weight": "45",
+      "expiry_days": "730"
     },
     {
       "id": "94216",
@@ -3062,7 +3648,8 @@
       "price": 909.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/ae437641-146a-4993-9639-b8a0dd661a7b.webp?1731272330.6535",
       "quant": "6",
-      "weight": "100"
+      "weight": "100",
+      "expiry_days": "1080"
     },
     {
       "id": "94217",
@@ -3070,7 +3657,8 @@
       "price": 945.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/404082d8-bad3-45a0-bf66-95c0121e6a65.webp?1733868685.466",
       "quant": "6",
-      "weight": "100"
+      "weight": "100",
+      "expiry_days": "1080"
     },
     {
       "id": "52512",
@@ -3078,7 +3666,8 @@
       "price": 1033.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/ba55b885-2c2e-4dbc-abd4-da7ba6a707c8.jpg?1704585850.7495",
       "quant": "6",
-      "weight": "50"
+      "weight": "50",
+      "expiry_days": "1095"
     },
     {
       "id": "52569",
@@ -3086,7 +3675,8 @@
       "price": 969.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/68daee8e-f10d-480c-ab72-dddcfff13865.jpg?1704586059.3782",
       "quant": "6",
-      "weight": "50"
+      "weight": "50",
+      "expiry_days": "1095"
     },
     {
       "id": "54431",
@@ -3094,7 +3684,8 @@
       "price": 939.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/52f53319-7855-4e4e-8f7f-1e79d203a096.jpg?1704585669.6591",
       "quant": "6",
-      "weight": "50"
+      "weight": "50",
+      "expiry_days": "1095"
     },
     {
       "id": "39373",
@@ -3102,7 +3693,8 @@
       "price": 1048.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/c5bf2d5d-601f-4518-b06b-581c450ae23e.jpg?1716414560.3057",
       "quant": "10",
-      "weight": "40"
+      "weight": "40",
+      "expiry_days": "720"
     },
     {
       "id": "56628",
@@ -3110,7 +3702,8 @@
       "price": 566.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/c14f57ed-748f-4ad7-988c-b826774578be.jpg?1711346876.5061",
       "quant": "12",
-      "weight": "40"
+      "weight": "40",
+      "expiry_days": "1095"
     },
     {
       "id": "51451",
@@ -3118,7 +3711,8 @@
       "price": 1131.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/a6afd45f-f40b-4ce5-b238-19991a7063fe.jpg?1711347388.1952",
       "quant": "12",
-      "weight": "50"
+      "weight": "50",
+      "expiry_days": "1095"
     },
     {
       "id": "15147",
@@ -3126,7 +3720,8 @@
       "price": 345.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/43b998ba-ffc3-44f6-b16d-cc286c01d99b.jpg?1711346691.3751",
       "quant": "24",
-      "weight": "37"
+      "weight": "37",
+      "expiry_days": "720"
     },
     {
       "id": "15221",
@@ -3134,7 +3729,8 @@
       "price": 559.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/3ac823a0-5f18-4f5b-a779-2b660d753c59.jpg?1711347848.2752",
       "quant": "24",
-      "weight": "50"
+      "weight": "50",
+      "expiry_days": "720"
     },
     {
       "id": "15222",
@@ -3142,7 +3738,8 @@
       "price": 559.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/1bf9c10f-6762-402b-861a-78b41fa077be.jpg?1715585562.7904",
       "quant": "24",
-      "weight": "50"
+      "weight": "50",
+      "expiry_days": "720"
     },
     {
       "id": "36532",
@@ -3150,7 +3747,8 @@
       "price": 935.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/2ea56a69-2a75-4f6e-bc1b-c5871e2c0176.jpg?1711347615.411",
       "quant": "12",
-      "weight": "30"
+      "weight": "30",
+      "expiry_days": "1095"
     },
     {
       "id": "28801",
@@ -3158,7 +3756,8 @@
       "price": 1092.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/16925afb-8415-490e-9265-1b066d43089f.jpg?1711269805.3545",
       "quant": "8",
-      "weight": "40"
+      "weight": "40",
+      "expiry_days": "720"
     },
     {
       "id": "88344",
@@ -3166,7 +3765,8 @@
       "price": 1001.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/27147f66-8a1b-4d6b-b50f-4027c7b83285.jpg?1725222376.85",
       "quant": "8",
-      "weight": "40"
+      "weight": "40",
+      "expiry_days": "1095"
     },
     {
       "id": "69998",
@@ -3174,7 +3774,8 @@
       "price": 507.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/f1306b9f-36d5-45e1-99af-0fb19f2a16a0.jpg?1715585613.8269",
       "quant": "12",
-      "weight": "45"
+      "weight": "45",
+      "expiry_days": "720"
     },
     {
       "id": "70392",
@@ -3182,7 +3783,8 @@
       "price": 547.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/f3d8a730-6b41-4b67-b3b0-a3d15547374f.jpg?1711347111.0811",
       "quant": "10",
-      "weight": "50"
+      "weight": "50",
+      "expiry_days": "730"
     },
     {
       "id": "36133",
@@ -3190,7 +3792,8 @@
       "price": 423.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/fef76b74-19a5-4ca1-bf17-7aeda04fa9ca.jpg?1711269346.4265",
       "quant": "20",
-      "weight": "30"
+      "weight": "30",
+      "expiry_days": "730"
     },
     {
       "id": "31245",
@@ -3198,7 +3801,8 @@
       "price": 797.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/4aae816f-3572-4453-8486-c1ed4bfe4ca3.jpg?1711353254.9132",
       "quant": "6",
-      "weight": "100"
+      "weight": "100",
+      "expiry_days": "960"
     },
     {
       "id": "54422",
@@ -3206,7 +3810,8 @@
       "price": 606.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/6cc9748a-a95f-496f-8577-63f9ccf97505.jpg?1711270734.0432",
       "quant": "12",
-      "weight": "36"
+      "weight": "36",
+      "expiry_days": "1095"
     },
     {
       "id": "53815",
@@ -3214,7 +3819,8 @@
       "price": 569.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/2d25ead1-85f8-4948-b4c5-23195f6f6688.jpg?1711270552.6187",
       "quant": "15",
-      "weight": "75"
+      "weight": "75",
+      "expiry_days": "720"
     },
     {
       "id": "43059",
@@ -3222,7 +3828,8 @@
       "price": 1060.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/3e9dcc06-ab61-4cb3-9f75-743c56bf9fe6.jpg?1711353429.7514",
       "quant": "8",
-      "weight": "40"
+      "weight": "40",
+      "expiry_days": "720"
     },
     {
       "id": "99132",
@@ -3230,7 +3837,8 @@
       "price": 1529.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/1163feb4-ed7f-430f-a6d7-87d52eddd842.webp?1733268082.3315",
       "quant": "6",
-      "weight": "70"
+      "weight": "70",
+      "expiry_days": "730"
     }
   ],
   "Сухофрукты. Сушеные овощи, грибы, ягоды. Орехи": [
@@ -3240,7 +3848,8 @@
       "price": 1889.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/a097c650-918c-4941-bf9a-f8d9fe922276.webp?1729888581.7775",
       "quant": "10",
-      "weight": "40"
+      "weight": "40",
+      "expiry_days": "720"
     },
     {
       "id": "100748",
@@ -3248,7 +3857,8 @@
       "price": 2816.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/7dff42d4-e4c2-460b-a18d-a37700487038.webp?1729113545.2851",
       "quant": "10",
-      "weight": "40"
+      "weight": "40",
+      "expiry_days": "720"
     },
     {
       "id": "14556",
@@ -3256,7 +3866,8 @@
       "price": 1359.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/7bf31c55-0bb9-4a68-9720-58d943d8af7b.jpg?1703751623.6756",
       "quant": "12",
-      "weight": "40"
+      "weight": "40",
+      "expiry_days": "540"
     },
     {
       "id": "20161",
@@ -3264,7 +3875,8 @@
       "price": 454.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/3e3db5d9-f2e1-4737-8b90-4adb8883cbce.jpg?1710497360.0557",
       "quant": "10",
-      "weight": "100"
+      "weight": "100",
+      "expiry_days": "270"
     },
     {
       "id": "20160",
@@ -3272,7 +3884,8 @@
       "price": 444.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/9ef4e989-3d24-4de7-a44b-ca96692fcd01.jpg?1713735171.1843",
       "quant": "20",
-      "weight": "100"
+      "weight": "100",
+      "expiry_days": "360"
     },
     {
       "id": "20779",
@@ -3280,7 +3893,8 @@
       "price": 222.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/5a2f4cef-b3c8-48b8-97a3-b5f228d489dd.jpg?1713371475.0405",
       "quant": "10",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "360"
     },
     {
       "id": "21907",
@@ -3288,7 +3902,8 @@
       "price": 201.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/f0d2c0ca-83b0-4241-a16b-703e93b99857.jpg?1710497426.7322",
       "quant": "30",
-      "weight": "50"
+      "weight": "50",
+      "expiry_days": "300"
     },
     {
       "id": "30787",
@@ -3296,7 +3911,8 @@
       "price": 587.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/17e748ac-f678-44c4-ba9e-a7ec981cfc80.jpg?1705446549.3773",
       "quant": "12",
-      "weight": "60"
+      "weight": "60",
+      "expiry_days": "360"
     },
     {
       "id": "23990",
@@ -3304,7 +3920,8 @@
       "price": 1062.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/a60126e6-f172-45d4-b143-751b10b30cac.jpg?1714158972.5429",
       "quant": "12",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "24157",
@@ -3312,7 +3929,8 @@
       "price": 1588.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/606a008e-e926-4e3a-983f-8146cd5f75f8.jpg?1705446489.919",
       "quant": "6",
-      "weight": "150"
+      "weight": "150",
+      "expiry_days": "240"
     },
     {
       "id": "22869",
@@ -3320,7 +3938,8 @@
       "price": 1000.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/8650c1a1-302c-402a-baa6-10b04a7bff99.jpg?1724623276.6193",
       "quant": "12",
-      "weight": "250"
+      "weight": "250",
+      "expiry_days": "360"
     },
     {
       "id": "22403",
@@ -3328,7 +3947,8 @@
       "price": 1532.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/27fd64a0-e154-4c33-a3fb-61936f134935.jpg?1714158836.1153",
       "quant": "8",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "240"
     },
     {
       "id": "98054",
@@ -3336,7 +3956,8 @@
       "price": 5789.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/63a5daf6-0c36-41e9-a742-70d8ca1ca167.webp?1727555877.2268",
       "quant": "5",
-      "weight": "1000"
+      "weight": "1000",
+      "expiry_days": "180"
     }
   ],
   "Нон-Фуд": [
@@ -3346,7 +3967,8 @@
       "price": 1407.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/ae4f910e-e66d-473e-b814-7da20c12e347.jpg?1699649546.5972",
       "quant": "12",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "730"
     },
     {
       "id": "75608",
@@ -3354,7 +3976,8 @@
       "price": 1341.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/d5672190-3126-446a-baae-ffe0daa46dcb.jpg?1702328332.4641",
       "quant": "12",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "720"
     },
     {
       "id": "75545",
@@ -3362,7 +3985,8 @@
       "price": 1273.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/bf1e5560-5a52-4342-a529-3fc57115343a.jpg?1713214349.3718",
       "quant": "12",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "730"
     },
     {
       "id": "31549",
@@ -3370,7 +3994,8 @@
       "price": 2161.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/a4e47601-6c2d-47c8-9ecd-b7250da39e64.jpg?1711660273.8792",
       "quant": "4",
-      "weight": "1200"
+      "weight": "1200",
+      "expiry_days": "720"
     },
     {
       "id": "18493",
@@ -3378,7 +4003,8 @@
       "price": 919.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/6f9be886-f65d-438e-8d90-d48733b25f91.jpg?1723073046.4733",
       "quant": "10",
-      "weight": "480"
+      "weight": "480",
+      "expiry_days": "720"
     },
     {
       "id": "56123",
@@ -3386,7 +4012,8 @@
       "price": 1298.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/416cafdc-7aa6-441b-915c-87b0fcb7e0cf.jpg?1719087393.4462",
       "quant": "8",
-      "weight": "600"
+      "weight": "600",
+      "expiry_days": "1460"
     },
     {
       "id": "23971",
@@ -3394,7 +4021,8 @@
       "price": 600.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/9549ab08-a30b-4095-bb33-dbb4080ad699.jpg?1718399044.9007",
       "quant": "12",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "720"
     },
     {
       "id": "86179",
@@ -3402,7 +4030,8 @@
       "price": 989.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/0256ded9-b661-43e8-be7b-73588418b72f.jpg?1710351967.8554",
       "quant": "12",
-      "weight": "900"
+      "weight": "900",
+      "expiry_days": "730"
     },
     {
       "id": "64843",
@@ -3410,7 +4039,8 @@
       "price": 716.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/a2af32e7-e401-4ac6-b7ad-123eaf9e81af.jpg?1714941400.698",
       "quant": "6",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "1080"
     },
     {
       "id": "64841",
@@ -3418,7 +4048,8 @@
       "price": 695.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/566e4141-80bc-4a42-a1a7-1b53bfdaa3f7.jpg?1725360261.6124",
       "quant": "6",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "1080"
     },
     {
       "id": "86076",
@@ -3426,7 +4057,8 @@
       "price": 592.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/a4de6766-c843-4dc5-8e01-05fe1f7a3886.jpg?1710352029.0499",
       "quant": "12",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "730"
     },
     {
       "id": "80544",
@@ -3434,7 +4066,8 @@
       "price": 419.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/7ce5c5f3-ac8a-43fa-897b-98b3c330b06e.jpg?1708115027.962",
       "quant": "15",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "730"
     },
     {
       "id": "86183",
@@ -3442,7 +4075,8 @@
       "price": 750.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/5d04488d-b859-49b9-95e3-c06ed107a3c8.jpg?1710352046.9793",
       "quant": "12",
-      "weight": "1000"
+      "weight": "1000",
+      "expiry_days": "730"
     },
     {
       "id": "18490",
@@ -3450,7 +4084,8 @@
       "price": 576.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/b17731d9-3ff2-453f-9cb8-ab365ae90ed1.jpg?1725359962.6195",
       "quant": "12",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "720"
     },
     {
       "id": "86678",
@@ -3458,7 +4093,8 @@
       "price": 1550.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/2fec8107-cc7e-42a2-8f5d-6517fc39110d.jpg?1706214330.4467",
       "quant": "12",
-      "weight": "1000"
+      "weight": "1000",
+      "expiry_days": "1095"
     },
     {
       "id": "86731",
@@ -3466,7 +4102,8 @@
       "price": 1372.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/8d976175-206c-43fe-8ccb-205bcb34a71b.jpg?1725401895.8815",
       "quant": "12",
-      "weight": "850"
+      "weight": "850",
+      "expiry_days": "1095"
     },
     {
       "id": "92544",
@@ -3474,7 +4111,8 @@
       "price": 312.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/26391c77-8867-493a-81e7-cc635e942036.webp?1732319543.7533",
       "quant": "12",
-      "weight": "500"
+      "weight": "500",
+      "expiry_days": "730"
     }
   ],
   "Овощи. Фрукты. Грибы. Зелень": [
@@ -3484,7 +4122,8 @@
       "price": 1712.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/1ecc50e9-a8f8-45c6-8e6a-8543510edbf2.jpg?1722288019.1363",
       "quant": "12",
-      "weight": "350"
+      "weight": "350",
+      "expiry_days": "360"
     },
     {
       "id": "33576",
@@ -3492,7 +4131,8 @@
       "price": 611.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/b66e314d-9b86-407c-8493-ad92bb72fd72.jpg?1722285067.9199",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "720"
     },
     {
       "id": "16122",
@@ -3500,7 +4140,8 @@
       "price": 777.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/bf2d701d-9bf9-4679-b450-194de47c4b00.jpg?1722288737.0951",
       "quant": "20",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "16091",
@@ -3508,7 +4149,8 @@
       "price": 492.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/c90142d7-edb3-464b-a7b2-fa443f37ee6d.jpg?1692927129.6794",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "720"
     },
     {
       "id": "19658",
@@ -3516,7 +4158,8 @@
       "price": 653.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/d8fce002-0795-49e3-aaf5-4c42ea5a02ac.jpg?1722289501.6059",
       "quant": "20",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "360"
     },
     {
       "id": "16127",
@@ -3524,7 +4167,8 @@
       "price": 708.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/7adcd9c5-7bf0-4d83-b05a-da5b077f9c17.jpg?1723154956.5171",
       "quant": "12",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "78529",
@@ -3532,7 +4176,8 @@
       "price": 661.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/b6e586c1-ee74-43cd-9e49-888107a8710a.jpg?1700859190.8298",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "20129",
@@ -3540,7 +4185,8 @@
       "price": 873.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/e977d793-ca39-4a19-8c3c-7343790f3e99.jpg?1722283883.2017",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "29706",
@@ -3548,7 +4194,8 @@
       "price": 474.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/6fb14f29-93fd-4280-ae20-c0ea0bd6395c.jpg?1722281080.5366",
       "quant": "14",
-      "weight": "350"
+      "weight": "350",
+      "expiry_days": "360"
     },
     {
       "id": "31748",
@@ -3556,7 +4203,8 @@
       "price": 408.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/3c15b9fe-8de3-4ffb-8b2b-639dd7a7af06.jpg?1723045218.1351",
       "quant": "12",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "31749",
@@ -3564,7 +4212,8 @@
       "price": 450.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/42f152ca-6826-409b-92d7-cf8fe400596e.jpg?1692916809.3808",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "31752",
@@ -3572,7 +4221,8 @@
       "price": 711.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/f7bc16fb-6b53-4ba3-81eb-3a41bda84b88.jpg?1722285000.6045",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "31777",
@@ -3580,7 +4230,8 @@
       "price": 565.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/d55b66aa-16b0-4979-b571-fa0f7c4cee09.jpg?1725399401.6139",
       "quant": "12",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "39930",
@@ -3588,7 +4239,8 @@
       "price": 1393.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/d24c2e04-e286-4680-bebf-e780ab0649c3.jpg?1711658723.2851",
       "quant": "10",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "360"
     },
     {
       "id": "40146",
@@ -3596,7 +4248,8 @@
       "price": 2837.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/5b91491d-b427-40b0-9029-8a9e039d429f.jpg?1692750199.927",
       "quant": "6",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "360"
     },
     {
       "id": "56609",
@@ -3604,7 +4257,8 @@
       "price": 628.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/36555c8e-7898-4e11-bdec-872f4db61aff.jpg?1697315650.7947",
       "quant": "10",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "360"
     },
     {
       "id": "33468",
@@ -3612,7 +4266,8 @@
       "price": 1053.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/f00811fa-c397-4ac7-b14f-2b46bd4da88d.jpg?1722261678.9892",
       "quant": "10",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "360"
     },
     {
       "id": "61838",
@@ -3620,7 +4275,8 @@
       "price": 448.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/e1a77337-3da8-427f-b0f4-cf51e8a0b6bf.jpg?1692918429.1153",
       "quant": "10",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "360"
     },
     {
       "id": "65083",
@@ -3628,7 +4284,8 @@
       "price": 1000.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/2b91b2c8-71d1-445b-a06f-f983c6f72ace.jpg?1722286731.6094",
       "quant": "8",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "360"
     },
     {
       "id": "76356",
@@ -3636,7 +4293,8 @@
       "price": 794.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/5374d1b9-3ec7-4e33-a98d-9a2b65b6478f.jpg?1722284301.7486",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "77007",
@@ -3644,7 +4302,8 @@
       "price": 1131.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/e3054a70-fba9-4993-b260-d512bd651c47.jpg?1722374679.7472",
       "quant": "0",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "82336",
@@ -3652,7 +4311,8 @@
       "price": 808.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/3367797d-6769-474a-8718-2967b85a0630.jpg?1703751738.2592",
       "quant": "10",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "365"
     },
     {
       "id": "73794",
@@ -3660,7 +4320,8 @@
       "price": 621.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/7d7ab72b-fe05-444b-b1e7-6c3b82aa2b2b.jpg?1697315469.3652",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "85910",
@@ -3668,7 +4329,8 @@
       "price": 836.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/89efd141-0778-466e-84fa-eec8d5b03360.jpg?1712610219.7012",
       "quant": "15",
-      "weight": "100"
+      "weight": "100",
+      "expiry_days": "365"
     },
     {
       "id": "85911",
@@ -3676,7 +4338,8 @@
       "price": 764.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/d4d4f803-ceab-4bcc-82ae-b7610e423c3a.jpg?1712350490.558",
       "quant": "15",
-      "weight": "100"
+      "weight": "100",
+      "expiry_days": "360"
     },
     {
       "id": "91448",
@@ -3684,7 +4347,8 @@
       "price": 1660.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/31e645ec-1a60-4a4d-b1cd-3c6b9dca0200.jpg?1722283637.1504",
       "quant": "6",
-      "weight": "1000"
+      "weight": "1000",
+      "expiry_days": "360"
     },
     {
       "id": "91449",
@@ -3692,7 +4356,8 @@
       "price": 1594.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/1d9cd068-e20b-4631-89fb-d1558b7cd402.jpg?1722284180.9693",
       "quant": "6",
-      "weight": "1000"
+      "weight": "1000",
+      "expiry_days": "360"
     },
     {
       "id": "94741",
@@ -3700,7 +4365,8 @@
       "price": 870.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/d3632f4a-e835-476a-882b-05eeb54a17d9.jpg?1724359842.3429",
       "quant": "10",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "360"
     },
     {
       "id": "96776",
@@ -3708,7 +4374,8 @@
       "price": 762.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/6c252487-8100-475c-82e9-f08e0766b62d.jpg?1725051154.3496",
       "quant": "12",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "360"
     },
     {
       "id": "94743",
@@ -3716,7 +4383,8 @@
       "price": 1487.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/206263d4-f9c4-4dd3-9eb4-63ca7858c745.webp?1734045712.4974",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "38893",
@@ -3724,7 +4392,8 @@
       "price": 758.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/f286dcc5-6329-4f48-a7ee-461b5482250e.jpg?1722284359.3396",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "270"
     },
     {
       "id": "37144",
@@ -3732,7 +4401,8 @@
       "price": 1044.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/b5d6d341-3bae-4195-b74e-16e01a59b29c.jpg?1722374541.0644",
       "quant": "10",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "360"
     },
     {
       "id": "19688",
@@ -3740,7 +4410,8 @@
       "price": 683.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/aa3b1051-01ba-4650-856b-9c8904ea0539.jpg?1705527791.5572",
       "quant": "10",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "270"
     },
     {
       "id": "19656",
@@ -3748,7 +4419,8 @@
       "price": 1542.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/b7ac6fef-abda-4450-bfc0-3f8525c072f7.jpg?1693131440.7843",
       "quant": "12",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "270"
     },
     {
       "id": "914",
@@ -3756,7 +4428,8 @@
       "price": 1149.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/3d7cff57-503b-4aa7-9c27-c173dd01241d.jpg?1722280795.414",
       "quant": "10",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "270"
     },
     {
       "id": "913",
@@ -3764,7 +4437,8 @@
       "price": 1410.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/31862cec-2707-43b5-b6dc-bb0cefaf361e.jpg?1722284776.3262",
       "quant": "10",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "270"
     },
     {
       "id": "915",
@@ -3772,7 +4446,8 @@
       "price": 958.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/c62e7bf4-2d1e-4bf0-b110-4b3f20751363.jpg?1722288241.3793",
       "quant": "10",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "270"
     },
     {
       "id": "22270",
@@ -3780,7 +4455,8 @@
       "price": 827.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/dcdefeb1-efec-4c11-a02c-2c360fdb74d2.jpg?1722374573.4908",
       "quant": "8",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "270"
     },
     {
       "id": "37513",
@@ -3788,7 +4464,8 @@
       "price": 2496.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/7b9d80af-9693-45ab-a3ca-96dc35867603.jpg?1693130714.0925",
       "quant": "8",
-      "weight": "125"
+      "weight": "125",
+      "expiry_days": "270"
     },
     {
       "id": "51238",
@@ -3796,7 +4473,8 @@
       "price": 1317.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/d921bed9-72bf-440b-b500-05cbed24f6ec.jpg?1722287865.2873",
       "quant": "10",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "270"
     },
     {
       "id": "80923",
@@ -3804,7 +4482,8 @@
       "price": 493.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/682261b4-cffe-4e02-b9cd-11893598e405.jpg?1722281416.2927",
       "quant": "10",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "270"
     },
     {
       "id": "82254",
@@ -3812,7 +4491,8 @@
       "price": 562.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/4edb05de-d5d5-4670-b8b9-15b15095123c.jpg?1722287785.3763",
       "quant": "10",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "270"
     },
     {
       "id": "91103",
@@ -3820,7 +4500,8 @@
       "price": 1160.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/26499d8d-6646-43fc-8b99-bbd84718c4b8.jpg?1722281183.8595",
       "quant": "8",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "270"
     },
     {
       "id": "92845",
@@ -3828,7 +4509,8 @@
       "price": 83.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/a275e901-fb0d-453a-b599-850a64c3d32b.jpg?1716842193.446",
       "quant": "50",
-      "weight": "10"
+      "weight": "10",
+      "expiry_days": "360"
     },
     {
       "id": "93461",
@@ -3836,7 +4518,8 @@
       "price": 830.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/433134aa-be01-4747-93ed-87b523cefb07.jpg?1722286024.9014",
       "quant": "10",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "360"
     },
     {
       "id": "96779",
@@ -3844,7 +4527,8 @@
       "price": 1052.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/f393b1f6-a3e7-44ed-b092-0b7ffb4b1fdf.jpg?1723706676.9965",
       "quant": "12",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "270"
     },
     {
       "id": "67746",
@@ -3852,7 +4536,8 @@
       "price": 406.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/7647d969-65c4-4630-b6d5-6c74b3cc341e.jpg?1715585020.9441",
       "quant": "20",
-      "weight": "50"
+      "weight": "50",
+      "expiry_days": "540"
     },
     {
       "id": "67747",
@@ -3860,7 +4545,8 @@
       "price": 406.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/ca3750f9-48e4-4036-9ba3-7079b48f8064.jpg?1715585123.875",
       "quant": "20",
-      "weight": "50"
+      "weight": "50",
+      "expiry_days": "360"
     },
     {
       "id": "67751",
@@ -3868,7 +4554,8 @@
       "price": 406.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/ad7d08a4-c375-461a-a608-5129e8dfd6b8.jpg?1715585180.9604",
       "quant": "20",
-      "weight": "50"
+      "weight": "50",
+      "expiry_days": "540"
     },
     {
       "id": "73428",
@@ -3876,7 +4563,8 @@
       "price": 797.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/83a66b9c-c66a-4824-89fc-0c2b3145bdbd.jpg?1722372169.7349",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "270"
     },
     {
       "id": "77361",
@@ -3884,7 +4572,8 @@
       "price": 667.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/a9022b2d-35bd-435c-a0b0-8deb2ac0789c.jpg?1713794203.383",
       "quant": "6",
-      "weight": "105"
+      "weight": "105",
+      "expiry_days": "360"
     },
     {
       "id": "77362",
@@ -3892,7 +4581,8 @@
       "price": 625.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/7509feac-8e40-4cac-8c47-9bd0520d8949.jpg?1713514554.8279",
       "quant": "6",
-      "weight": "105"
+      "weight": "105",
+      "expiry_days": "360"
     },
     {
       "id": "77373",
@@ -3900,7 +4590,8 @@
       "price": 631.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/5be7e2f9-9bba-4c1b-927a-53dbddf3cc0b.jpg?1713794097.5778",
       "quant": "6",
-      "weight": "105"
+      "weight": "105",
+      "expiry_days": "360"
     },
     {
       "id": "77375",
@@ -3908,7 +4599,8 @@
       "price": 628.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/df189d61-8dea-43dd-a0e3-094e6e769450.jpg?1713794147.9237",
       "quant": "6",
-      "weight": "105"
+      "weight": "105",
+      "expiry_days": "360"
     },
     {
       "id": "82940",
@@ -3916,7 +4608,8 @@
       "price": 393.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/b986b1ed-98a6-4926-85d2-3b0ee06f4973.jpg?1713734233.3135",
       "quant": "10",
-      "weight": "65"
+      "weight": "65",
+      "expiry_days": "360"
     },
     {
       "id": "82941",
@@ -3924,7 +4617,8 @@
       "price": 393.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/e6c5cf49-afc9-4929-922e-b1e948ce3c40.jpg?1709618051.9673",
       "quant": "10",
-      "weight": "65"
+      "weight": "65",
+      "expiry_days": "360"
     },
     {
       "id": "82943",
@@ -3932,7 +4626,8 @@
       "price": 393.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/1501b22f-e97a-467c-8e2b-999b5a1bc23f.jpg?1713514721.0962",
       "quant": "10",
-      "weight": "65"
+      "weight": "65",
+      "expiry_days": "360"
     },
     {
       "id": "94742",
@@ -3940,7 +4635,8 @@
       "price": 697.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/0aac12cd-9fa2-454e-a996-fe7416467656.jpg?1724359655.947",
       "quant": "8",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "270"
     },
     {
       "id": "28804",
@@ -3948,7 +4644,8 @@
       "price": 847.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/9da5cfca-d903-4db3-9225-d461f8df2b4c.jpg?1693099509.9706",
       "quant": "8",
-      "weight": "80"
+      "weight": "80",
+      "expiry_days": "365"
     },
     {
       "id": "74000",
@@ -3956,7 +4653,8 @@
       "price": 1120.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/01b35f7f-939d-42d5-bea7-059476bbceff.jpg?1693179492.2867",
       "quant": "6",
-      "weight": "250"
+      "weight": "250",
+      "expiry_days": "720"
     },
     {
       "id": "74001",
@@ -3964,7 +4662,8 @@
       "price": 1162.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/2daedf00-6e3a-48f6-a4d0-c6fbb23f64f3.jpg?1693179672.1232",
       "quant": "6",
-      "weight": "250"
+      "weight": "250",
+      "expiry_days": "720"
     },
     {
       "id": "74002",
@@ -3972,7 +4671,8 @@
       "price": 942.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/29794b22-8bd7-4f42-9571-f1032dac3247.jpg?1693179615.7615",
       "quant": "6",
-      "weight": "250"
+      "weight": "250",
+      "expiry_days": "720"
     },
     {
       "id": "92360",
@@ -3980,7 +4680,8 @@
       "price": 1147.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/f8ad11f6-320c-49b3-859a-926e894d71f9.jpg?1713992233.3999",
       "quant": "6",
-      "weight": "250"
+      "weight": "250",
+      "expiry_days": "720"
     },
     {
       "id": "92361",
@@ -3988,7 +4689,8 @@
       "price": 921.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/6c5535a1-dad1-4dde-8dc7-011f51613093.jpg?1713991929.1131",
       "quant": "6",
-      "weight": "250"
+      "weight": "250",
+      "expiry_days": "720"
     },
     {
       "id": "94377",
@@ -3996,7 +4698,8 @@
       "price": 1010.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/250b5a3a-3c65-46fc-baf1-abae8e2e47ed.jpg?1720039354.41",
       "quant": "6",
-      "weight": "250"
+      "weight": "250",
+      "expiry_days": "720"
     },
     {
       "id": "31754",
@@ -4004,7 +4707,8 @@
       "price": 749.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/e767574c-857e-4d20-bfd3-245864cebf03.jpg?1722281301.3082",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "16089",
@@ -4012,7 +4716,8 @@
       "price": 513.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/14d0ab24-c72d-4d7a-80c8-5089fe574ab0.jpg?1722286997.7771",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "16088",
@@ -4020,7 +4725,8 @@
       "price": 459.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/2bd626a9-923c-4ff6-93d8-d8ca62649194.jpg?1722281009.8971",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "16090",
@@ -4028,7 +4734,8 @@
       "price": 532.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/97b58eca-b328-426f-a3a4-de0a5c8cf028.jpg?1722287263.3503",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "16260",
@@ -4036,7 +4743,8 @@
       "price": 402.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/7eebd1c4-9bf7-421a-8723-3977fe1e65a5.jpg?1656469803.6871",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "720"
     },
     {
       "id": "31747",
@@ -4044,7 +4752,8 @@
       "price": 578.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/139b8a83-6345-4339-835f-7c027a840043.jpg?1722289855.4823",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "31755",
@@ -4052,7 +4761,8 @@
       "price": 917.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/55a0e34a-6804-42b0-b437-f596be589bae.jpg?1722288651.0209",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "38962",
@@ -4060,7 +4770,8 @@
       "price": 866.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/845fa739-8400-438f-9351-ef61518a6666.jpg?1722289459.5965",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "41192",
@@ -4068,7 +4779,8 @@
       "price": 792.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/dfe71081-4ea0-49c1-aa05-beb64ec477ef.jpg?1722286765.9549",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "720"
     },
     {
       "id": "56174",
@@ -4076,7 +4788,8 @@
       "price": 470.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/f1d4996b-738e-4590-9c6e-3df002c27cbf.jpg?1722289976.4406",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "56175",
@@ -4084,7 +4797,8 @@
       "price": 479.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/cf45117f-41f3-4596-9570-d4c3dac9718e.jpg?1722885237.971",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "720"
     },
     {
       "id": "56179",
@@ -4092,7 +4806,8 @@
       "price": 500.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/4f68fe48-144e-4664-a693-bc407d4c1caa.jpg?1722287567.202",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "720"
     },
     {
       "id": "74669",
@@ -4100,7 +4815,8 @@
       "price": 568.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/94c1378c-3485-4024-adc9-89b77bea855a.jpg?1722287305.0448",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "82568",
@@ -4108,7 +4824,8 @@
       "price": 870.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/4d203f90-4f4e-4865-984d-af6c1dc97586.jpg?1700427042.4119",
       "quant": "8",
-      "weight": "300"
+      "weight": "300",
+      "expiry_days": "360"
     },
     {
       "id": "96778",
@@ -4116,7 +4833,8 @@
       "price": 663.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/f96c0624-8169-4d06-99a4-4241edf7694d.jpg?1725051230.1838",
       "quant": "12",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "70273",
@@ -4124,7 +4842,8 @@
       "price": 407.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/571fe84c-1ab2-435e-b14a-9c144e079518.jpg?1722289373.6226",
       "quant": "8",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "360"
     },
     {
       "id": "74673",
@@ -4132,7 +4851,8 @@
       "price": 565.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/164c66f1-9777-45e0-b044-675e2969bcda.jpg?1706202133.2943",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "74683",
@@ -4140,7 +4860,8 @@
       "price": 598.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/045a5d52-541e-440e-8017-baee45d618cd.jpg?1706208791.5729",
       "quant": "8",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "83234",
@@ -4148,7 +4869,8 @@
       "price": 675.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/672abf76-2d96-4667-b92a-76d683bc4c2d.jpg?1722374640.0557",
       "quant": "0",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "83375",
@@ -4156,7 +4878,8 @@
       "price": 356.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/c1ea9244-3239-4e5b-974f-d7bef9d8d0ef.jpg?1702759693.9305",
       "quant": "10",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "360"
     },
     {
       "id": "83376",
@@ -4164,7 +4887,8 @@
       "price": 407.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/cfad4164-bc83-41e8-ab30-408732b7674b.jpg?1722826700.9647",
       "quant": "10",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "360"
     },
     {
       "id": "83378",
@@ -4172,7 +4896,8 @@
       "price": 761.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/a52f5726-b116-495c-9e91-9728d0d00463.jpg?1718361164.8357",
       "quant": "10",
-      "weight": "400"
+      "weight": "400",
+      "expiry_days": "360"
     },
     {
       "id": "86540",
@@ -4180,7 +4905,8 @@
       "price": 706.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/1d15fec0-2b7d-40bb-a1d5-fcae8c5cd0e9.jpg?1722288963.982",
       "quant": "4",
-      "weight": "350"
+      "weight": "350",
+      "expiry_days": "180"
     }
   ],
   "Мороженое": [
@@ -4190,7 +4916,8 @@
       "price": 454.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/c9ad242d-baf0-4331-8dcc-cd4ea26b9e1c.jpg?1686094387.557",
       "quant": "12",
-      "weight": "75"
+      "weight": "75",
+      "expiry_days": "180"
     },
     {
       "id": "50153",
@@ -4198,7 +4925,8 @@
       "price": 348.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/5a85bafe-4de7-49c3-80a8-d07b417ff25b.jpg?1704485112.4963",
       "quant": "12",
-      "weight": "75"
+      "weight": "75",
+      "expiry_days": "180"
     },
     {
       "id": "88666",
@@ -4206,7 +4934,8 @@
       "price": 334.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/4bb9d068-d9f9-4141-bed5-f4caf059d3fa.jpg?1714596775.811",
       "quant": "12",
-      "weight": "75"
+      "weight": "75",
+      "expiry_days": "360"
     },
     {
       "id": "88665",
@@ -4214,7 +4943,8 @@
       "price": 384.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/821b870b-8fb6-486c-825e-6d011ee269e5.jpg?1714596861.4402",
       "quant": "12",
-      "weight": "75"
+      "weight": "75",
+      "expiry_days": "360"
     },
     {
       "id": "20148",
@@ -4222,7 +4952,8 @@
       "price": 366.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/beec4062-0fe5-4833-afd3-848f3f5363a3.jpg?1686094268.601",
       "quant": "12",
-      "weight": "75"
+      "weight": "75",
+      "expiry_days": "180"
     },
     {
       "id": "61784",
@@ -4230,7 +4961,8 @@
       "price": 195.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/26c6932b-1244-4ab1-b24f-fccfce02e553.jpg?1719816115.3238",
       "quant": "12",
-      "weight": "70"
+      "weight": "70",
+      "expiry_days": "180"
     },
     {
       "id": "66501",
@@ -4238,7 +4970,8 @@
       "price": 462.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/863227b0-8128-401e-802a-45273e15e7ab.jpg?1686093548.1435",
       "quant": "12",
-      "weight": "75"
+      "weight": "75",
+      "expiry_days": "180"
     },
     {
       "id": "50622",
@@ -4246,7 +4979,8 @@
       "price": 455.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/4f119d94-eb3a-4d82-bfa4-d6fc70bff6ca.jpg?1686092765.568",
       "quant": "12",
-      "weight": "75"
+      "weight": "75",
+      "expiry_days": "360"
     },
     {
       "id": "90770",
@@ -4254,7 +4988,8 @@
       "price": 399.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/f032bfaa-85a0-499c-adfb-5875a8a45553.jpg?1716929417.3519",
       "quant": "12",
-      "weight": "75"
+      "weight": "75",
+      "expiry_days": "360"
     },
     {
       "id": "17724",
@@ -4262,7 +4997,8 @@
       "price": 369.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/58e916e2-a08a-4b66-a002-2096d382d992.jpg?1720564695.6414",
       "quant": "12",
-      "weight": "75"
+      "weight": "75",
+      "expiry_days": "180"
     },
     {
       "id": "101239",
@@ -4270,7 +5006,8 @@
       "price": 413.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/7eedbdf3-a1be-4976-8bef-57e6db7eea56.webp?1733177300.597",
       "quant": "21",
-      "weight": "100"
+      "weight": "100",
+      "expiry_days": "180"
     },
     {
       "id": "90662",
@@ -4278,7 +5015,8 @@
       "price": 403.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/d2ad2534-33f0-4a54-a2ad-412867b5db79.jpg?1718230066.7445",
       "quant": "12",
-      "weight": "75"
+      "weight": "75",
+      "expiry_days": "360"
     },
     {
       "id": "90039",
@@ -4286,7 +5024,8 @@
       "price": 413.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/6d283eb8-c1a6-4f33-8999-525d47980737.jpg?1719182507.716",
       "quant": "21",
-      "weight": "100"
+      "weight": "100",
+      "expiry_days": "180"
     }
   ],
   "Сладости, кондитерские изделия": [
@@ -4296,7 +5035,8 @@
       "price": 1011.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/6491395a-3295-4156-b4ec-4476c14a15cb.jpg?1719865988.8303",
       "quant": "12",
-      "weight": "150"
+      "weight": "150",
+      "expiry_days": "360"
     },
     {
       "id": "65280",
@@ -4304,7 +5044,8 @@
       "price": 976.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/05d1adc6-4bcd-4f98-af13-4a357cf58302.jpg?1709618783.3023",
       "quant": "12",
-      "weight": "150"
+      "weight": "150",
+      "expiry_days": "360"
     },
     {
       "id": "27851",
@@ -4312,7 +5053,8 @@
       "price": 2507.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/3a1a80fc-f842-451a-865e-b1ff75581a4a.jpg?1709618289.3753",
       "quant": "12",
-      "weight": "200"
+      "weight": "200",
+      "expiry_days": "720"
     },
     {
       "id": "17534",
@@ -4320,7 +5062,8 @@
       "price": 1386.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/92dacab4-1a24-49f1-940b-153b4df1ec43.jpg?1709875927.5975",
       "quant": "12",
-      "weight": "150"
+      "weight": "150",
+      "expiry_days": "270"
     },
     {
       "id": "15882",
@@ -4328,7 +5071,8 @@
       "price": 606.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/ea431f0c-1e5a-48ec-8035-e979a775c637.jpg?1709618168.6964",
       "quant": "12",
-      "weight": "150"
+      "weight": "150",
+      "expiry_days": "270"
     },
     {
       "id": "18295",
@@ -4336,7 +5080,8 @@
       "price": 704.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/32f00da0-8797-4ac7-b92e-ad01290d71b2.jpg?1708543115.8098",
       "quant": "12",
-      "weight": "150"
+      "weight": "150",
+      "expiry_days": "90"
     },
     {
       "id": "19392",
@@ -4344,7 +5089,8 @@
       "price": 891.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/10d55fc9-dd6b-4317-91ca-390f93670f11.jpg?1721162315.3813",
       "quant": "12",
-      "weight": "330"
+      "weight": "330",
+      "expiry_days": "720"
     },
     {
       "id": "18784",
@@ -4352,7 +5098,8 @@
       "price": 685.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/3a318904-0564-4145-888e-27dad31d9f94.jpg?1710031567.3445",
       "quant": "12",
-      "weight": "250"
+      "weight": "250",
+      "expiry_days": "180"
     },
     {
       "id": "22760",
@@ -4360,7 +5107,8 @@
       "price": 668.0,
       "image": "https://img.vkusvill.ru/pim/images/mobile/05d1adc6-4bcd-4f98-af13-4a357cf58302.jpg?1709618226.1455",
       "quant": "12",
-      "weight": "150"
+      "weight": "150",
+      "expiry_days": "360"
     },
     {
       "id": "90660",
@@ -4368,14 +5116,226 @@
       "price": 719.0,
       "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/328d3a89-5385-4f6c-b6dd-f012cdaef823.webp?1731791511.7121",
       "quant": "12",
-      "weight": "150"
+      "weight": "150",
+      "expiry_days": "365"
     }
   ]
 };
         
+        // Корзина (хранится в localStorage)
+        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        
         function formatPrice(price) {
             if (price === 0) return "Цена по запросу";
             return new Intl.NumberFormat('ru-RU').format(Math.round(price)) + ' ₸';
+        }
+        
+        function saveCart() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartBadge();
+        }
+        
+        function updateCartBadge() {
+            const badge = document.getElementById('cart-badge');
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            if (totalItems > 0) {
+                badge.textContent = totalItems;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+        
+        function addToCartFromButton(button) {
+            const productJson = button.getAttribute('data-product');
+            const product = JSON.parse(productJson.replace(/&quot;/g, '"'));
+            addToCart(product);
+        }
+        
+        function addToCart(product) {
+            const existingItem = cart.find(item => item.id === product.id);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    quantity: 1,
+                    category: product.category || ''
+                });
+            }
+            saveCart();
+            // Обновляем кнопку на карточке товара
+            updateProductButton(product.id);
+        }
+        
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            saveCart();
+            updateProductButton(productId);
+            if (document.getElementById('cart-view').classList.contains('active')) {
+                renderCart();
+            }
+        }
+        
+        function updateQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(productId);
+                } else {
+                    saveCart();
+                    renderCart();
+                }
+            }
+        }
+        
+        function updateProductButton(productId) {
+            const btn = document.querySelector(`[data-product-id="${productId}"]`);
+            if (btn) {
+                const inCart = cart.find(item => item.id === productId);
+                if (inCart) {
+                    btn.textContent = '✓ В корзине';
+                    btn.classList.add('added');
+                } else {
+                    btn.textContent = '+ В корзину';
+                    btn.classList.remove('added');
+                }
+            }
+        }
+        
+        function showCart() {
+            document.getElementById('categories-view').classList.remove('active');
+            document.getElementById('products-view').classList.remove('active');
+            document.getElementById('cart-view').classList.add('active');
+            renderCart();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        function renderCart() {
+            const cartContent = document.getElementById('cart-content');
+            
+            if (cart.length === 0) {
+                cartContent.innerHTML = `
+                    <div class="empty-cart">
+                        <p>Корзина пуста</p>
+                        <p style="margin-top: 10px; font-size: 0.9em;">Добавьте товары из каталога</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                html += `
+                    <div class="cart-item">
+                        <div class="cart-item-info">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-details">
+                                ID: ${item.id} • ${item.price > 0 ? formatPrice(item.price) : 'Цена по запросу'}
+                            </div>
+                        </div>
+                        <div class="cart-item-controls">
+                            <div class="quantity-control">
+                                <button class="quantity-btn" onclick="updateQuantity('${item.id}', -1)">-</button>
+                                <span class="quantity-value">${item.quantity}</span>
+                                <button class="quantity-btn" onclick="updateQuantity('${item.id}', 1)">+</button>
+                            </div>
+                            <div style="font-weight: 600; min-width: 100px; text-align: right;">
+                                ${item.price > 0 ? formatPrice(itemTotal) : '—'}
+                            </div>
+                            <button class="remove-item-btn" onclick="removeFromCart('${item.id}')">Удалить</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += `
+                <div class="cart-total">
+                    <span>Итого:</span>
+                    <span>${total > 0 ? formatPrice(total) : '—'}</span>
+                </div>
+                <button class="submit-order-btn" onclick="submitOrder()">Отправить заказ</button>
+            `;
+            
+            cartContent.innerHTML = html;
+        }
+        
+        async function submitOrder() {
+            if (cart.length === 0) {
+                alert('Корзина пуста');
+                return;
+            }
+            
+            const submitBtn = document.querySelector('.submit-order-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Отправка...';
+            
+            // Формируем данные заказа
+            const orderData = {
+                timestamp: new Date().toISOString(),
+                date: new Date().toLocaleString('ru-RU'),
+                client: 'HoReCa',
+                items: cart.map(item => ({
+                    id: item.id,
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity,
+                    total: item.price * item.quantity
+                })),
+                total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                totalItems: cart.reduce((sum, item) => sum + item.quantity, 0)
+            };
+            
+            try {
+                // Сохраняем заказ в localStorage как резервную копию
+                const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+                orders.push(orderData);
+                localStorage.setItem('orders', JSON.stringify(orders));
+                
+                // Формируем текст заказа для отображения
+                const orderSummary = orderData.items.map(item => 
+                    `ID: ${item.id} | ${item.name} | Кол-во: ${item.quantity} | Цена: ${item.price > 0 ? formatPrice(item.price) : 'по запросу'}`
+                ).join('\n');
+                
+                const userMessage = `Заказ сформирован!\n\n` +
+                    `Клиент: ${orderData.client}\n` +
+                    `Товаров: ${orderData.totalItems} шт\n` +
+                    `Сумма: ${orderData.total > 0 ? formatPrice(orderData.total) : '—'}\n\n` +
+                    `Детали заказа:\n${orderSummary}\n\n` +
+                    `(Данные сохранены локально. В будущем будет автоматическая отправка в Google Таблицу)`;
+                
+                alert(userMessage);
+                
+                // Очищаем корзину
+                cart = [];
+                saveCart();
+                renderCart();
+                showCategories();
+                
+                // Показываем сообщение об успехе
+                submitBtn.textContent = 'Заказ отправлен! ✓';
+                submitBtn.style.background = '#2dbe64';
+                
+                setTimeout(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Отправить заказ';
+                    submitBtn.style.background = '';
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Ошибка отправки заказа:', error);
+                alert('Ошибка отправки заказа. Данные сохранены локально.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Отправить заказ';
+            }
         }
         
         function showCategory(categoryName) {
@@ -4393,6 +5353,9 @@
             // Добавляем товары
             const products = categoriesData[categoryName] || [];
             products.forEach(product => {
+                // Добавляем категорию к продукту
+                product.category = categoryName;
+                
                 const productCard = document.createElement('div');
                 productCard.className = 'product-card';
                 
@@ -4404,23 +5367,84 @@
                 }
                 
                 let detailsHtml = '';
-                if (product.quant || product.weight) {
-                    let details = [];
-                    if (product.quant) details.push('Квант: ' + product.quant);
-                    if (product.weight) details.push(product.weight);
+                let details = [];
+                
+                // Квант
+                if (product.quant && product.quant.toString().trim() !== '') {
+                    const quantValue = parseInt(product.quant);
+                    // Если это число и больше 0, показываем как "Остаток"
+                    if (!isNaN(quantValue) && quantValue >= 0) {
+                        details.push('Остаток: ' + product.quant + ' шт');
+                    } else if (product.quant.toString().includes('Квант')) {
+                        details.push('Квант: ' + product.quant);
+                    } else {
+                        details.push('Квант: ' + product.quant);
+                    }
+                }
+                
+                // Вес: в граммах (из столбца G)
+                if (product.weight && product.weight.toString().trim() !== '') {
+                    const weightValue = product.weight.toString().trim();
+                    if (weightValue && weightValue !== 'nan') {
+                        // Проверяем, есть ли уже единица измерения в значении
+                        const hasUnit = /(гр|мл|кг|л|шт)/i.test(weightValue);
+                        if (hasUnit) {
+                            details.push('Вес: ' + weightValue);
+                        } else {
+                            // Если единицы нет, добавляем "гр" по умолчанию
+                            details.push('Вес: ' + weightValue + ' гр');
+                        }
+                    }
+                }
+                
+                // Срок годности (из столбца F)
+                if (product.expiry_days && product.expiry_days.toString().trim() !== '') {
+                    const expiryValue = product.expiry_days.toString().trim();
+                    if (expiryValue && expiryValue !== 'nan') {
+                        // Проверяем, есть ли уже единица измерения в значении
+                        const hasUnit = /(сут|дней|день|дн)/i.test(expiryValue);
+                        if (hasUnit) {
+                            details.push('Срок годности: ' + expiryValue);
+                        } else {
+                            // Если единицы нет, добавляем "сут" по умолчанию
+                            details.push('Срок годности: ' + expiryValue + ' сут');
+                        }
+                    }
+                }
+                
+                if (details.length > 0) {
                     detailsHtml = `<div class="product-details">${details.join(' • ')}</div>`;
                 }
+                
+                let priceHtml = '';
+                if (product.price && product.price > 0) {
+                    priceHtml = `<div class="product-price">${formatPrice(product.price)}</div>`;
+                }
+                
+                // Проверяем, есть ли товар в корзине
+                const inCart = cart.find(item => item.id === product.id);
+                const buttonText = inCart ? '✓ В корзине' : '+ В корзину';
+                const buttonClass = inCart ? 'add-to-cart-btn added' : 'add-to-cart-btn';
+                
+                // Сохраняем данные товара в data-атрибуте для безопасной передачи
+                const productJson = JSON.stringify(product).replace(/"/g, '&quot;');
                 
                 productCard.innerHTML = `
                     ${imageHtml}
                     <div class="product-info">
                         <div class="product-name">${product.name}</div>
                         ${detailsHtml}
-                        <div class="product-price">${formatPrice(product.price)}</div>
+                        ${priceHtml}
+                        <button class="${buttonClass}" data-product-id="${product.id}" data-product='${productJson}' onclick="addToCartFromButton(this)">${buttonText}</button>
                     </div>
                 `;
                 
                 productsGrid.appendChild(productCard);
+            });
+            
+            // Обновляем все кнопки корзины после добавления товаров
+            products.forEach(product => {
+                updateProductButton(product.id);
             });
             
             // Прокручиваем вверх
@@ -4428,8 +5452,9 @@
         }
         
         function showCategories() {
-            // Скрываем товары
+            // Скрываем все виды
             document.getElementById('products-view').classList.remove('active');
+            document.getElementById('cart-view').classList.remove('active');
             
             // Показываем категории
             document.getElementById('categories-view').classList.add('active');
@@ -4437,6 +5462,11 @@
             // Прокручиваем вверх
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+        
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartBadge();
+        });
     </script>
 </body>
 </html>
