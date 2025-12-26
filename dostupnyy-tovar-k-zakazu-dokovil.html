@@ -621,6 +621,7 @@
                         ${productImage ? `<img class="product-image" src="${productImage}" alt="${productName}" onerror="this.parentElement.innerHTML='<div class=\\'no-image\\'>Нет фото</div>'">` : '<div class="no-image">Нет фото</div>'}
                         <div class="product-info">
                             <div class="product-name">${productName}</div>
+                            ${product.stock !== undefined && product.stock !== null ? `<div class="product-details">Остаток: ${product.stock} шт</div>` : ''}
                             ${product.quant ? `<div class="product-details">Квант: ${product.quant}</div>` : ''}
                             ${product.weight ? `<div class="product-details">Вес: ${product.weight} гр/мл</div>` : ''}
                             ${product.expiry_days ? `<div class="product-details">Срок годности: ${product.expiry_days} сут</div>` : ''}
