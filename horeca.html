@@ -5406,42 +5406,99 @@
                     try {
                         console.log('Отправка заказа в Google Таблицу...', orderData);
                         
-                        const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(orderData)
-                        });
+                        // Используем XMLHttpRequest вместо fetch (лучше работает с Google Apps Script)
+                        const xhr = new XMLHttpRequest();
+                        xhr.open('POST', GOOGLE_APPS_SCRIPT_URL, true);
+                        xhr.setRequestHeader('Content-Type', 'application/json');
                         
-                        console.log('Статус ответа:', response.status, response.statusText);
-                        
-                        if (response.ok) {
-                            const responseText = await response.text();
-                            console.log('Текст ответа:', responseText);
+                        // Обработка ответа
+                        xhr.onload = function() {
+                            console.log('Статус ответа:', xhr.status, xhr.statusText);
+                            console.log('Текст ответа:', xhr.responseText);
                             
-                            try {
-                                orderResult = JSON.parse(responseText);
-                                console.log('Распарсенный ответ:', orderResult);
-                                
-                                if (orderResult.success) {
-                                    orderSent = true;
-                                } else {
-                                    errorMessage = orderResult.error || 'Неизвестная ошибка';
-                                    console.error('Ошибка от Google Apps Script:', errorMessage);
+                            if (xhr.status === 200) {
+                                try {
+                                    orderResult = JSON.parse(xhr.responseText);
+                                    console.log('Распарсенный ответ:', orderResult);
+                                    
+                                    if (orderResult.success) {
+                                        orderSent = true;
+                                    } else {
+                                        errorMessage = orderResult.error || 'Неизвестная ошибка';
+                                        console.error('Ошибка от Google Apps Script:', errorMessage);
+                                    }
+                                } catch (parseError) {
+                                    console.error('Ошибка парсинга JSON ответа:', parseError);
+                                    console.error('Ответ был:', xhr.responseText);
+                                    errorMessage = 'Не удалось обработать ответ от сервера';
                                 }
-                            } catch (parseError) {
-                                console.error('Ошибка парсинга JSON ответа:', parseError);
-                                console.error('Ответ был:', responseText);
-                                errorMessage = 'Не удалось обработать ответ от сервера';
+                            } else {
+                                console.error('HTTP ошибка:', xhr.status, xhr.statusText);
+                                errorMessage = 'HTTP ' + xhr.status + ': ' + xhr.statusText;
                             }
-                        } else {
-                            const errorText = await response.text();
-                            console.error('HTTP ошибка:', response.status, errorText);
-                            const statusCode = response.status;
-                            const statusText = response.statusText;
-                            errorMessage = 'HTTP ' + statusCode + ': ' + statusText;
+                            
+                            // Продолжаем обработку заказа после получения ответа
+                            continueOrderProcessing();
+                        };
+                        
+                        xhr.onerror = function() {
+                            console.error('Ошибка сети при отправке заказа');
+                            errorMessage = 'Ошибка сети при отправке заказа';
+                            continueOrderProcessing();
+                        };
+                        
+                        // Отправляем данные
+                        xhr.send(JSON.stringify(orderData));
+                        
+                        // Функция для продолжения обработки после получения ответа
+                        function continueOrderProcessing() {
+                            // Формируем текст заказа для отображения
+                            const orderSummary = orderData.items.map(item => 
+                                `ID: ${item.id} | ${item.name} | Кол-во: ${item.quantity} | Цена: ${item.price > 0 ? formatPrice(item.price) : 'по запросу'}`
+                            ).join('\n');
+                            
+                            let userMessage = `Заказ сформирован!\n\n` +
+                                `Клиент: ${orderData.client}\n` +
+                                `Товаров: ${orderData.totalItems} шт\n` +
+                                `Сумма: ${orderData.total > 0 ? formatPrice(orderData.total) : '—'}\n\n` +
+                                `Детали заказа:\n${orderSummary}`;
+                            
+                            if (orderSent) {
+                                userMessage += '\n\n✅ Заказ успешно отправлен в Google Таблицу!';
+                                if (orderResult && orderResult.spreadsheet_url) {
+                                    userMessage += '\n\nПросмотреть заказ: ' + orderResult.spreadsheet_url;
+                                }
+                            } else if (GOOGLE_APPS_SCRIPT_URL && GOOGLE_APPS_SCRIPT_URL.trim() !== '') {
+                                userMessage += '\n\n⚠️ Заказ сохранен локально. Не удалось отправить в Google Таблицу.';
+                                if (errorMessage) {
+                                    userMessage += '\n\nОшибка: ' + errorMessage;
+                                    userMessage += '\n\nПроверьте консоль браузера (F12) для деталей.';
+                                }
+                            } else {
+                                userMessage += '\n\n📝 Заказ сохранен локально.';
+                            }
+                            
+                            alert(userMessage);
+                            
+                            // Очищаем корзину
+                            cart = [];
+                            saveCart();
+                            renderCart();
+                            showCategories();
+                            
+                            // Показываем сообщение об успехе
+                            submitBtn.textContent = orderSent ? 'Заказ отправлен! ✓' : 'Заказ сохранен! ✓';
+                            submitBtn.style.background = orderSent ? '#2dbe64' : '#ff9800';
+                            
+                            setTimeout(() => {
+                                submitBtn.disabled = false;
+                                submitBtn.textContent = 'Отправить заказ';
+                                submitBtn.style.background = '';
+                            }, 2000);
                         }
+                        
+                        // Не выполняем код ниже, так как обработка происходит в continueOrderProcessing
+                        return;
                         
                     } catch (fetchError) {
                         console.error('Ошибка отправки в Google Таблицу:', fetchError);
@@ -5450,6 +5507,7 @@
                     }
                 }
                 
+                // Если URL не указан или произошла ошибка, обрабатываем заказ локально
                 // Формируем текст заказа для отображения
                 const orderSummary = orderData.items.map(item => 
                     `ID: ${item.id} | ${item.name} | Кол-во: ${item.quantity} | Цена: ${item.price > 0 ? formatPrice(item.price) : 'по запросу'}`
