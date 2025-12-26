@@ -19,18 +19,19 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #2dbe64 0%, #26a855 100%);
-            color: white;
-            padding: 30px 20px;
+            background: #2dbe64;
             text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            padding: 40px 20px;
+            border-radius: 0 0 20px 20px;
             position: relative;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .header h1 {
-            font-size: 2em;
+            font-size: 2.5em;
             margin-bottom: 10px;
-            font-weight: 700;
+            font-weight: 600;
         }
 
         .header p {
@@ -88,11 +89,14 @@
         }
 
         .cart-total-info {
-            font-size: 0.85em;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
             padding: 5px 10px;
-            border-radius: 15px;
+            border-radius: 8px;
+            font-size: 0.85em;
             font-weight: 600;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
 
         .cart-total-info.hidden {
@@ -113,21 +117,32 @@
             display: block;
         }
 
+        .products-header {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
         .back-btn {
-            background: #333333;
+            background: #2dbe64;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 24px;
             border-radius: 8px;
             cursor: pointer;
             font-size: 1em;
-            margin-bottom: 20px;
+            font-weight: 500;
             transition: all 0.3s;
         }
 
         .back-btn:hover {
-            background: #555555;
-            transform: translateY(-2px);
+            background: #25a855;
+            transform: translateX(-2px);
         }
 
         .categories-grid {
@@ -143,21 +158,22 @@
             padding: 25px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             border: 2px solid transparent;
         }
 
         .category-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 16px rgba(45, 190, 100, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(45, 190, 100, 0.2);
             border-color: #2dbe64;
         }
 
         .category-card h2 {
-            color: #2dbe64;
-            font-size: 1.3em;
-            margin-bottom: 10px;
+            color: #333333;
+            font-size: 1.4em;
+            margin-bottom: 8px;
+            font-weight: 600;
         }
 
         .category-card .count {
@@ -176,47 +192,55 @@
             background: white;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
             display: flex;
             flex-direction: column;
         }
 
         .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(45, 190, 100, 0.15);
+            border-color: #2dbe64;
         }
 
-        .product-card img {
+        .product-image {
             width: 100%;
             height: 200px;
             object-fit: cover;
-            background: #f0f0f0;
+            background: #f5f5f5;
         }
 
         .product-info {
             padding: 15px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
         }
 
-        .product-info h3 {
-            font-size: 1em;
+        .no-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #2dbe64 0%, #25a855 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9em;
+        }
+
+        .product-name {
+            font-size: 0.95em;
+            color: #333333;
             margin-bottom: 10px;
-            color: #333;
             min-height: 40px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            line-height: 1.4;
+            font-weight: 500;
         }
 
         .product-price {
-            font-size: 1.2em;
+            font-size: 1.4em;
             font-weight: 700;
             color: #2dbe64;
-            margin-bottom: 5px;
+            margin-top: 12px;
         }
 
         .product-stock {
@@ -225,10 +249,11 @@
             margin-bottom: 10px;
         }
 
-        .product-detail {
+        .product-details {
             font-size: 0.85em;
             color: #666;
-            margin-bottom: 5px;
+            margin-top: 8px;
+            line-height: 1.6;
         }
 
         .available-stock {
@@ -254,20 +279,23 @@
             background: #2dbe64;
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: 10px 15px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 1em;
-            font-weight: 600;
+            font-size: 0.9em;
+            font-weight: 500;
+            margin-top: 10px;
             transition: all 0.3s;
             width: 100%;
-            margin-top: auto;
         }
 
         .add-to-cart-btn:hover {
-            background: #26a855;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(45, 190, 100, 0.3);
+            background: #25a855;
+            transform: scale(1.02);
+        }
+
+        .add-to-cart-btn:active {
+            transform: scale(0.98);
         }
 
         .add-to-cart-btn.added {
@@ -275,7 +303,7 @@
         }
 
         .add-to-cart-btn.added:hover {
-            background: #b8123f;
+            background: #c01342;
         }
 
         .cart-view {
@@ -291,8 +319,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px;
-            border-bottom: 1px solid #eee;
-            gap: 15px;
+            border-bottom: 1px solid #f0f0f0;
         }
 
         .cart-item:last-child {
@@ -304,14 +331,12 @@
         }
 
         .cart-item-name {
-            font-weight: 600;
-            font-size: 1.1em;
+            font-weight: 500;
             margin-bottom: 5px;
-            color: #333;
         }
 
         .cart-item-details {
-            font-size: 0.9em;
+            font-size: 0.85em;
             color: #666;
         }
 
@@ -321,61 +346,67 @@
             gap: 10px;
         }
 
-        .cart-item-controls button {
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
             background: #2dbe64;
             color: white;
             border: none;
-            width: 35px;
-            height: 35px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             cursor: pointer;
             font-size: 1.2em;
-            transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .cart-item-controls button:hover {
-            background: #26a855;
-            transform: scale(1.1);
+        .quantity-btn:hover {
+            background: #25a855;
         }
 
-        .cart-item-controls span {
+        .quantity-value {
+            font-weight: 600;
             min-width: 30px;
             text-align: center;
-            font-weight: 600;
         }
 
+
         .remove-item-btn {
-            background: #d7144b !important;
-            width: auto !important;
-            padding: 8px 15px !important;
-            border-radius: 8px !important;
-            font-size: 0.9em !important;
+            background: #d7144b;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
         }
 
         .remove-item-btn:hover {
-            background: #b8123f !important;
+            background: #c01342;
         }
 
         .cart-total {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #2dbe64;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 0;
-            margin-top: 20px;
-            border-top: 2px solid #2dbe64;
-            font-size: 1.3em;
-            font-weight: 700;
-            color: #333;
+            font-size: 1.2em;
+            font-weight: 600;
         }
 
         .cart-buttons-wrapper {
             display: flex;
-            gap: 15px;
+            flex-direction: column;
+            gap: 10px;
             margin-top: 20px;
-            flex-wrap: wrap;
         }
 
         .download-order-btn {
@@ -387,9 +418,9 @@
             cursor: pointer;
             font-size: 1.1em;
             font-weight: 600;
+            margin-top: 10px;
+            width: 100%;
             transition: all 0.3s;
-            flex: 1;
-            min-width: 200px;
         }
 
         .download-order-btn:hover {
@@ -401,57 +432,49 @@
 
         .empty-cart {
             text-align: center;
-            padding: 60px 20px;
+            padding: 40px;
             color: #666;
         }
 
-        .empty-cart p {
-            font-size: 1.2em;
-            margin-bottom: 10px;
-        }
-
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.5em;
-            }
-
-            .cart-icon-wrapper {
-                top: 10px;
-                right: 10px;
-            }
-
-            .cart-icon {
-                width: 40px;
-                height: 40px;
-                font-size: 1.2em;
-            }
-
             .categories-grid {
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
                 gap: 15px;
             }
-
+            
             .products-grid {
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
                 gap: 15px;
             }
-
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .cart-icon-wrapper {
+                top: 15px;
+                right: 15px;
+            }
+            
+            .cart-icon {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .cart-total-info {
+                font-size: 0.75em;
+                padding: 4px 8px;
+            }
+            
             .cart-item {
                 flex-direction: column;
                 align-items: flex-start;
+                gap: 10px;
             }
-
+            
             .cart-item-controls {
                 width: 100%;
                 justify-content: space-between;
-            }
-
-            .cart-buttons-wrapper {
-                flex-direction: column;
-            }
-
-            .download-order-btn {
-                width: 100%;
             }
         }
     </style>
@@ -478,8 +501,10 @@
 
         <!-- Вид товаров -->
         <div id="products-view" class="view">
-            <button class="back-btn" onclick="showCategories()">← Назад к категориям</button>
-            <h2 id="category-title"></h2>
+            <div class="products-header">
+                <button class="back-btn" onclick="showCategories()">← Назад к категориям</button>
+                <h2 id="category-title"></h2>
+            </div>
             <div class="products-grid" id="products-container"></div>
         </div>
 
@@ -592,14 +617,13 @@
                 
                 html += `
                     <div class="product-card">
-                        <img src="${productImage}" alt="${productName}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'200\' height=\'200\'%3E%3Crect fill=\'%23f0f0f0\' width=\'200\' height=\'200\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dy=\'.3em\' fill=\'%23999\' font-family=\'Arial\' font-size=\'14\'%3EНет фото%3C/text%3E%3C/svg%3E'">
+                        ${productImage ? `<img class="product-image" src="${productImage}" alt="${productName}" onerror="this.parentElement.innerHTML='<div class=\\'no-image\\'>Нет фото</div>'">` : '<div class="no-image">Нет фото</div>'}
                         <div class="product-info">
-                            <h3>${productName}</h3>
+                            <div class="product-name">${productName}</div>
+                            ${product.quant ? `<div class="product-details">Квант: ${product.quant}</div>` : ''}
+                            ${product.weight ? `<div class="product-details">Вес: ${product.weight} гр/мл</div>` : ''}
+                            ${product.expiry_days ? `<div class="product-details">Срок годности: ${product.expiry_days} сут</div>` : ''}
                             ${product.price > 0 ? `<div class="product-price">${formatPrice(product.price)}</div>` : '<div class="product-price">Цена по запросу</div>'}
-                            ${product.stock !== undefined && product.stock !== null ? `<div class="product-stock">Остаток: ${product.stock} шт</div>` : ''}
-                            ${product.quant ? `<div class="product-detail">Квант: ${product.quant}</div>` : ''}
-                            ${product.weight ? `<div class="product-detail">Вес: ${product.weight} гр/мл</div>` : ''}
-                            ${product.expiry_days ? `<div class="product-detail">Срок годности: ${product.expiry_days} сут</div>` : ''}
                             <button class="${buttonClass}" data-product-id="${product.id}" data-product='${productJson}' onclick="addToCartFromButton(this)">${buttonText}</button>
                         </div>
                     </div>
@@ -847,9 +871,11 @@
                             ${availableStock !== null ? `<div class="available-stock ${availableStockClass}">Доступный товар: ${availableStock} шт</div>` : ''}
                         </div>
                         <div class="cart-item-controls">
-                            <button onclick="updateQuantity('${item.id}', -1)">-</button>
-                            <span>${item.quantity}</span>
-                            <button onclick="updateQuantity('${item.id}', 1)">+</button>
+                            <div class="quantity-control">
+                                <button class="quantity-btn" onclick="updateQuantity('${item.id}', -1)">-</button>
+                                <span class="quantity-value">${item.quantity}</span>
+                                <button class="quantity-btn" onclick="updateQuantity('${item.id}', 1)">+</button>
+                            </div>
                             <button class="remove-item-btn" onclick="removeFromCart('${item.id}')">Удалить</button>
                         </div>
                     </div>
