@@ -495,7 +495,7 @@
         <div id="cart-view" class="view-mode">
             <div class="products-header">
                 <button class="back-button" onclick="showCategories()">← Назад к категориям</button>
-                <h2>Корзина</h2>
+                <h2>Корзина. Товар заказывается кратно Квантам.</h2>
             </div>
             <div class="cart-view" id="cart-content">
                 <div class="empty-cart">
@@ -5163,7 +5163,8 @@
                     name: product.name,
                     price: product.price,
                     quantity: 1,
-                    category: product.category || ''
+                    category: product.category || '',
+                    quant: product.quant || ''
                 });
             }
             saveCart();
@@ -5235,12 +5236,24 @@
                 const itemTotal = item.price * item.quantity;
                 total += itemTotal;
                 
+                // Формируем строку с деталями товара
+                let detailsParts = [];
+                detailsParts.push('ID: ' + item.id);
+                if (item.price > 0) {
+                    detailsParts.push(formatPrice(item.price));
+                } else {
+                    detailsParts.push('Цена по запросу');
+                }
+                if (item.quant && item.quant.toString().trim() !== '') {
+                    detailsParts.push('Квант: ' + item.quant);
+                }
+                
                 html += `
                     <div class="cart-item">
                         <div class="cart-item-info">
                             <div class="cart-item-name">${item.name}</div>
                             <div class="cart-item-details">
-                                ID: ${item.id} • ${item.price > 0 ? formatPrice(item.price) : 'Цена по запросу'}
+                                ${detailsParts.join(' • ')}
                             </div>
                         </div>
                         <div class="cart-item-controls">
