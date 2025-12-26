@@ -931,50 +931,12 @@
             link.click();
             document.body.removeChild(link);
             
-            // Также создаем текстовую версию для удобства
-            let txtContent = `ЗАКАЗ ${clientName}\n`;
-            txtContent += `Дата: ${orderDate}\n`;
-            txtContent += `${'='.repeat(60)}\n\n`;
-            
-            cart.forEach((item, index) => {
-                const itemTotal = item.price * item.quantity;
-                txtContent += `${index + 1}. ${item.name}\n`;
-                txtContent += `   ID: ${item.id}\n`;
-                txtContent += `   Цена: ${item.price > 0 ? formatPrice(item.price) : 'Цена по запросу'}\n`;
-                txtContent += `   Количество: ${item.quantity}\n`;
-                if (item.quant) {
-                    txtContent += `   Квант: ${item.quant}\n`;
-                }
-                txtContent += `   Сумма: ${item.price > 0 ? formatPrice(itemTotal) : '—'}\n\n`;
-            });
-            
-            txtContent += `${'='.repeat(60)}\n`;
-            txtContent += `Итого товаров: ${cart.reduce((sum, item) => sum + item.quantity, 0)}\n`;
-            txtContent += `Общая сумма: ${totalSum > 0 ? formatPrice(totalSum) : '—'}\n`;
-            
-            // Небольшая задержка перед скачиванием второго файла
+            // Очищаем URL объект
             setTimeout(() => {
-                // Скачиваем текстовый файл
-                const txtBlob = new Blob([txtContent], { type: 'text/plain;charset=utf-8;' });
-                const txtLink = document.createElement('a');
-                const txtUrl = URL.createObjectURL(txtBlob);
-                
-                txtLink.setAttribute('href', txtUrl);
-                txtLink.setAttribute('download', `${fileName}.txt`);
-                txtLink.style.visibility = 'hidden';
-                
-                document.body.appendChild(txtLink);
-                txtLink.click();
-                document.body.removeChild(txtLink);
-                
-                // Очищаем URL объекты
-                setTimeout(() => {
-                    URL.revokeObjectURL(url);
-                    URL.revokeObjectURL(txtUrl);
-                }, 100);
-                
-                alert(`Заказ сохранен!\n\nСкачаны файлы:\n- ${fileName}.csv (для Excel)\n- ${fileName}.txt (текстовый формат)`);
-            }, 300);
+                URL.revokeObjectURL(url);
+            }, 100);
+            
+            alert(`Заказ сохранен!\n\nСкачан файл: ${fileName}.csv\n\nФайл можно открыть в Excel.`);
         }
     </script>
 </body>
