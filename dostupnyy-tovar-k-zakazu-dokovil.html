@@ -398,25 +398,6 @@
             box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
         }
 
-        .submit-order-btn {
-            background: #2dbe64;
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1.1em;
-            font-weight: 600;
-            transition: all 0.3s;
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .submit-order-btn:hover {
-            background: #26a855;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(45, 190, 100, 0.3);
-        }
 
         .empty-cart {
             text-align: center;
@@ -644,15 +625,6 @@
                 button.textContent = '+ В корзину';
                 button.classList.remove('added');
             }
-        }
-        
-        // Получить товар по ID из productsData
-        function getProductById(productId) {
-            for (const category in productsData) {
-                const product = productsData[category].find(p => p.id === productId);
-                if (product) return product;
-            }
-            return null;
         }
         
         // Добавить в корзину
@@ -891,8 +863,7 @@
                     <span>${total > 0 ? formatPrice(total) : '—'}</span>
                 </div>
                 <div class="cart-buttons-wrapper">
-                    <button class="download-order-btn" onclick="exportCartToFile()">📥 Скачать заказ (Excel/CSV)</button>
-                    <button class="submit-order-btn" onclick="submitOrder()">Отправить заказ</button>
+                    <button class="download-order-btn" onclick="exportCartToFile()">📥 Скачать заказ (Excel)</button>
                 </div>
             `;
             
@@ -1005,21 +976,6 @@
                 
                 alert(`Заказ сохранен!\n\nСкачаны файлы:\n- ${fileName}.csv (для Excel)\n- ${fileName}.txt (текстовый формат)`);
             }, 300);
-        }
-        
-        // Отправить заказ
-        function submitOrder() {
-            if (cart.length === 0) {
-                alert('Корзина пуста');
-                return;
-            }
-            
-            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            
-            const message = `Заказ для ${clientName}\n\nТоваров: ${totalItems}\nСумма: ${totalPrice > 0 ? formatPrice(totalPrice) : '—'}\n\nДля отправки заказа свяжитесь с менеджером или используйте функцию "Скачать заказ" для сохранения файла.`;
-            
-            alert(message);
         }
     </script>
 </body>
