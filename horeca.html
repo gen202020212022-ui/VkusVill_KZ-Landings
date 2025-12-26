@@ -5381,11 +5381,15 @@
                     name: item.name,
                     price: item.price,
                     quantity: item.quantity,
+                    quant: item.quant || '',
                     total: item.price * item.quantity
                 })),
                 total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
                 totalItems: cart.reduce((sum, item) => sum + item.quantity, 0)
             };
+            
+            // URL Google Apps Script Web App (замените на ваш URL после настройки)
+            const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbygnvbOt2AvHNTIcFAGtjMSJ_-KqPxFEVGw-h1oVNdsmRDDPE5IE_m_h7qANGiltNpE7Q/exec'; // TODO: Добавьте URL после настройки Google Apps Script
             
             try {
                 // Сохраняем заказ в localStorage как резервную копию
@@ -5393,17 +5397,53 @@
                 orders.push(orderData);
                 localStorage.setItem('orders', JSON.stringify(orders));
                 
+                // Отправляем заказ в Google Таблицу через Google Apps Script
+                let orderSent = false;
+                let orderResult = null;
+                
+                if (GOOGLE_APPS_SCRIPT_URL && GOOGLE_APPS_SCRIPT_URL.trim() !== '') {
+                    try {
+                        const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(orderData)
+                        });
+                        
+                        if (response.ok) {
+                            orderResult = await response.json();
+                            if (orderResult.success) {
+                                orderSent = true;
+                            }
+                        }
+                    } catch (fetchError) {
+                        console.error('Ошибка отправки в Google Таблицу:', fetchError);
+                        // Продолжаем выполнение, данные сохранены локально
+                    }
+                }
+                
                 // Формируем текст заказа для отображения
                 const orderSummary = orderData.items.map(item => 
                     `ID: ${item.id} | ${item.name} | Кол-во: ${item.quantity} | Цена: ${item.price > 0 ? formatPrice(item.price) : 'по запросу'}`
                 ).join('\n');
                 
-                const userMessage = `Заказ сформирован!\n\n` +
+                let userMessage = `Заказ сформирован!\n\n` +
                     `Клиент: ${orderData.client}\n` +
                     `Товаров: ${orderData.totalItems} шт\n` +
                     `Сумма: ${orderData.total > 0 ? formatPrice(orderData.total) : '—'}\n\n` +
-                    `Детали заказа:\n${orderSummary}\n\n` +
-                    `(Данные сохранены локально. В будущем будет автоматическая отправка в Google Таблицу)`;
+                    `Детали заказа:\n${orderSummary}`;
+                
+                if (orderSent) {
+                    userMessage += `\n\n✅ Заказ успешно отправлен в Google Таблицу!`;
+                    if (orderResult && orderResult.spreadsheet_url) {
+                        userMessage += `\n\nПросмотреть заказ: ${orderResult.spreadsheet_url}`;
+                    }
+                } else if (GOOGLE_APPS_SCRIPT_URL && GOOGLE_APPS_SCRIPT_URL.trim() !== '') {
+                    userMessage += `\n\n⚠️ Заказ сохранен локально. Не удалось отправить в Google Таблицу.`;
+                } else {
+                    userMessage += `\n\n📝 Заказ сохранен локально.`;
+                }
                 
                 alert(userMessage);
                 
@@ -5414,8 +5454,8 @@
                 showCategories();
                 
                 // Показываем сообщение об успехе
-                submitBtn.textContent = 'Заказ отправлен! ✓';
-                submitBtn.style.background = '#2dbe64';
+                submitBtn.textContent = orderSent ? 'Заказ отправлен! ✓' : 'Заказ сохранен! ✓';
+                submitBtn.style.background = orderSent ? '#2dbe64' : '#ff9800';
                 
                 setTimeout(() => {
                     submitBtn.disabled = false;
