@@ -5400,9 +5400,12 @@
                 // Отправляем заказ в Google Таблицу через Google Apps Script
                 let orderSent = false;
                 let orderResult = null;
+                let errorMessage = '';
                 
                 if (GOOGLE_APPS_SCRIPT_URL && GOOGLE_APPS_SCRIPT_URL.trim() !== '') {
                     try {
+                        console.log('Отправка заказа в Google Таблицу...', orderData);
+                        
                         const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
                             method: 'POST',
                             headers: {
@@ -5411,14 +5414,38 @@
                             body: JSON.stringify(orderData)
                         });
                         
+                        console.log('Статус ответа:', response.status, response.statusText);
+                        
                         if (response.ok) {
-                            orderResult = await response.json();
-                            if (orderResult.success) {
-                                orderSent = true;
+                            const responseText = await response.text();
+                            console.log('Текст ответа:', responseText);
+                            
+                            try {
+                                orderResult = JSON.parse(responseText);
+                                console.log('Распарсенный ответ:', orderResult);
+                                
+                                if (orderResult.success) {
+                                    orderSent = true;
+                                } else {
+                                    errorMessage = orderResult.error || 'Неизвестная ошибка';
+                                    console.error('Ошибка от Google Apps Script:', errorMessage);
+                                }
+                            } catch (parseError) {
+                                console.error('Ошибка парсинга JSON ответа:', parseError);
+                                console.error('Ответ был:', responseText);
+                                errorMessage = 'Не удалось обработать ответ от сервера';
                             }
+                        } else {
+                            const errorText = await response.text();
+                            console.error('HTTP ошибка:', response.status, errorText);
+                            const statusCode = response.status;
+                            const statusText = response.statusText;
+                            errorMessage = 'HTTP ' + statusCode + ': ' + statusText;
                         }
+                        
                     } catch (fetchError) {
                         console.error('Ошибка отправки в Google Таблицу:', fetchError);
+                        errorMessage = fetchError.toString();
                         // Продолжаем выполнение, данные сохранены локально
                     }
                 }
@@ -5435,14 +5462,18 @@
                     `Детали заказа:\n${orderSummary}`;
                 
                 if (orderSent) {
-                    userMessage += `\n\n✅ Заказ успешно отправлен в Google Таблицу!`;
+                    userMessage += '\n\n✅ Заказ успешно отправлен в Google Таблицу!';
                     if (orderResult && orderResult.spreadsheet_url) {
-                        userMessage += `\n\nПросмотреть заказ: ${orderResult.spreadsheet_url}`;
+                        userMessage += '\n\nПросмотреть заказ: ' + orderResult.spreadsheet_url;
                     }
                 } else if (GOOGLE_APPS_SCRIPT_URL && GOOGLE_APPS_SCRIPT_URL.trim() !== '') {
-                    userMessage += `\n\n⚠️ Заказ сохранен локально. Не удалось отправить в Google Таблицу.`;
+                    userMessage += '\n\n⚠️ Заказ сохранен локально. Не удалось отправить в Google Таблицу.';
+                    if (errorMessage) {
+                        userMessage += '\n\nОшибка: ' + errorMessage;
+                        userMessage += '\n\nПроверьте консоль браузера (F12) для деталей.';
+                    }
                 } else {
-                    userMessage += `\n\n📝 Заказ сохранен локально.`;
+                    userMessage += '\n\n📝 Заказ сохранен локально.';
                 }
                 
                 alert(userMessage);
