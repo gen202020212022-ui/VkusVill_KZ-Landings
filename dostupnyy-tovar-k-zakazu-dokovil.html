@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Доступный товар к заказу - Dokovil</title>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -888,7 +889,7 @@
                     <span>${total > 0 ? formatPrice(total) : '—'}</span>
                 </div>
                 <div class="cart-buttons-wrapper">
-                    <button class="download-order-btn" onclick="exportCartToFile()">📥 Скачать заказ (Excel)</button>
+                    <button class="download-order-btn" onclick="exportCartToFile()">📥 Скачать заказ (.xlsx)</button>
                 </div>
             `;
             
@@ -901,10 +902,16 @@
             return new Intl.NumberFormat('ru-RU').format(Math.round(price)) + ' ₸';
         }
         
-        // Экспорт заказа в файлы
+        // Экспорт заказа в Excel файл
         function exportCartToFile() {
             if (cart.length === 0) {
                 alert('Корзина пуста');
+                return;
+            }
+            
+            // Проверяем наличие библиотеки SheetJS
+            if (typeof XLSX === 'undefined') {
+                alert('Ошибка: библиотека для работы с Excel не загружена. Пожалуйста, обновите страницу.');
                 return;
             }
             
@@ -919,11 +926,11 @@
             
             const fileName = `Заказ_${clientName}_${orderDate.replace(/[:\s]/g, '_')}`;
             
-            // Формируем CSV содержимое
-            let csvContent = '\uFEFF'; // BOM для правильной кодировки UTF-8 в Excel
+            // Подготавливаем данные для Excel
+            const worksheetData = [];
             
             // Заголовки
-            csvContent += 'ID товара;Наименование;Цена за единицу;Количество;Квант;Сумма\n';
+            worksheetData.push(['ID товара', 'Наименование', 'Цена за единицу', 'Количество', 'Квант', 'Сумма']);
             
             // Данные товаров
             let totalSum = 0;
@@ -931,38 +938,54 @@
                 const itemTotal = item.price * item.quantity;
                 totalSum += itemTotal;
                 
-                // Экранируем кавычки и точки с запятой в названии
-                const name = String(item.name || '').replace(/"/g, '""').replace(/;/g, ',');
                 const price = item.price > 0 ? item.price : 'Цена по запросу';
                 const quant = item.quant || '';
                 
-                csvContent += `${item.id};"${name}";${price};${item.quantity};${quant};${itemTotal}\n`;
+                worksheetData.push([
+                    item.id,
+                    item.name || '',
+                    price,
+                    item.quantity,
+                    quant,
+                    itemTotal
+                ]);
             });
             
+            // Пустая строка
+            worksheetData.push([]);
+            
             // Итого
-            csvContent += `\nИтого;;;${cart.reduce((sum, item) => sum + item.quantity, 0)};;${totalSum}\n`;
-            csvContent += `\nДата заказа: ${orderDate}\n`;
-            csvContent += `Клиент: ${clientName}\n`;
+            const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+            worksheetData.push(['Итого', '', '', totalQuantity, '', totalSum]);
             
-            // Создаем Blob и скачиваем CSV файл
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
+            // Пустая строка
+            worksheetData.push([]);
             
-            link.setAttribute('href', url);
-            link.setAttribute('download', `${fileName}.csv`);
-            link.style.visibility = 'hidden';
+            // Дополнительная информация
+            worksheetData.push(['Дата заказа:', orderDate]);
+            worksheetData.push(['Клиент:', clientName]);
             
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            // Создаем рабочую книгу Excel
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(worksheetData);
             
-            // Очищаем URL объект
-            setTimeout(() => {
-                URL.revokeObjectURL(url);
-            }, 100);
+            // Устанавливаем ширину колонок
+            ws['!cols'] = [
+                { wch: 12 }, // ID товара
+                { wch: 40 }, // Наименование
+                { wch: 15 }, // Цена за единицу
+                { wch: 12 }, // Количество
+                { wch: 10 }, // Квант
+                { wch: 15 }  // Сумма
+            ];
             
-            alert(`Заказ сохранен!\n\nСкачан файл: ${fileName}.csv\n\nФайл можно открыть в Excel.`);
+            // Добавляем лист в книгу
+            XLSX.utils.book_append_sheet(wb, ws, 'Заказ');
+            
+            // Генерируем Excel файл и скачиваем
+            XLSX.writeFile(wb, `${fileName}.xlsx`);
+            
+            alert(`Заказ сохранен!\n\nСкачан файл: ${fileName}.xlsx\n\nФайл можно открыть в Excel.`);
         }
     </script>
 </body>
