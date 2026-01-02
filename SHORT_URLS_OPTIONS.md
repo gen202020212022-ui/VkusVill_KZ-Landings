@@ -124,3 +124,4 @@ https://gen202020212022-ui.github.io/VkusVill_KZ-Landings/ost-26dec
 | HoReCa | `horeca` | `.../horeca.html` |
 | Клиент "Кафе" | `cafe` | `.../cafe.html` |
 | Клиент "Ресторан" | `rest` | `.../rest.html` |
+

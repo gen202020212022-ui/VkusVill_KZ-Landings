@@ -49,3 +49,4 @@ python3 generate_landing.py "КП.xlsx" "Остатки на складе" "ost-
 ---
 
 **Полная документация:** `landings/README.md`
+

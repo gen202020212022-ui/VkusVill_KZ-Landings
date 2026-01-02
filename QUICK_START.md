@@ -80,3 +80,4 @@ https://gen202020212022-ui.github.io/VkusVill_KZ-Landings/horeca
 ## 🎯 Готово!
 
 После настройки GitHub Pages все готово к использованию! 🚀
+

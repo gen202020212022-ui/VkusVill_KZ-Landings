@@ -409,65 +409,31 @@
             transform: none;
         }
         
-        .export-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .export-btn {
+        .download-order-btn {
             background: #4a90e2;
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: 15px 40px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 0.95em;
+            font-size: 1.1em;
             font-weight: 600;
-            flex: 1;
-            min-width: 140px;
+            margin-top: 10px;
+            width: 100%;
             transition: all 0.3s;
         }
         
-        .export-btn:hover {
+        .download-order-btn:hover {
             background: #357abd;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
         }
         
-        .export-btn.csv {
-            background: #50c878;
-        }
-        
-        .export-btn.csv:hover {
-            background: #45b369;
-        }
-        
-        .export-btn.excel {
-            background: #217346;
-        }
-        
-        .export-btn.excel:hover {
-            background: #1d5f3a;
-        }
-        
-        .export-btn.clipboard {
-            background: #9b59b6;
-        }
-        
-        .export-btn.clipboard:hover {
-            background: #8e44ad;
-        }
-        
-        @media (max-width: 768px) {
-            .export-buttons {
-                flex-direction: column;
-            }
-            
-            .export-btn {
-                width: 100%;
-            }
+        .cart-buttons-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
         }
         
         .empty-cart {
@@ -600,9 +566,6 @@
             </div>
         </div>
     </div>
-    
-    <!-- Библиотека SheetJS для экспорта в Excel -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     
     <script>
         const categoriesData = {
@@ -5419,204 +5382,114 @@
                     <span>Итого:</span>
                     <span>${total > 0 ? formatPrice(total) : '—'}</span>
                 </div>
-                <button class="submit-order-btn" onclick="submitOrder()">Отправить заказ</button>
-                <div class="export-buttons">
-                    <button class="export-btn csv" onclick="exportToCSV()">📥 Скачать CSV</button>
-                    <button class="export-btn excel" onclick="exportToExcel()">📊 Скачать Excel</button>
-                    <button class="export-btn clipboard" onclick="copyToClipboard(event)">📋 Копировать для Google Sheets</button>
+                <div class="cart-buttons-wrapper">
+                    <button class="download-order-btn" onclick="exportCartToFile()">📥 Скачать заказ (Excel/CSV)</button>
+                    <button class="submit-order-btn" onclick="submitOrder()">Отправить заказ</button>
                 </div>
             `;
             
             cartContent.innerHTML = html;
         }
         
-        // Функция экспорта в CSV
-        function exportToCSV() {
+        function exportCartToFile() {
             if (cart.length === 0) {
                 alert('Корзина пуста');
                 return;
             }
             
-            // Формируем заголовки
-            const headers = ['ID', 'Наименование', 'Цена за шт', 'Количество', 'Квант', 'Итого'];
-            const rows = [headers];
+            // Формируем данные заказа
+            const orderDate = new Date().toLocaleString('ru-RU', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            }).replace(/\./g, '-');
             
-            // Добавляем данные
+            const fileName = `Заказ_HoReCa_${orderDate.replace(/[:\s]/g, '_')}`;
+            
+            // Формируем CSV содержимое
+            let csvContent = '\uFEFF'; // BOM для правильной кодировки UTF-8 в Excel
+            
+            // Заголовки
+            csvContent += 'ID товара;Наименование;Цена за единицу;Количество;Квант;Сумма\n';
+            
+            // Данные товаров
+            let totalSum = 0;
             cart.forEach(item => {
-                rows.push([
-                    item.id || '',
-                    item.name || '',
-                    item.price > 0 ? item.price.toString() : 'по запросу',
-                    item.quantity.toString(),
-                    item.quant || '',
-                    item.price > 0 ? (item.price * item.quantity).toString() : '—'
-                ]);
+                const itemTotal = item.price * item.quantity;
+                totalSum += itemTotal;
+                
+                // Экранируем кавычки и точки с запятой в названии
+                const name = String(item.name || '').replace(/"/g, '""').replace(/;/g, ',');
+                const price = item.price > 0 ? item.price : 'Цена по запросу';
+                const quant = item.quant || '';
+                
+                csvContent += `${item.id};"${name}";${price};${item.quantity};${quant};${itemTotal}\n`;
             });
             
-            // Добавляем итоговую строку
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            rows.push(['', '', '', '', 'Итого:', total > 0 ? total.toString() : '—']);
+            // Итого
+            csvContent += `\nИтого;;;${cart.reduce((sum, item) => sum + item.quantity, 0)};;${totalSum}\n`;
+            csvContent += `\nДата заказа: ${orderDate}\n`;
+            csvContent += `Клиент: HoReCa\n`;
             
-            // Преобразуем в CSV
-            const csvContent = rows.map(row => 
-                row.map(cell => {
-                    // Экранируем кавычки и оборачиваем в кавычки если содержит запятую или кавычку
-                    const cellStr = String(cell);
-                    if (cellStr.includes(',') || cellStr.includes('"') || cellStr.includes('\n')) {
-                        return '"' + cellStr.replace(/"/g, '""') + '"';
-                    }
-                    return cellStr;
-                }).join(',')
-            ).join('\n');
-            
-            // Добавляем BOM для правильного отображения кириллицы в Excel
-            const BOM = '\uFEFF';
-            const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+            // Создаем Blob и скачиваем файл
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
+            
             link.setAttribute('href', url);
-            link.setAttribute('download', `Заказ_HoReCa_${new Date().toISOString().split('T')[0]}.csv`);
+            link.setAttribute('download', `${fileName}.csv`);
             link.style.visibility = 'hidden';
+            
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-        }
-        
-        // Функция экспорта в Excel
-        function exportToExcel() {
-            if (cart.length === 0) {
-                alert('Корзина пуста');
-                return;
-            }
             
-            // Проверяем наличие библиотеки SheetJS
-            if (typeof XLSX === 'undefined') {
-                alert('Библиотека для работы с Excel не загружена. Попробуйте скачать CSV.');
-                return;
-            }
+            // Также создаем текстовую версию для удобства
+            let txtContent = `ЗАКАЗ HoReCa\n`;
+            txtContent += `Дата: ${orderDate}\n`;
+            txtContent += `${'='.repeat(60)}\n\n`;
             
-            // Формируем данные для таблицы
-            const data = [];
-            
-            // Заголовки
-            data.push(['ID', 'Наименование', 'Цена за шт', 'Количество', 'Квант', 'Итого']);
-            
-            // Данные товаров
-            cart.forEach(item => {
-                data.push([
-                    item.id || '',
-                    item.name || '',
-                    item.price > 0 ? item.price : 'по запросу',
-                    item.quantity,
-                    item.quant || '',
-                    item.price > 0 ? item.price * item.quantity : '—'
-                ]);
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                txtContent += `${index + 1}. ${item.name}\n`;
+                txtContent += `   ID: ${item.id}\n`;
+                txtContent += `   Цена: ${item.price > 0 ? formatPrice(item.price) : 'Цена по запросу'}\n`;
+                txtContent += `   Количество: ${item.quantity}\n`;
+                if (item.quant) {
+                    txtContent += `   Квант: ${item.quant}\n`;
+                }
+                txtContent += `   Сумма: ${item.price > 0 ? formatPrice(itemTotal) : '—'}\n\n`;
             });
             
-            // Итоговая строка
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            data.push(['', '', '', '', 'Итого:', total > 0 ? total : '—']);
+            txtContent += `${'='.repeat(60)}\n`;
+            txtContent += `Итого товаров: ${cart.reduce((sum, item) => sum + item.quantity, 0)}\n`;
+            txtContent += `Общая сумма: ${totalSum > 0 ? formatPrice(totalSum) : '—'}\n`;
             
-            // Создаем рабочую книгу
-            const wb = XLSX.utils.book_new();
-            const ws = XLSX.utils.aoa_to_sheet(data);
-            
-            // Устанавливаем ширину колонок
-            ws['!cols'] = [
-                { wch: 10 }, // ID
-                { wch: 40 }, // Наименование
-                { wch: 12 }, // Цена за шт
-                { wch: 12 }, // Количество
-                { wch: 10 }, // Квант
-                { wch: 12 }  // Итого
-            ];
-            
-            // Добавляем лист в книгу
-            XLSX.utils.book_append_sheet(wb, ws, 'Заказ');
-            
-            // Сохраняем файл
-            const fileName = `Заказ_HoReCa_${new Date().toISOString().split('T')[0]}.xlsx`;
-            XLSX.writeFile(wb, fileName);
-        }
-        
-        // Функция копирования в буфер обмена для вставки в Google Sheets
-        async function copyToClipboard(event) {
-            if (cart.length === 0) {
-                alert('Корзина пуста');
-                return;
-            }
-            
-            // Формируем данные в формате TSV (табуляция) для Google Sheets
-            const rows = [];
-            
-            // Заголовки
-            rows.push(['ID', 'Наименование', 'Цена за шт', 'Количество', 'Квант', 'Итого']);
-            
-            // Данные товаров
-            cart.forEach(item => {
-                rows.push([
-                    item.id || '',
-                    item.name || '',
-                    item.price > 0 ? item.price.toString() : 'по запросу',
-                    item.quantity.toString(),
-                    item.quant || '',
-                    item.price > 0 ? (item.price * item.quantity).toString() : '—'
-                ]);
-            });
-            
-            // Итоговая строка
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            rows.push(['', '', '', '', 'Итого:', total > 0 ? total.toString() : '—']);
-            
-            // Преобразуем в TSV (табуляция между колонками, перенос строки между строками)
-            const tsvContent = rows.map(row => row.join('\t')).join('\n');
-            
-            // Получаем кнопку для изменения текста
-            const btn = event ? event.target : document.querySelector('.export-btn.clipboard');
-            
-            try {
-                // Копируем в буфер обмена
-                await navigator.clipboard.writeText(tsvContent);
+            // Небольшая задержка перед скачиванием второго файла
+            setTimeout(() => {
+                // Скачиваем текстовый файл
+                const txtBlob = new Blob([txtContent], { type: 'text/plain;charset=utf-8;' });
+                const txtLink = document.createElement('a');
+                const txtUrl = URL.createObjectURL(txtBlob);
                 
-                // Показываем сообщение об успехе
-                if (btn) {
-                    const originalText = btn.textContent;
-                    btn.textContent = '✓ Скопировано!';
-                    btn.style.background = '#2dbe64';
-                    
-                    setTimeout(() => {
-                        btn.textContent = originalText;
-                        btn.style.background = '';
-                    }, 2000);
-                }
+                txtLink.setAttribute('href', txtUrl);
+                txtLink.setAttribute('download', `${fileName}.txt`);
+                txtLink.style.visibility = 'hidden';
                 
-                alert('Данные скопированы в буфер обмена!\n\nОткройте Google Sheets и нажмите Ctrl+V (или Cmd+V на Mac) для вставки.');
-            } catch (err) {
-                console.error('Ошибка копирования в буфер обмена:', err);
-                // Fallback: показываем данные в текстовом поле для ручного копирования
-                const textarea = document.createElement('textarea');
-                textarea.value = tsvContent;
-                textarea.style.position = 'fixed';
-                textarea.style.opacity = '0';
-                document.body.appendChild(textarea);
-                textarea.select();
-                try {
-                    document.execCommand('copy');
-                    if (btn) {
-                        const originalText = btn.textContent;
-                        btn.textContent = '✓ Скопировано!';
-                        btn.style.background = '#2dbe64';
-                        setTimeout(() => {
-                            btn.textContent = originalText;
-                            btn.style.background = '';
-                        }, 2000);
-                    }
-                    alert('Данные скопированы в буфер обмена!\n\nОткройте Google Sheets и нажмите Ctrl+V (или Cmd+V на Mac) для вставки.');
-                } catch (fallbackErr) {
-                    alert('Не удалось скопировать автоматически. Пожалуйста, используйте экспорт в CSV или Excel.');
-                }
-                document.body.removeChild(textarea);
-            }
+                document.body.appendChild(txtLink);
+                txtLink.click();
+                document.body.removeChild(txtLink);
+                
+                // Очищаем URL объекты
+                setTimeout(() => {
+                    URL.revokeObjectURL(url);
+                    URL.revokeObjectURL(txtUrl);
+                }, 100);
+                
+                alert(`Заказ сохранен!\n\nСкачаны файлы:\n- ${fileName}.csv (для Excel)\n- ${fileName}.txt (текстовый формат)`);
+            }, 300);
         }
         
         async function submitOrder() {
