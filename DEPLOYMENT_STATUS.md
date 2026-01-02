@@ -66,3 +66,4 @@ https://gen202020212022-ui.github.io/VkusVill_KZ-Landings/dostupnyy-tovar-k-zaka
 ---
 
 **Дата загрузки:** 2025-12-26
+
