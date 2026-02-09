@@ -1,0 +1,1792 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MFood Топы</title>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f8f8f8;
+            min-height: 100vh;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: #2dbe64;
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            padding: 40px 20px;
+            border-radius: 0 0 20px 20px;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+        
+        .header .stock-date {
+            font-size: 1.3em;
+            opacity: 0.95;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        
+        .cart-icon-wrapper {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 5px;
+        }
+        
+        .cart-icon {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.5em;
+            position: relative;
+        }
+        
+        .cart-icon:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #d7144b;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7em;
+            font-weight: bold;
+        }
+        
+        .cart-badge.hidden {
+            display: none;
+        }
+        
+        .cart-total-info {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            font-weight: 600;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        
+        .cart-total-info.hidden {
+            display: none;
+        }
+        
+        /* Поиск (DEV FEATURE) */
+        .search-container {
+            position: relative;
+            max-width: 500px;
+            margin: 20px auto 0;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1em;
+            color: #333;
+            outline: none;
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+        
+        .search-input:focus {
+            border-color: rgba(255, 255, 255, 0.6);
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-input::placeholder {
+            color: #999;
+        }
+        
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+            pointer-events: none;
+        }
+        
+        .empty-search {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .product-category-badge {
+            display: inline-block;
+            background: #2dbe64;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+        
+        .view-mode {
+            display: none;
+        }
+        
+        .view-mode.active {
+            display: block;
+        }
+        
+        /* Категории */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .category-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border: 2px solid transparent;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(45, 190, 100, 0.2);
+            border-color: #2dbe64;
+        }
+        
+        .category-card h2 {
+            color: #333333;
+            font-size: 1.4em;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .category-card .count {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        /* Товары */
+        .products-header {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .back-button {
+            background: #2dbe64;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .back-button:hover {
+            background: #25a855;
+            transform: translateX(-2px);
+        }
+        
+        .products-header h2 {
+            color: #333333;
+            font-weight: 600;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(45, 190, 100, 0.15);
+            border-color: #2dbe64;
+        }
+        
+        .add-to-cart-btn {
+            background: #2dbe64;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 500;
+            margin-top: 10px;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        .add-to-cart-btn:hover {
+            background: #25a855;
+            transform: scale(1.02);
+        }
+        
+        .add-to-cart-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .add-to-cart-btn.added {
+            background: #d7144b;
+        }
+        
+        .add-to-cart-btn.added:hover {
+            background: #c01342;
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #f5f5f5;
+        }
+        
+        .product-info {
+            padding: 15px;
+        }
+        
+        .product-name {
+            font-size: 0.95em;
+            color: #333333;
+            margin-bottom: 10px;
+            min-height: 40px;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+        
+        .product-price {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #2dbe64;
+            margin-top: 12px;
+        }
+        
+        .product-details {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 8px;
+            line-height: 1.6;
+        }
+        
+        .product-stock {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #2dbe64;
+            margin-top: 8px;
+            padding: 4px 8px;
+            background: #e8f5e9;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        
+        .available-stock {
+            font-size: 0.85em;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+        
+        .available-stock.positive {
+            color: #2dbe64;
+            background: #e8f5e9;
+        }
+        
+        .available-stock.negative {
+            color: #d7144b;
+            background: #ffeef0;
+        }
+        
+        .no-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #2dbe64 0%, #25a855 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9em;
+        }
+        
+        /* Корзина */
+        .cart-view {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        
+        .cart-item-info {
+            flex: 1;
+        }
+        
+        .cart-item-name {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .cart-item-details {
+            font-size: 0.85em;
+            color: #666;
+        }
+        
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .quantity-btn {
+            background: #2dbe64;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .quantity-btn:hover {
+            background: #25a855;
+        }
+        
+        .quantity-value {
+            font-weight: 600;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .remove-item-btn {
+            background: #d7144b;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85em;
+        }
+        
+        .remove-item-btn:hover {
+            background: #c01342;
+        }
+        
+        .cart-total {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #2dbe64;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+        
+        .cart-buttons-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .download-order-btn {
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        
+        .download-order-btn:hover {
+            background: #357abd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+        }
+        
+        .empty-cart {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .categories-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .cart-icon-wrapper {
+                top: 15px;
+                right: 15px;
+            }
+            
+            .cart-icon {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .cart-total-info {
+                font-size: 0.75em;
+                padding: 4px 8px;
+            }
+            
+            .search-container {
+                max-width: 100%;
+                margin: 15px auto 0;
+            }
+            
+            .search-input {
+                font-size: 0.9em;
+                padding: 10px 40px 10px 12px;
+            }
+            
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .cart-item-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>MFood Топы</h1>
+            <p class="stock-date">В наличии на 09.02.2026</p>
+            <p>В корзину добавляется 1 квант<br>Для увеличения количества квантов в заказе, перейдите в корзину</p>
+            
+            <!-- Поиск (DEV FEATURE) -->
+            <div class="search-container">
+                <input type="text" 
+                       id="search-input" 
+                       class="search-input" 
+                       placeholder="🔍 Поиск товара по названию..." 
+                       oninput="handleSearch(this.value)">
+            </div>
+            
+            <div class="cart-icon-wrapper">
+                <div class="cart-icon" onclick="showCart()">
+                    🛒
+                    <span class="cart-badge hidden" id="cart-badge">0</span>
+                </div>
+                <div class="cart-total-info hidden" id="cart-total-info"></div>
+            </div>
+        </div>
+        
+        <!-- Вид категорий -->
+        <div id="categories-view" class="view-mode active">
+            <div class="categories-grid">
+                
+                <div class="category-card" onclick="showCategory('Хлеб')">
+                    <h2>Хлеб</h2>
+                    <div class="count">4 товаров</div>
+                </div>
+                
+                <div class="category-card" onclick="showCategory('Сладости, кондитерские изделия')">
+                    <h2>Сладости, кондитерские изделия</h2>
+                    <div class="count">11 товаров</div>
+                </div>
+                
+                <div class="category-card" onclick="showCategory('Напитки')">
+                    <h2>Напитки</h2>
+                    <div class="count">6 товаров</div>
+                </div>
+                
+                <div class="category-card" onclick="showCategory('Бакалея')">
+                    <h2>Бакалея</h2>
+                    <div class="count">10 товаров</div>
+                </div>
+                
+            </div>
+        </div>
+        
+        <!-- Вид товаров -->
+        <div id="products-view" class="view-mode">
+            <div class="products-header">
+                <button class="back-button" onclick="showCategories()">← Назад к категориям</button>
+                <h2 id="category-title"></h2>
+            </div>
+            <div class="products-grid" id="products-grid">
+                <!-- Товары будут добавлены через JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Вид корзины -->
+        <div id="cart-view" class="view-mode">
+            <div class="products-header">
+                <button class="back-button" onclick="showCategories()">← Назад к категориям</button>
+                <h2>Корзина. Товар заказывается кратно Квантам.</h2>
+            </div>
+            <div class="cart-view" id="cart-content">
+                <div class="empty-cart">
+                    <p>Корзина пуста</p>
+                    <p style="margin-top: 10px; font-size: 0.9em;">Добавьте товары из каталога</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Вид результатов поиска (DEV FEATURE) -->
+        <div id="search-results-view" class="view-mode">
+            <div class="products-header">
+                <button class="back-button" onclick="clearSearch()">← Назад к категориям</button>
+                <h2 id="search-results-title">Результаты поиска</h2>
+            </div>
+            <div class="products-grid" id="search-results-grid">
+                <!-- Результаты поиска будут добавлены через JavaScript -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const categoriesData = {
+  "Хлеб": [
+    {
+      "id": "64977",
+      "name": "Хлебцы льняные с томатом и базиликом",
+      "price": 650.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/0ae272cb-b03d-49e8-aa45-73f0c2668279.webp?1703237267.8281",
+      "quant": "30",
+      "weight": "70",
+      "expiry_days": "90",
+      "stock": 237
+    },
+    {
+      "id": "1065",
+      "name": "Хлебцы томатные",
+      "price": 530.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/2c0d2dea-32b1-4600-b1ed-603c1ebb1879.webp?1703434890.3592",
+      "quant": "30",
+      "weight": "70",
+      "expiry_days": "90",
+      "stock": 120
+    },
+    {
+      "id": "975",
+      "name": "Хлебцы с клетчаткой и луком",
+      "price": 520.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/3d652678-84e8-4316-a89c-7f8f5b9e25f0.webp?1732068120.9471",
+      "quant": "30",
+      "weight": "70",
+      "expiry_days": "90",
+      "stock": 90
+    },
+    {
+      "id": "79078",
+      "name": "Гренки \"Бородинские\" с томатом, чесноком и перцем",
+      "price": 500.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/6adc72db-565b-4145-9cd1-6949facbbdaa.webp?1731723670.7016",
+      "quant": "10",
+      "weight": "80",
+      "expiry_days": "180",
+      "stock": 40
+    }
+  ],
+  "Сладости, кондитерские изделия": [
+    {
+      "id": "83443",
+      "name": "Батончик из белевской пастилы \"Ягодное ассорти\"",
+      "price": 490.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/ac463b90-2d78-40a0-8c3a-bb469d562b78.webp?1718392951.0597",
+      "quant": "40",
+      "weight": "35",
+      "expiry_days": "360",
+      "stock": 7
+    },
+    {
+      "id": "83444",
+      "name": "Батончик из белевской пастилы с малиной",
+      "price": 510.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/e8f667b2-2339-44a8-bc02-dff50e929104.webp?1723232962.2034",
+      "quant": "40",
+      "weight": "35",
+      "expiry_days": "360",
+      "stock": 41
+    },
+    {
+      "id": "68930",
+      "name": "Карамель леденцовая в ассортименте",
+      "price": 190.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/91220bd2-2803-46d2-bc1d-9966945ade16.webp?1714664465.6329",
+      "quant": "100",
+      "weight": "10",
+      "expiry_days": "720",
+      "stock": 177
+    },
+    {
+      "id": "36727",
+      "name": "Печенье сдобное с молоком",
+      "price": 120.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/8bebe5b9-07c8-41f5-b7e4-3253cc92b9b7.webp?1734259551.7574",
+      "quant": "56",
+      "weight": "32",
+      "expiry_days": "360",
+      "stock": 280
+    },
+    {
+      "id": "15249",
+      "name": "Вафли с какао",
+      "price": 700.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/54bf4acf-824b-47b5-b28e-89fa356cd89b.webp?1713183953.9114",
+      "quant": "24",
+      "weight": "180",
+      "expiry_days": "180",
+      "stock": 37
+    },
+    {
+      "id": "67776",
+      "name": "Зефир сливовый",
+      "price": 1200.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/de461d98-9f17-42b5-a16d-3c728d75e7cd.webp?1719948687.2302",
+      "quant": "10",
+      "weight": "150",
+      "expiry_days": "180",
+      "stock": 58
+    },
+    {
+      "id": "18295",
+      "name": "Арахисовая паста классическая",
+      "price": 1300.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/32f00da0-8797-4ac7-b92e-ad01290d71b2.webp?1708543116.9277",
+      "quant": "12",
+      "weight": "150",
+      "expiry_days": "90",
+      "stock": 22
+    },
+    {
+      "id": "77529",
+      "name": "Зефир воздушный \"Мороженое\", 11г",
+      "price": 180.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/dafa21ed-02a2-4c8a-b891-06fd92071fc3.webp?1709331438.3367",
+      "quant": "50",
+      "weight": "11",
+      "expiry_days": "360",
+      "stock": 290
+    },
+    {
+      "id": "73542",
+      "name": "Вафельные рулеты \"Пикколо\"",
+      "price": 630.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/0886e620-0186-4602-9ff2-9c58a7276596.webp?1727558187.8582",
+      "quant": "7",
+      "weight": "150",
+      "expiry_days": "360",
+      "stock": 21
+    },
+    {
+      "id": "77360",
+      "name": "Зефир воздушный \"Хот-дог\"",
+      "price": 240.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/d2d73f5d-2fef-4149-b0d8-a923035716b5.webp?1703794341.7393",
+      "quant": "12",
+      "weight": "18",
+      "expiry_days": "360",
+      "stock": 41
+    },
+    {
+      "id": "62231",
+      "name": "Батончик из белевской яблочной пастилы с черной смородиной",
+      "price": 560.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/a9baae8e-796f-402e-8485-040059c7d8c0.webp?1718914050.2524",
+      "quant": "30",
+      "weight": "35",
+      "expiry_days": "120",
+      "stock": 390
+    }
+  ],
+  "Напитки": [
+    {
+      "id": "80805",
+      "name": "Напиток магниевый со вкусом лайма и мяты, 500 мл",
+      "price": 750.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/0cc5285e-4fe5-4899-8c39-61c280cdbc1e.webp?1711831921.0667",
+      "quant": "12",
+      "weight": "500",
+      "expiry_days": "180",
+      "stock": 311
+    },
+    {
+      "id": "96214",
+      "name": "Вода магниевая негазированная, 500 мл",
+      "price": 670.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/cfbe2276-d477-4e07-b300-829b4ee4b585.webp?1724087958.1226",
+      "quant": "12",
+      "weight": "500",
+      "expiry_days": "360",
+      "stock": 576
+    },
+    {
+      "id": "22399",
+      "name": "Вода кокосовая, 310 мл",
+      "price": 1530.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/2c9f1652-c63d-44c2-8cad-e7d2c205a9b4.webp?1732003937.4265",
+      "quant": "12",
+      "weight": "310",
+      "expiry_days": "730",
+      "stock": 330
+    },
+    {
+      "id": "85650",
+      "name": "Комбуча со стевией, 330 мл",
+      "price": 820.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/d87a2536-fa0b-4364-8710-d7368f6654e5.webp?1730276247.3488",
+      "quant": "12",
+      "weight": "330",
+      "expiry_days": "360",
+      "stock": 45
+    },
+    {
+      "id": "89036",
+      "name": "Вода минеральная \"Псыж\", 1,5 л",
+      "price": 480.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/21305e1f-0e1c-46fd-89f4-6b4e104ebd5f.webp?1708361535.8971",
+      "quant": "6",
+      "weight": "1500",
+      "expiry_days": "360",
+      "stock": 100
+    },
+    {
+      "id": "92413",
+      "name": "Лимонад \"Тоник-грейпфрут\", 330 мл",
+      "price": 1000.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/1d45c590-5f90-43b7-99bc-e1e271d72bdc.webp?1731947410.2346",
+      "quant": "12",
+      "weight": "330",
+      "expiry_days": "360",
+      "stock": 46
+    }
+  ],
+  "Бакалея": [
+    {
+      "id": "56997",
+      "name": "Чипсы нутовые \"Сметана и зелень\"",
+      "price": 720.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/87a67989-8fe5-43ab-8664-f569a19d07ac.webp?1710491447.2565",
+      "quant": "17",
+      "weight": "50",
+      "expiry_days": "210",
+      "stock": 145
+    },
+    {
+      "id": "86671",
+      "name": "Попкорн соленый, 120 г",
+      "price": 760.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/77fd5c5a-d968-45f3-9d15-0f83fe727274.webp?1714423506.7522",
+      "quant": "12",
+      "weight": "120",
+      "expiry_days": "270",
+      "stock": 76
+    },
+    {
+      "id": "76824",
+      "name": "Чипсы из батата с томатом и паприкой, 75 г",
+      "price": 1160.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/1f3a2345-8043-40ec-8b0d-958da8fe6531.webp?1706298196.7226",
+      "quant": "17",
+      "weight": "75",
+      "expiry_days": "270",
+      "stock": 27
+    },
+    {
+      "id": "74423",
+      "name": "Чипсы картофельные с морской солью, розовым и черным перцем",
+      "price": 970.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/360be6fd-c7b7-4f53-a28b-7582deaf44e4.webp?1703359704.2309",
+      "quant": "10",
+      "weight": "100",
+      "expiry_days": "180",
+      "stock": 281
+    },
+    {
+      "id": "81639",
+      "name": "Матча латте зелёная",
+      "price": 360.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/8169db55-10df-41f1-9735-ae0e7764b2e0.webp?1726865063.8467",
+      "quant": "7",
+      "weight": "20",
+      "expiry_days": "360",
+      "stock": 44
+    },
+    {
+      "id": "30824",
+      "name": "Батончик ореховый \"Арахис-фисташка\"",
+      "price": 580.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/9e24e86f-cea3-4309-82c5-1a7267a88e93.webp?1716845159.11",
+      "quant": "25",
+      "weight": "35",
+      "expiry_days": "270",
+      "stock": 165
+    },
+    {
+      "id": "91271",
+      "name": "Кофе молотый с ароматом миндаля (порционный)",
+      "price": 480.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/10808920-b11d-4caf-a9bb-66eb9c7b6654.webp?1719335125.289",
+      "quant": "25",
+      "weight": "10",
+      "expiry_days": "360",
+      "stock": 50
+    },
+    {
+      "id": "37589",
+      "name": "Гранола \"Ореховая\"",
+      "price": 2380.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/6baa4726-deb3-4dcb-896e-672529304d28.webp?1711437037.5111",
+      "quant": "12",
+      "weight": "280",
+      "expiry_days": "360",
+      "stock": 108
+    },
+    {
+      "id": "72738",
+      "name": "Батончик-мюсли с бананом",
+      "price": 490.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/a8a1c243-1091-42ab-a5e4-93d6c8e114a0.webp?1724182521.0175",
+      "quant": "16",
+      "weight": "55",
+      "expiry_days": "360",
+      "stock": 484
+    },
+    {
+      "id": "105315",
+      "name": "Батончик ореховый \"Грецкий орех и мед\"",
+      "price": 490.0,
+      "image": "https://img.vkusvill.ru/pim/images/site_BigWebP/e09e26a5-cdc3-4799-ba8e-b35cafb6e2c2.webp?1747816725.6706",
+      "quant": "20",
+      "weight": "25",
+      "expiry_days": "180",
+      "stock": 60
+    }
+  ]
+};
+        
+        // Тип лендинга (для условной логики)
+        const LANDING_TYPE = "\u0432-\u043d\u0430\u043b\u0438\u0447\u0438\u0438";
+        
+        // Уникальный ID лендинга для изоляции корзины
+        const LANDING_ID = "mfood-topy-20260209-vnalichii";
+        const CART_STORAGE_KEY = 'cart_' + LANDING_ID;
+        
+        // Список всех ID товаров в текущем каталоге (для фильтрации корзины)
+        const catalogProductIds = new Set();
+        for (const category in categoriesData) {
+            categoriesData[category].forEach(product => {
+                if (product.id) {
+                    catalogProductIds.add(product.id.toString());
+                }
+            });
+        }
+        
+        // Корзина (хранится в localStorage с уникальным ключом)
+        let cart = JSON.parse(localStorage.getItem(CART_STORAGE_KEY) || '[]');
+        
+        // Фильтруем корзину: оставляем только товары, которые есть в текущем каталоге
+        // Это защищает от товаров из других лендингов
+        cart = cart.filter(item => {
+            const itemId = item.id ? item.id.toString() : '';
+            return catalogProductIds.has(itemId);
+        });
+        
+        // Сохраняем отфильтрованную корзину обратно в localStorage
+        if (cart.length !== JSON.parse(localStorage.getItem(CART_STORAGE_KEY) || '[]').length) {
+            localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+        }
+        
+        function formatPrice(price) {
+            if (price === 0) return "Цена по запросу";
+            return new Intl.NumberFormat('ru-RU').format(Math.round(price)) + ' ₸';
+        }
+        
+        function saveCart() {
+            localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+            updateCartBadge();
+        }
+        
+        function updateCartBadge() {
+            const badge = document.getElementById('cart-badge');
+            const totalInfo = document.getElementById('cart-total-info');
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            if (totalItems > 0) {
+                badge.textContent = totalItems;
+                badge.classList.remove('hidden');
+                
+                // Показываем итоговую сумму
+                if (totalPrice > 0) {
+                    totalInfo.textContent = 'Итого: ' + formatPrice(totalPrice);
+                    totalInfo.classList.remove('hidden');
+                } else {
+                    totalInfo.textContent = 'Итого: по запросу';
+                    totalInfo.classList.remove('hidden');
+                }
+            } else {
+                badge.classList.add('hidden');
+                totalInfo.classList.add('hidden');
+            }
+        }
+        
+        // Получить товар по ID из categoriesData
+        function getProductById(productId) {
+            for (const category in categoriesData) {
+                const product = categoriesData[category].find(p => p.id === productId);
+                if (product) return product;
+            }
+            return null;
+        }
+        
+        // Обновить остатки в корзине из актуальных данных товаров (только для типа "В Наличии")
+        function updateCartStock() {
+            if (LANDING_TYPE !== 'в-наличии') {
+                return;  // Для типа "под-заказ" остатки не нужны
+            }
+            cart.forEach(item => {
+                const productInfo = getProductById(item.id);
+                if (productInfo && productInfo.stock !== undefined && productInfo.stock !== null) {
+                    item.stock = productInfo.stock;
+                }
+            });
+            saveCart();
+        }
+        
+        function addToCartFromButton(button) {
+            const productJson = button.getAttribute('data-product');
+            if (!productJson) {
+                console.error('Ошибка: data-product атрибут не найден на кнопке');
+                return;
+            }
+            try {
+                const product = JSON.parse(productJson.replace(/&quot;/g, '"'));
+                // Убеждаемся, что у товара есть ID
+                if (!product.id || product.id.toString().trim() === '') {
+                    console.error('Ошибка: у товара нет ID', product);
+                    return;
+                }
+                addToCart(product);
+            } catch (e) {
+                console.error('Ошибка парсинга товара:', e, productJson);
+            }
+        }
+        
+        function addToCart(product) {
+            // Проверяем, что у товара есть ID
+            if (!product.id || product.id.toString().trim() === '') {
+                console.error('Ошибка: у товара нет ID', product);
+                return;
+            }
+            
+            // Парсим квант из строки (может быть "6", "6 шт", "Квант: 6" и т.д.)
+            let quantValue = 1;
+            if (product.quant && product.quant.toString().trim() !== '') {
+                const quantStr = product.quant.toString().trim();
+                // Извлекаем число из строки
+                const quantMatch = quantStr.match(/\d+/);
+                if (quantMatch) {
+                    quantValue = parseInt(quantMatch[0]);
+                }
+            }
+            
+            // Получаем актуальную информацию о товаре для проверки остатка (только для лендинга "В Наличии")
+            const productInfo = getProductById(product.id);
+            const stock = (LANDING_TYPE === 'в-наличии' && productInfo && productInfo.stock !== undefined && productInfo.stock !== null) ? productInfo.stock : null;
+            
+            // Используем строгое сравнение ID (конвертируем в строку для надежности)
+            const productIdStr = product.id.toString();
+            const existingItem = cart.find(item => item.id && item.id.toString() === productIdStr);
+            if (existingItem) {
+                // Если товар уже есть, проверяем остаток перед добавлением (только для типа "В Наличии")
+                if (LANDING_TYPE === 'в-наличии' && stock !== null) {
+                    // УМНАЯ ЛОГИКА: определяем, сколько добавлять
+                    const availableStock = stock - existingItem.quantity;
+                    let addAmount = quantValue;  // По умолчанию добавляем квант
+                    
+                    if (availableStock < quantValue) {
+                        // Остаток меньше кванта → добавляем по 1 штуке
+                        addAmount = 1;
+                    }
+                    
+                    // Проверяем, что можем добавить хотя бы что-то
+                    if (availableStock <= 0) {
+                        alert(`Недостаточно товара на складе. Доступно: ${stock} шт., в корзине: ${existingItem.quantity} шт.`);
+                        return;
+                    }
+                    
+                    const newQuantity = existingItem.quantity + addAmount;
+                    if (newQuantity > stock) {
+                        alert(`Недостаточно товара на складе. Доступно: ${stock} шт., в корзине: ${existingItem.quantity} шт.`);
+                        return;
+                    }
+                    
+                    existingItem.quantity = newQuantity;
+                } else {
+                    // Для типа "под-заказ" или если остатки не заданы - добавляем по кванту
+                    existingItem.quantity = existingItem.quantity + quantValue;
+                }
+            } else {
+                // УМНАЯ ЛОГИКА: первое добавление товара в корзину
+                let initialQuantity = quantValue;  // По умолчанию добавляем квант
+                
+                if (LANDING_TYPE === 'в-наличии' && stock !== null) {
+                    // Если остаток меньше кванта → добавляем 1 штуку (не весь квант!)
+                    if (stock < quantValue) {
+                        initialQuantity = 1;
+                    }
+                    
+                    // Проверяем, что товар вообще есть на складе
+                    if (stock <= 0) {
+                        alert(`Товара нет на складе.`);
+                        return;
+                    }
+                }
+                
+                // Добавляем товар с умным количеством
+                cart.push({
+                    id: productIdStr,  // Используем строковое представление для надежности
+                    name: product.name,
+                    price: product.price,
+                    quantity: initialQuantity,  // Умное количество (квант или 1 шт)
+                    category: product.category || '',
+                    quant: product.quant || '',
+                    stock: stock
+                });
+            }
+            saveCart();
+            // Обновляем кнопку ТОЛЬКО для добавленного товара (по уникальному ID)
+            updateProductButton(productIdStr);
+        }
+        
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            saveCart();
+            updateProductButton(productId);
+            if (document.getElementById('cart-view').classList.contains('active')) {
+                renderCart();
+            }
+        }
+        
+        function updateQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                // Парсим квант из строки (может быть "6", "6 шт", "Квант: 6" и т.д.)
+                let quantValue = 1;
+                if (item.quant && item.quant.toString().trim() !== '') {
+                    const quantStr = item.quant.toString().trim();
+                    // Извлекаем число из строки
+                    const quantMatch = quantStr.match(/\d+/);
+                    if (quantMatch) {
+                        quantValue = parseInt(quantMatch[0]);
+                    }
+                }
+                
+                // Получаем актуальную информацию о товаре для проверки остатка (только для лендинга "В Наличии")
+                const productInfo = getProductById(productId);
+                const stock = (LANDING_TYPE === 'в-наличии' && productInfo && productInfo.stock !== undefined && productInfo.stock !== null) 
+                    ? productInfo.stock 
+                    : ((LANDING_TYPE === 'в-наличии' && item.stock !== undefined && item.stock !== null) ? item.stock : null);
+                
+                // НОВАЯ ЛОГИКА: Умное добавление товара
+                if (change > 0) {
+                    // При нажатии "+" проверяем остаток перед добавлением (только для типа "В Наличии")
+                    if (LANDING_TYPE === 'в-наличии' && stock !== null) {
+                        // Вычисляем доступный остаток (сколько еще можно добавить)
+                        const availableStock = stock - item.quantity;
+                        
+                        // УМНАЯ ЛОГИКА: если доступный остаток >= кванта → добавляем квант, иначе добавляем по 1 шт
+                        let addAmount = quantValue;  // По умолчанию добавляем квант
+                        
+                        if (availableStock < quantValue) {
+                            // Остаток меньше кванта → добавляем по 1 штуке
+                            addAmount = 1;
+                        }
+                        
+                        // Проверяем, что можем добавить хотя бы что-то
+                        if (availableStock <= 0) {
+                            alert(`Недостаточно товара на складе. Доступно: ${stock} шт., в корзине: ${item.quantity} шт.`);
+                            return;
+                        }
+                        
+                        // Проверяем, что не превышаем остаток
+                        const newQuantity = item.quantity + addAmount;
+                        if (newQuantity > stock) {
+                            alert(`Недостаточно товара на складе. Доступно: ${stock} шт., в корзине: ${item.quantity} шт.`);
+                            return;
+                        }
+                        
+                        item.quantity = newQuantity;
+                    } else {
+                        // Для типа "под-заказ" или если остатки не заданы - добавляем по кванту
+                        item.quantity = item.quantity + quantValue;
+                    }
+                } else {
+                    // При нажатии "-" убираем один квант (или по 1 шт, если в корзине меньше кванта)
+                    const removeAmount = item.quantity >= quantValue ? quantValue : 1;
+                    item.quantity -= removeAmount;
+                }
+                
+                // Обновляем stock в элементе корзины (только для типа "В Наличии")
+                if (LANDING_TYPE === 'в-наличии' && stock !== null) {
+                    item.stock = stock;
+                }
+                
+                if (item.quantity <= 0) {
+                    removeFromCart(productId);
+                } else {
+                    saveCart();
+                    renderCart();
+                }
+            }
+        }
+        
+        function updateProductButton(productId) {
+            // Конвертируем ID в строку для надежного сравнения
+            const productIdStr = productId ? productId.toString() : '';
+            if (!productIdStr) {
+                console.error('Ошибка: updateProductButton вызван с пустым ID');
+                return;
+            }
+            
+            // Находим ВСЕ кнопки с таким ID (на случай дубликатов)
+            const buttons = document.querySelectorAll(`[data-product-id="${productIdStr}"]`);
+            
+            // Проверяем, есть ли товар в корзине (строгое сравнение ID)
+            const inCart = cart.find(item => item.id && item.id.toString() === productIdStr);
+            
+            // Обновляем все найденные кнопки
+            buttons.forEach(btn => {
+                if (inCart) {
+                    btn.textContent = '✓ В корзине';
+                    btn.classList.add('added');
+                } else {
+                    btn.textContent = '+ В корзину';
+                    btn.classList.remove('added');
+                }
+            });
+        }
+        
+        function showCart() {
+            // Обновляем остатки в корзине из актуальных данных (для лендинга "В Наличии")
+            updateCartStock();
+            document.getElementById('categories-view').classList.remove('active');
+            document.getElementById('products-view').classList.remove('active');
+            document.getElementById('search-results-view').classList.remove('active');
+            document.getElementById('cart-view').classList.add('active');
+            renderCart();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        function renderCart() {
+            const cartContent = document.getElementById('cart-content');
+            
+            if (cart.length === 0) {
+                cartContent.innerHTML = `
+                    <div class="empty-cart">
+                        <p>Корзина пуста</p>
+                        <p style="margin-top: 10px; font-size: 0.9em;">Добавьте товары из каталога</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                // Получаем актуальную информацию о товаре для расчета доступного остатка (только для лендинга "В Наличии")
+                let availableStock = null;
+                let availableStockClass = '';
+                if (LANDING_TYPE === 'в-наличии') {
+                    const productInfo = getProductById(item.id);
+                    const stock = productInfo && productInfo.stock !== undefined && productInfo.stock !== null 
+                        ? productInfo.stock 
+                        : (item.stock !== undefined && item.stock !== null ? item.stock : null);
+                    
+                    // Вычисляем доступный товар (только для типа "В Наличии")
+                    if (stock !== null) {
+                        availableStock = stock - item.quantity;
+                        availableStockClass = availableStock < 0 ? 'negative' : 'positive';
+                    }
+                }
+                
+                // Формируем строку с деталями товара
+                let detailsParts = [];
+                detailsParts.push('ID: ' + item.id);
+                if (item.quant && item.quant.toString().trim() !== '') {
+                    detailsParts.push('Квант: ' + item.quant);
+                }
+                if (item.price > 0) {
+                    detailsParts.push('Цена: ' + formatPrice(item.price) + ' шт');
+                } else {
+                    detailsParts.push('Цена: по запросу');
+                }
+                
+                html += `
+                    <div class="cart-item">
+                        <div class="cart-item-info">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-details">
+                                ${detailsParts.join(' • ')}
+                            </div>
+                            ${availableStock !== null ? `<div class="available-stock ${availableStockClass}">Доступный товар: ${availableStock} шт</div>` : ''}
+                        </div>
+                        <div class="cart-item-controls">
+                            <div class="quantity-control">
+                                <button class="quantity-btn" onclick="updateQuantity('${item.id}', -1)">-</button>
+                                <span class="quantity-value">${item.quantity}</span>
+                                <button class="quantity-btn" onclick="updateQuantity('${item.id}', 1)">+</button>
+                            </div>
+                            <div style="font-weight: 600; min-width: 100px; text-align: right;">
+                                ${item.price > 0 ? formatPrice(itemTotal) : '—'}
+                            </div>
+                            <button class="remove-item-btn" onclick="removeFromCart('${item.id}')">Удалить</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += `
+                <div class="cart-total">
+                    <span>Итого:</span>
+                    <span>${total > 0 ? formatPrice(total) : '—'}</span>
+                </div>
+                <div class="cart-buttons-wrapper">
+                    <button class="download-order-btn" onclick="exportCartToFile()">📥 Скачать заказ (.xlsx)</button>
+                </div>
+            `;
+            
+            cartContent.innerHTML = html;
+        }
+        
+        function exportCartToFile() {
+            if (cart.length === 0) {
+                alert('Корзина пуста');
+                return;
+            }
+            
+            // Проверяем наличие библиотеки SheetJS
+            if (typeof XLSX === 'undefined') {
+                alert('Ошибка: библиотека для создания Excel файлов не загружена. Пожалуйста, обновите страницу.');
+                return;
+            }
+            
+            // Формируем данные заказа
+            // Только дата в формате DD-MM-YYYY (без времени) для имени файла
+            const now = new Date();
+            const orderDate = now.toLocaleDateString('ru-RU', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            }).replace(/\./g, '-');
+            
+            // Полная дата и время для метаданных в Excel
+            const fullOrderDate = now.toLocaleString('ru-RU', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            }).replace(/\./g, '-').replace(/,/g, ' ');
+            
+            const clientName = "MFood Топы";
+            // Преобразуем тип лендинга в читаемый формат для имени файла
+            let landingTypeText = '';
+            if (LANDING_TYPE === 'в-наличии') {
+                landingTypeText = 'В_Наличии';
+            } else if (LANDING_TYPE === 'под-заказ') {
+                landingTypeText = 'Под_Заказ';
+            } else {
+                landingTypeText = 'Обычный';
+            }
+            // Очищаем имя клиента для имени файла: оставляем только буквы (включая кириллицу), цифры, пробелы и дефисы
+            // Удаляем спецсимволы, заменяем пробелы на подчеркивания
+            // Используем явное регулярное выражение с кириллицей для надежности
+            const cleanClientName = clientName.replace(/[^а-яА-ЯёЁa-zA-Z0-9_\s-]/g, '').replace(/\s+/g, '_').replace(/^_+|_+$/g, '');
+            // Формат: Заказ_[Клиент]_[Тип лендинга]_DD-MM-YYYY
+            const fileName = `Заказ_${cleanClientName}_${landingTypeText}_${orderDate}`;
+            
+            // Подготавливаем данные для Excel
+            const worksheetData = [];
+            
+            // Заголовки
+            worksheetData.push(['ID товара', 'Наименование', 'Цена за единицу', 'Количество', 'Квант', 'Сумма']);
+            
+            // Данные товаров
+            let totalSum = 0;
+            let totalItems = 0;
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                totalSum += itemTotal;
+                totalItems += item.quantity;
+                
+                const price = item.price > 0 ? item.price : 'Цена по запросу';
+                const quant = item.quant || '';
+                
+                worksheetData.push([
+                    item.id,
+                    item.name || '',
+                    price,
+                    item.quantity,
+                    quant,
+                    itemTotal > 0 ? itemTotal : '—'
+                ]);
+            });
+            
+            // Пустая строка
+            worksheetData.push([]);
+            
+            // Итого
+            worksheetData.push(['Итого', '', '', totalItems, '', totalSum > 0 ? totalSum : '—']);
+            
+            // Пустая строка
+            worksheetData.push([]);
+            
+            // Метаданные
+            worksheetData.push(['Дата заказа:', fullOrderDate]);
+            worksheetData.push(['Клиент:', clientName]);
+            
+            // Создаем рабочую книгу Excel
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(worksheetData);
+            
+            // Настраиваем ширину столбцов
+            ws['!cols'] = [
+                { wch: 12 }, // ID товара
+                { wch: 40 }, // Наименование
+                { wch: 18 }, // Цена за единицу
+                { wch: 12 }, // Количество
+                { wch: 10 }, // Квант
+                { wch: 15 }  // Сумма
+            ];
+            
+            // Добавляем лист в книгу
+            XLSX.utils.book_append_sheet(wb, ws, 'Заказ');
+            
+            // Генерируем Excel файл
+            XLSX.writeFile(wb, `${fileName}.xlsx`);
+            
+            alert(`Заказ сохранен!\n\nСкачан файл:\n- ${fileName}.xlsx`);
+        }
+        
+        function showCategory(categoryName) {
+            // Скрываем категории и результаты поиска
+            document.getElementById('categories-view').classList.remove('active');
+            document.getElementById('search-results-view').classList.remove('active');
+            
+            // Показываем товары
+            document.getElementById('products-view').classList.add('active');
+            document.getElementById('category-title').textContent = categoryName;
+            
+            // Очищаем сетку товаров
+            const productsGrid = document.getElementById('products-grid');
+            productsGrid.innerHTML = '';
+            
+            // Добавляем товары
+            const products = categoriesData[categoryName] || [];
+            products.forEach((product, index) => {
+                // Создаем копию продукта с категорией (чтобы не изменять исходные данные)
+                // Убеждаемся, что ID уникален и не пустой
+                const productId = product.id && product.id.toString().trim() !== '' ? product.id.toString() : `${categoryName}_${index}`.replace(/[^\w]/g, '_');
+                const productWithCategory = {
+                    ...product,
+                    id: productId,
+                    category: categoryName
+                };
+                
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                
+                let imageHtml = '';
+                if (productWithCategory.image && productWithCategory.image.trim() !== '') {
+                    imageHtml = `<img src="${productWithCategory.image}" alt="${productWithCategory.name}" class="product-image" onerror="this.parentElement.innerHTML='<div class=\'no-image\'>Нет фото</div>'">`;
+                } else {
+                    imageHtml = `<div class="no-image">Нет фото</div>`;
+                }
+                
+                let detailsHtml = '';
+                let details = [];
+                
+                // Квант
+                if (productWithCategory.quant && productWithCategory.quant.toString().trim() !== '') {
+                    const quantValue = parseInt(productWithCategory.quant);
+                    // Если это число и больше 0, показываем как "Остаток"
+                    if (!isNaN(quantValue) && quantValue >= 0) {
+                        details.push('Квант: ' + productWithCategory.quant + ' шт');
+                    } else {
+                        details.push('Квант: ' + productWithCategory.quant);
+                    }
+                }
+                
+                // Вес: в граммах (из столбца G)
+                if (productWithCategory.weight && productWithCategory.weight.toString().trim() !== '') {
+                    const weightValue = productWithCategory.weight.toString().trim();
+                    if (weightValue && weightValue !== 'nan') {
+                        // Проверяем, есть ли уже единица измерения в значении
+                        const hasUnit = /(гр|мл|кг|л|шт)/i.test(weightValue);
+                        if (hasUnit) {
+                            details.push('Вес: ' + weightValue);
+                        } else {
+                            // Если единиц нет, добавляем "гр" по умолчанию
+                            details.push('Вес: ' + weightValue + ' гр');
+                        }
+                    }
+                }
+                
+                // Срок годности (из столбца F)
+                if (productWithCategory.expiry_days && productWithCategory.expiry_days.toString().trim() !== '') {
+                    const expiryValue = productWithCategory.expiry_days.toString().trim();
+                    if (expiryValue && expiryValue !== 'nan') {
+                        // Проверяем, есть ли уже единица измерения в значении
+                        const hasUnit = /(сут|дней|день|дн)/i.test(expiryValue);
+                        if (hasUnit) {
+                            details.push('Срок годности: ' + expiryValue);
+                        } else {
+                            // Если единиц нет, добавляем "сут" по умолчанию
+                            details.push('Срок годности: ' + expiryValue + ' сут');
+                        }
+                    }
+                }
+                
+                if (details.length > 0) {
+                    // Отображаем каждую деталь на отдельной строке
+                    detailsHtml = `<div class="product-details">${details.join('<br>')}</div>`;
+                }
+                
+                // Остаток (только для лендинга "В Наличии")
+                let stockHtml = '';
+                if (LANDING_TYPE === 'в-наличии' && productWithCategory.stock !== undefined && productWithCategory.stock !== null) {
+                    stockHtml = `<div class="product-stock">Остаток: ${productWithCategory.stock} шт</div>`;
+                }
+                
+                let priceHtml = '';
+                if (productWithCategory.price && productWithCategory.price > 0) {
+                    priceHtml = `<div class="product-price">${formatPrice(productWithCategory.price)}</div>`;
+                }
+                
+                // Проверяем, есть ли товар в корзине (строгое сравнение по ID)
+                const productIdStr = productId.toString();
+                const inCart = cart.find(item => item.id && item.id.toString() === productIdStr);
+                const buttonText = inCart ? '✓ В корзине' : '+ В корзину';
+                const buttonClass = inCart ? 'add-to-cart-btn added' : 'add-to-cart-btn';
+                
+                // Сохраняем данные товара в data-атрибуте для безопасной передачи
+                const productJson = JSON.stringify(productWithCategory).replace(/"/g, '&quot;');
+                
+                productCard.innerHTML = `
+                    ${imageHtml}
+                    <div class="product-info">
+                        <div class="product-name">${productWithCategory.name}</div>
+                        ${detailsHtml}
+                        ${stockHtml}
+                        ${priceHtml}
+                        <button class="${buttonClass}" data-product-id="${productIdStr}" data-product='${productJson}' onclick="addToCartFromButton(this)">${buttonText}</button>
+                    </div>
+                `;
+                
+                productsGrid.appendChild(productCard);
+            });
+            
+            // Прокручиваем вверх
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Поиск товаров (DEV FEATURE)
+        function handleSearch(searchQuery) {
+            const query = searchQuery.trim().toLowerCase();
+            
+            if (query.length === 0) {
+                clearSearch();
+                return;
+            }
+            
+            // Ищем товары по всем категориям
+            const results = [];
+            for (const category in categoriesData) {
+                categoriesData[category].forEach((product, index) => {
+                    if (product.name && product.name.toLowerCase().includes(query)) {
+                        // Создаем копию продукта с категорией
+                        const productId = product.id && product.id.toString().trim() !== '' ? product.id.toString() : `${category}_${index}`.replace(/[^\w]/g, '_');
+                        results.push({
+                            ...product,
+                            id: productId,
+                            category: category
+                        });
+                    }
+                });
+            }
+            
+            // Отображаем результаты
+            displaySearchResults(results, query);
+        }
+        
+        // Отображение результатов поиска
+        function displaySearchResults(results, query) {
+            // Скрываем другие виды
+            document.getElementById('categories-view').classList.remove('active');
+            document.getElementById('products-view').classList.remove('active');
+            document.getElementById('cart-view').classList.remove('active');
+            
+            // Показываем вид результатов поиска
+            const searchView = document.getElementById('search-results-view');
+            searchView.classList.add('active');
+            
+            // Обновляем заголовок
+            const title = document.getElementById('search-results-title');
+            title.textContent = `Результаты поиска: "${query}" (найдено: ${results.length})`;
+            
+            // Очищаем контейнер результатов
+            const resultsGrid = document.getElementById('search-results-grid');
+            resultsGrid.innerHTML = '';
+            
+            // Отображаем найденные товары
+            if (results.length === 0) {
+                resultsGrid.innerHTML = '<div class="empty-search">Товары не найдены</div>';
+                return;
+            }
+            
+            results.forEach((product) => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                
+                let imageHtml = '';
+                if (product.image && product.image.trim() !== '') {
+                    imageHtml = `<img src="${product.image}" alt="${product.name}" class="product-image" onerror="this.parentElement.innerHTML='<div class=\'no-image\'>Нет фото</div>'">`;
+                } else {
+                    imageHtml = `<div class="no-image">Нет фото</div>`;
+                }
+                
+                let detailsHtml = '';
+                let details = [];
+                
+                // Квант
+                if (product.quant && product.quant.toString().trim() !== '') {
+                    const quantValue = parseInt(product.quant);
+                    if (!isNaN(quantValue) && quantValue >= 0) {
+                        details.push('Квант: ' + product.quant + ' шт');
+                    } else {
+                        details.push('Квант: ' + product.quant);
+                    }
+                }
+                
+                // Вес
+                if (product.weight && product.weight.toString().trim() !== '') {
+                    const weightValue = product.weight.toString().trim();
+                    if (weightValue && weightValue !== 'nan') {
+                        const hasUnit = /(гр|мл|кг|л|шт)/i.test(weightValue);
+                        if (hasUnit) {
+                            details.push('Вес: ' + weightValue);
+                        } else {
+                            details.push('Вес: ' + weightValue + ' гр');
+                        }
+                    }
+                }
+                
+                // Срок годности
+                if (product.expiry_days && product.expiry_days.toString().trim() !== '') {
+                    const expiryValue = product.expiry_days.toString().trim();
+                    if (expiryValue && expiryValue !== 'nan') {
+                        const hasUnit = /(сут|дней|день|дн)/i.test(expiryValue);
+                        if (hasUnit) {
+                            details.push('Срок годности: ' + expiryValue);
+                        } else {
+                            details.push('Срок годности: ' + expiryValue + ' сут');
+                        }
+                    }
+                }
+                
+                if (details.length > 0) {
+                    detailsHtml = `<div class="product-details">${details.join('<br>')}</div>`;
+                }
+                
+                // Остаток (только для лендинга "В Наличии")
+                let stockHtml = '';
+                if (LANDING_TYPE === 'в-наличии' && product.stock !== undefined && product.stock !== null) {
+                    stockHtml = `<div class="product-stock">Остаток: ${product.stock} шт</div>`;
+                }
+                
+                let priceHtml = '';
+                if (product.price && product.price > 0) {
+                    priceHtml = `<div class="product-price">${formatPrice(product.price)}</div>`;
+                }
+                
+                // Проверяем, есть ли товар в корзине
+                const productIdStr = product.id.toString();
+                const inCart = cart.find(item => item.id && item.id.toString() === productIdStr);
+                const buttonText = inCart ? '✓ В корзине' : '+ В корзину';
+                const buttonClass = inCart ? 'add-to-cart-btn added' : 'add-to-cart-btn';
+                
+                // Сохраняем данные товара в data-атрибуте
+                const productJson = JSON.stringify(product).replace(/"/g, '&quot;');
+                
+                productCard.innerHTML = `
+                    ${imageHtml}
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-category-badge">${product.category}</div>
+                        ${detailsHtml}
+                        ${stockHtml}
+                        ${priceHtml}
+                        <button class="${buttonClass}" data-product-id="${productIdStr}" data-product='${productJson}' onclick="addToCartFromButton(this)">${buttonText}</button>
+                    </div>
+                `;
+                
+                resultsGrid.appendChild(productCard);
+            });
+            
+            // Обновляем кнопки товаров после отображения
+            results.forEach(product => {
+                updateProductButton(product.id);
+            });
+            
+            // Прокручиваем вверх
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Очистка поиска
+        function clearSearch() {
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) {
+                searchInput.value = '';
+            }
+            document.getElementById('search-results-view').classList.remove('active');
+            showCategories();
+        }
+        
+        function showCategories() {
+            // Скрываем все виды
+            document.getElementById('products-view').classList.remove('active');
+            document.getElementById('cart-view').classList.remove('active');
+            document.getElementById('search-results-view').classList.remove('active');
+            
+            // Показываем категории
+            document.getElementById('categories-view').classList.add('active');
+            
+            // Прокручиваем вверх
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Обновляем остатки в корзине из актуальных данных (для лендинга "В Наличии")
+            updateCartStock();
+            updateCartBadge();
+        });
+    </script>
+</body>
+</html>
